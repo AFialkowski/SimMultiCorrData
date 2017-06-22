@@ -1,0 +1,127 @@
+---
+title: "Functions by Topic"
+author: "Allison C Fialkowski"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Functions by Topic}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+The following gives a description of `SimMultiCorrData`'s functions by topic.  The user should visit the appropriate help page for more information.
+
+## Simulation Functions:
+1. `nonnormvar1` simulates one non-normal continuous variable using either Fleishman's third-order (method = "Fleishman") or Headrick's fifth-order (`method` = "Polynomial") approximation.
+
+1. `rcorrvar` simulates `k_cat` ordinal (r >= 2 categories), `k_cont` continuous, `k_pois` Poisson, and/or `k_nb` Negative Binomial variables with a specified correlation matrix `rho` using method 1.  The variables are generated from multivariate normal variables with intermediate correlation matrix `Sigma`, calculated by `findintercorr`, and then transformed appropriately.  The ordering of the variables in `rho` must be ordinal, continuous, Poisson, and Negative Binomial (note that it is possible for `k_cat`, `k_cont`, `k_pois`, and/or `k_nb` to be 0).
+
+1. `rcorrvar2` simulates `k_cat` ordinal (r >= 2 categories), `k_cont` continuous, `k_pois` Poisson, and/or `k_nb` Negative Binomial variables with a specified correlation matrix `rho` using method 2.  The variables are generated from multivariate normal variables with intermediate correlation matrix `Sigma`, calculated by `findintercorr2`, and then transformed appropriately.  The ordering of the variables in `rho` must be ordinal, continuous, Poisson, and Negative Binomial (note that it is possible for `k_cat`, `k_cont`, `k_pois`, and/or `k_nb` to be 0).
+
+## Power Method Constants Functions:
+1. `find_constants` calculates the constants used to generate continuous variables via either Fleishman's third-order (using `fleish` equations) or Headrick's fifth-order (using `poly` equations) polynomial transformation.  It attempts to find constants that generate a valid power method pdf.  If no solutions converged or no valid pdf solutions could be found and a vector of sixth cumulant correction values (`Six`) is provided, the function will attempt to find the smallest correction value that generates a valid power method pdf.  If not, invalid pdf constants will be given.
+
+1. `fleish` contains Fleishman's third-order polynomial transformation equations.
+
+1. `poly` contains Headrick's fifth-order polynomial transformation equations.
+
+## Data Description (Summary) Functions:
+1. `calc_fisherk` uses Fisher's k-statistics to calculate the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given a vector of data.
+
+1. `calc_moments` uses the method of moments to calculate the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given a vector of data.
+
+1. `calc_theory` calculates the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given either a distribution name with up to 3 associated parameters or pdf function fx with lower and upper support bounds.  The available distributions by name are: Beta, Chisq, Exponential, F, Gamma, Gaussian, Laplace (Double Exponential), Logistic, Lognormal, Pareto, (Generalized) Rayleigh, t, Triangular, Uniform, Weibull.  The pareto (see `VGAM::dpareto`), generalized rayleigh (see `VGAM::dgenray`), and laplace (see `VGAM::dlaplace`) distributions come from the `VGAM` package.  The triangular (see `triangle::dtriangle`) distribution comes from the `triangle` package.  The other distributions come from the `stats` package.  Please see the appropriate help pages for information regarding parameter inputs.
+
+1. `cdf_prob` calculates a cumulative probability using the theoretical power method cdf $\Large F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))$ up to $\Large sigma * y + mu = delta$, where $\Large y = p(z)$, after using `pdf_check` to verify that the given constants produce a valid pdf.  If the given constants do not produce a valid power method pdf, a warning is given.
+
+1. `power_norm_corr` calculates the correlation between a continuous variable produced using a polynomial transformation and the generating standard normal variable.  If the correlation is <= 0, the signs of c1 and c3 should be reversed (for `method` = "Fleishman"), or c1, c3, and c5 (for `method` = "Polynomial").  These sign changes have no effect on the cumulants of the resulting distribution.
+
+1. `pdf_check` determines if a given set of constants generates a valid power method pdf.  This requires yielding a continuous variable with a positive correlation with the generating standard normal variable and satisfying certain contraints that vary by approximation method.
+
+1. `sim_cdf_prob` calculates the simulated (empirical) cumulative probability up to a given y-value (`delta`). It uses Martin Maechler's `stats::ecdf` function to find the empirical cdf $\Large Fn$.  $\Large Fn$ is a step function with jumps $\Large i/n$ at observation values, where $\Large i$ is the number of tied observations at that value. Missing values are ignored. For observations $\Large y = (y1, y2, ..., yn)$, $\Large Fn$ is the fraction of observations less or equal to $\Large t$, i.e., $\Large Fn(t) = \#[y_{i} <= t]/n$.
+
+1. `stats_pdf` calculates the $\Large 100 * \alpha %$ symmetric trimmed mean ($\Large 0 < \alpha < 0.50$), median, mode, and maximum height of a valid power method pdf using the equations given by Headrick & Kowalchuk (2007).
+
+## Lower Kurtosis Boundary Functions:
+1. `calc_lower_skurt` determines the lower standardized kurtosis boundary for a continuous variable generated using the power method transformation.  This boundary depends on skewness (for Fleishman's third-order method) or skewness and standardized fifth and sixth cumulants (for Headrick's fifth-order method).
+
+1. `fleish_Hessian` calculates the Fleishman transformation Hessian matrix and its determinant, which are used in finding the lower kurtosis boundary for asymmetric distributions.
+
+1. `fleish_skurt_check` contains the Fleishman transformation Lagrangean constraints which are used in finding the lower kurtosis boundary for asymmetric distributions.
+
+1. `poly_skurt_check` contains the Headrick transformation Lagrangean constraints which are used in finding the lower kurtosis boundary.
+
+## Correlation Validation Functions:
+`valid_corr` (method 1) and `valid_corr2` (method 2) determine the feasible correlation bounds for ordinal, continuous, Poisson, and/or Negative Binomial variables.  If a target correlation matrix `rho` is specified, the functions check each pairwise correlation to see if it falls within the bounds.  The indices of any variable pair with a target correlation that is outside the bounds are given.  If continuous variables are required, the functions return the calculated constants, the required sixth cumulant correction (if a `Six` vector of possible values was given), and whether each set of constants generate a valid power method pdf.
+
+## Intermediate Correlation Functions:
+`findintercorr` (method 1) and `findintercorr2` (method 2) are the two main intermediate correlation calculation functions.  These functions call the other functions:
+
+1. `chat_nb` calculates the upper Frechet-Hoeffding correlation bound for Negative Binomial - Normal variable pairs used to determine the intermediate correlation for Negative Binomial - Continuous variable pairs in method 1.
+
+1. `chat_pois` calculates the upper Frechet-Hoeffding correlation bound for Poisson - Normal variable pairs used to determine the intermediate correlation for Poisson - Continuous variable pairs in method 1.
+
+1. `denom_corr_cat` is used in intermediate correlation calculations involving ordinal variables (or variables treated as ordinal, as in method 2).
+
+1. `findintercorr_cat_nb` calculates the intermediate correlation for ordinal - Negative Binomial variables in method 1.
+
+1. `findintercorr_cat_pois` calculates the intermediate correlation for ordinal - Poisson variables in method 1.
+
+1. `findintercorr_cont` calculates the intermediate correlation for continuous variables based on either Fleishman's third-order or Headrick's fifth-order approximation.
+
+1. `findintercorr_cont_cat` calculates the intermediate correlation for continuous - ordinal variables.
+
+1. `findintercorr_cont_nb` and `findintercorr_cont_nb2` calculate the intermediate correlations for continuous - Negative Binomial variables in method 1 or 2 (respectively).
+
+1. `findintercorr_cont_pois` and `findintercorr_cont_pois2` calculate the intermediate correlation for continuous - Poisson variables in method 1 or 2 (respectively).
+
+1. `findintercorr_nb` calculates the intermediate correlation for Negative Binomial variables in method 1.
+
+1. `findintercorr_pois` calculates the intermediate correlation for Poisson variables in method 1.
+
+1. `findintercorr_pois_nb` calculates the intermediate correlation for Poisson - Negative Binomial variables in method 1.
+
+1. `intercorr_fleish` contains Fleishman's third-order polynomial transformation intercorrelation equations.
+
+1. `intercorr_poly` contains Headrick's fifth-order polynomial transformation intercorrelation equations.
+
+1. `max_count_support` calculates the maximum support value for count variables by extending the method of Barbiero & Ferrari (2015) to include Negative Binomial variables.  It is used in method 2.
+
+1. `ordnorm` calculates the intermediate correlation for ordinal variables or variables treated as ordinal (as in method 2).  It is based off of `GenOrd::ordcont` with some important corrections.
+
+1. `var_cat` is used in intermediate correlation calculations involving ordinal variables (or variables treated as ordinal, as in method 2) to calculate the variance.
+
+## Error Loop Functions:
+1. `error_loop` is the main error_loop function called by `rcorrvar` or `rcorrvar2`.  
+
+1. `error_vars` is used to generate variable pairs within the error loop.
+
+## Graphing Functions:
+The 8 graphing functions either use simulated data as an input or a set of constants (found by `find_constants` or from simulation).  In the first case, the empirical cdf or pdf is found.  In the second case, the theoretical cdf or pdf is found using the equations from Headrick & Kowalchuk (2007).  These functions (`plot_cdf`, `plot_pdf_ext`, `plot_pdf_theory`) work only for continuous variable inputs.  The other graphing functions work for continuous or count variable inputs.  The graphs either display data values, pdfs, or cdfs.  In the case of cdfs, the cumulative probability up to a given y-value (delta) can be calculated and displayed on the graph (using `cdf_prob` for a set of constants or `sim_cdf_prob` for a vector of simulated data).  In the case of pdfs or actual data values, the target distribution can be overlayed on the graph.  This target distribution can either be an empirical data set or a distribution specified by name and up to 3 parameters or by a user-supplied pdf fx with support bounds (see `calc_theory`).  The graphing functions work for invalid or valid power method pdfs.  They are ggplot2 objects so designated graphing parameters (i.e. line color and type, title) can be specified by the user and the results can be further modified as necessary.
+
+1. `plot_cdf` plots the theoretical power method cumulative distribution function $\Large F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))$, given a set of constants.  If `calc_prob` = TRUE, it will also calculate the cumulative probability up to a user-specified `delta` value, where $\Large sigma * y + mu = delta$ and $\Large y = p(z)$.
+
+1. `plot_pdf_ext` plots the theoretical probability density function $\Large f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z))$, given a set of constants, and the target pdf calculated from a vector of external data.  Unlike in `plot_pdf_theory`, the vector of external data is required.  If the user wants to plot only the theoretical pdf, `plot_pdf_theory` should be used with `overlay` = FALSE.
+
+1. `plot_pdf_theory` plots the theoretical probability density function $\Large f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z))$, given a set of constants, and the target pdf (if `overlay` = TRUE), given either a distribution name and parameters or a user-supplied pdf fx (bounds set equal to bounds of simulated data).
+
+1. `plot_sim_cdf` plots the empirical cdf Fn of simulated data (see `ggplot2::stat_ecdf`).  If `calc_cprob` = TRUE, the cumulative probability up to a user-specified y-value (delta) is calculated (see `sim_cdf_prob`) and the region on the plot is filled with a dashed horizontal line drawn at $\Large Fn(delta)$.
+
+1. `plot_sim_ext` plots simulated continuous or count data and overlays external data (as a histogram).  Unlike in `plot_sim_theory`, the vector of external data is required.  If the user wants to plot only the simulated data, `plot_sim_theory` should be used with `overlay` = FALSE.
+
+1. `plot_sim_pdf_ext` plots the pdf of simulated continuous or count data and overlays the target pdf computed from a vector of external data.  Unlike in `plot_sim_pdf_theory`, the vector of external data is required.  If the user wants to plot only the pdf of simulated data, `plot_sim_pdf_theory` should be used with `overlay` = FALSE.
+
+1. `plot_sim_pdf_theory` plots the pdf of simulated continuous or count data and overlays the target pdf (if `overlay` = TRUE) specified by distribution name and parameters or by pdf fx (bounds set equal to bounds of simulated data).
+
+1. `plot_sim_theory` plots simulated continuous or count data and overlays data (if `overlay` = TRUE) randomly generated from a target distribution specified by name and parameters or by pdf fx (bounds set equal to bounds of simulated data).
+
+## Additional Helper Functions:
+These would not ordinarily be called by the user.
+
+1. `calc_final_corr` calculates the final correlation matrix.
+
+1. `separate_rho` separates a target correlation matrix by variable type.

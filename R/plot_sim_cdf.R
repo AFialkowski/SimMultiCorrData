@@ -1,0 +1,117 @@
+#' @title Plot Simulated (Empirical) Power Method Cumulative Distribution Function
+#'
+#' @description This plots the cumulative distribution function of simulated data using the empirical cdf Fn (see \code{\link[ggplot2]{stat_ecdf}}).
+#'     Fn is a step function with jumps i/n at observation values, where i is the number of tied observations at that value. Missing values are
+#'     ignored.  For observations y= (y1,y2, ... yn), Fn is the fraction of observations less or equal to t, i.e.,
+#'     \eqn{Fn(t) = sum[yi <= t]/n}.  If \code{calc_cprob} = TRUE, the cumulative probability up to \eqn{y = delta} is
+#'     calculated (see \code{\link[SimMultiCorrData]{sim_cdf_prob}}) and the region on the plot is filled with a dashed horizontal line drawn
+#'     at Fn(delta).  The cumulative probability is stated on top of the line.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
+#'     The graph parameters (i.e. \code{title}, \code{color}, \code{fill}, \code{hline}) are \code{\link[ggplot2]{ggplot2}} parameters.
+#'     It works for valid or invalid power method pdfs.
+#' @param sim_y a vector of simulated data
+#' @param title the title for the graph (default = "Empirical Cumulative Distribution Function")
+#' @param ylower the lower y value to use in the plot (default = NULL, uses minimum simulated y value)
+#' @param yupper the upper y value (default = NULL, uses maximum simulated y value)
+#' @param calc_cprob if TRUE (default), \code{\link[SimMultiCorrData]{sim_cdf_prob}} is used to find the empirical cumulative probability
+#'     up to y = delta and the region on the plot is filled with a dashed horizontal line drawn at Fn(delta)
+#' @param delta the value y at which to evaluate the cumulative probability
+#' @param color the line color for the cdf
+#' @param fill the fill color if calc_cprob = TRUE
+#' @param hline the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE
+#' @import ggplot2
+#' @import grid
+#' @export
+#' @keywords plot, simulated, empirical, cdf
+#' @seealso \code{\link[stats]{ecdf}}, \code{\link[SimMultiCorrData]{sim_cdf_prob}}, \code{\link[ggplot2]{ggplot}},
+#'     \code{\link[ggplot2]{stat_ecdf}}, \code{\link[ggplot2]{geom_hline}}, \code{\link[ggplot2]{geom_area}}
+#' @return A \code{\link[ggplot2]{ggplot2}} object.
+#' @references Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+#' Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
+#' (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#'
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+#'
+#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+#'
+#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
+#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35.
+#'
+#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
+#'
+#' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
+#'
+#' @examples \dontrun{
+#' # Logistic Distribution
+#'
+#' # Find standardized cumulants
+#' stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
+#'
+#' # Simulate without the sixth cumulant correction
+#' # (invalid power method pdf)
+#' Logvar1 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
+#'                       skews = stcum[3], skurts = stcum[4],
+#'                       fifths = stcum[5], sixths = stcum[6],
+#'                       Six = NULL, n = 10000, seed = 1234)
+#'
+#' # Plot cdf with cumulative probability calculated up to delta = 5
+#' plot_sim_cdf(sim_y = Logvar1$continuous_variable,
+#'              title = "Invalid Logistic Empirical CDF",
+#'              calc_cprob = TRUE, delta = 5)
+#'
+#' # Simulate with the sixth cumulant correction
+#' # (valid power method pdf)
+#' Logvar2 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
+#'                       skews = stcum[3], skurts = stcum[4],
+#'                       fifths = stcum[5], sixths = stcum[6],
+#'                       Six = seq(1.5, 2, 0.05), n = 10000, seed = 1234)
+#'
+#' # Plot cdf with cumulative probability calculated up to delta = 5
+#' plot_sim_cdf(sim_y = Logvar2$continuous_variable,
+#'              title = "Valid Logistic Empirical CDF",
+#'              calc_cprob = TRUE, delta = 5)
+#' }
+#'
+plot_sim_cdf <- function(sim_y,
+                         title = "Empirical Cumulative Distribution Function",
+                         ylower = NULL, yupper = NULL, calc_cprob = TRUE,
+                         delta = 5, color = "dark blue", fill = "blue",
+                         hline = "dark green") {
+  if (is.null(ylower) & is.null(yupper)) {
+    ylower <- min(sim_y)
+    yupper <- max(sim_y)
+  }
+  data <- data.frame(y = sim_y)
+  plot1 <- ggplot(data,  aes_(~y)) + stat_ecdf(geom = "step", colour = color) +
+    theme_bw() + geom_hline(yintercept = 0, lty = 2, colour = "#333333") +
+    geom_hline(yintercept = 1, lty = 2, colour = "#333333") + ggtitle(title) +
+    scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
+    scale_y_continuous(name = "Cumulative Probability") +
+    theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
+          legend.position = "none", axis.text.x  = element_text(size = 10),
+          axis.title.x = element_text(size = 13),
+          axis.text.y  = element_text(size = 10),
+          axis.title.y = element_text(size = 13))
+  if (calc_cprob == FALSE) return(plot1)
+  if (calc_cprob == TRUE) {
+    cprob <- sim_cdf_prob(sim_y = sim_y, delta = delta)
+    data2 <- data.frame(y = data[data[, 1] <= delta, ])
+    data2$cum_prob <- cprob$Fn(as.numeric(data2[, 1]))
+    text_one <- textGrob(paste("Cumulative probability = ",
+                               round(cprob$cumulative_prob, 4), ", y = ",
+                               round(delta, 4), sep = ""),
+                         gp = gpar(fontsize = 11, fontface = "bold",
+                                   col = hline))
+    plot1 <- plot1 +
+      geom_area(data = data2, aes_(x = ~y, y = ~cum_prob), fill = fill) +
+      geom_hline(yintercept = cprob$cumulative_prob, lty = 2, colour = hline) +
+      annotation_custom(text_one, xmin = 0.5 * (ylower + yupper),
+                        xmax = 0.5 * (ylower + yupper), ymin = 1.03,
+                        ymax = 1.03)
+    return(plot1)
+  }
+}

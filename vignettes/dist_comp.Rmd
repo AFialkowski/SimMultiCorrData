@@ -1,0 +1,110 @@
+---
+title: "Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data"
+author: "Allison C Fialkowski"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
+```
+
+Headrick & Kowalchuk (2007) outlined a general method for comparing a simulated distribution $\Large Y$ to a given theoretical distribution $\Large Y^*$.  Note that these could easily be modified for comparison to an empirical vector of data:
+
+1. **Obtain the standardized cumulants** (skewness, kurtosis, fifth, and sixth) for $\Large Y^*$.  This can be done using `calc_theory` along with either the distribution name (plus up to 3 parameters) or the pdf fx (plus support bounds).  In the case of an empirical vector of data, use `calc_moments` or `calc_fisherk`.
+
+1. **Obtain the constants** for $\Large Y$.  This can be done using `find_constants` or by simulating the distribution with `nonnormvar1`.
+
+1. Determine whether these constants produce a **valid power method pdf**.  The results of `find_constants` or `nonnormvar1` indicate whether the constants yield an invalid or valid pdf.  The constants may also be checked using `pdf_check`.  If the constants generate an invalid pdf, the user should check if the kurtosis falls above the lower bound (using `calc_lower_skurt`).  If yes, a vector of sixth cumulant correction values should be used in `find_constants` or `nonnormvar1` to find the smallest correction that produces valid pdf constants.
+
+1. **Select a critical value** from $\Large Y^*$, i.e. $\Large y^*$ such that $\Large Pr(Y^* \ge y^*) = 0.05$.  This can be done using the appropriate quantile function and 1 - alpha value (i.e. `qexp(1 - 0.05)`).
+
+1. **Solve** $\Large m_{2}^{1/2} * p(z') + m_{1} - y^* = 0$ for $\Large z'$, where $\Large m_{1}$ and $\Large m_{2}$ are the 1st and 2nd moments of $\Large Y^*$.
+
+1. **Calculate** $\Large 1 - \Phi(z')$, the corresponding probability for the approximation $\Large Y$ to $\Large Y^*$ (i.e. $\Large 1 - \Phi(z') = 0.05$) and compare to target value alpha.
+
+1. **Plot a parametric graph** of $\Large Y^*$ and $\Large Y$.  This can be done with a set of constants using `plot_pdf_theory` (`overlay` = TRUE) or with a simulated vector of data using `plot_sim_pdf_theory` (`overlay` = TRUE).  If comparing to an empirical vector of data, use `plot_pdf_ext` or `plot_sim_pdf_ext`.
+
+## Example
+Use these steps to compare a simulated **exponential(mean = 2) variable** to the theoretical exponential(mean = 2) density.
+
+### Step 1: Obtain the standardized cumulants
+In R, the exponential parameter is rate <- 1/mean.
+```{r, warning = FALSE, message = FALSE}
+library(SimMultiCorrData)
+
+stcums <- calc_theory(Dist = "Exponential", params = 0.5)
+stcums
+```
+
+### Step 2: Simulate the variable
+Note that `calc_theory` returns the standard deviation, not the variance.  The simulation functions require variance as the input.
+```{r}
+H_exp <- nonnormvar1("Polynomial", means = stcums[1], vars = stcums[2]^2, 
+                     skews = stcums[3], skurts = stcums[4], 
+                     fifths = stcums[5], sixths = stcums[6], Six = NULL, 
+                     cstart = NULL, n = 10000, seed = 1234)
+
+names(H_exp)
+# Look at constants
+H_exp$constants
+
+# Look at summary
+round(H_exp$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
+                               "skurtosis", "fifth", "sixth")], 5)
+```
+
+### Step 3: Determine if the constants generate a valid power method pdf
+```{r}
+H_exp$valid.pdf
+```
+
+### Step 4: Select a critical value
+Let alpha = 0.05.
+```{r}
+y_star <- qexp(1 - 0.05, rate = 0.5) # note that rate = 1/mean
+y_star
+```
+
+### Step 5: Solve for $\Large z'$
+Since the exponential(2) distribution has a mean and standard deviation equal to 2, solve $\Large 2 * p(z') + 2 - y_star = 0$ for $\Large z'$.  Here, $\Large p(z') = c0 + c1 * z' + c2 * z'^2 + c3 * z'^3 + c4 * z'^4 + c5 * z'^5$.
+```{r}
+f_exp <- function(z, c, y) {
+  return(2 * (c[1] + c[2] * z + c[3] * z^2 + c[4] * z^3 + c[5] * z^4 + 
+                c[6] * z^5) + 2 - y)
+}
+
+z_prime <- uniroot(f_exp, interval = c(-1e06, 1e06), 
+                   c = as.numeric(H_exp$constants), y = y_star)$root
+z_prime
+```
+
+### Step 6: Calculate $\Large \Phi(z')$
+```{r}
+1 - pnorm(z_prime)
+```
+This is approximately equal to the alpha value of 0.05, indicating the method provides a **good approximation to the actual distribution.**
+
+
+### Step 7: Plot graphs
+```{r}
+plot_sim_pdf_theory(sim_y = as.numeric(H_exp$continuous_variable[, 1]), 
+                    overlay = TRUE, Dist = "Exponential", params = 0.5)
+```
+
+We can also plot the empirical cdf and show the cumulative probability up to y_star.
+```{r}
+plot_sim_cdf(sim_y = as.numeric(H_exp$continuous_variable[, 1]), 
+             calc_cprob = TRUE, delta = y_star)
+```
+
+### Calculate descriptive statistics.
+```{r}
+stats_pdf(c = H_exp$constants[1, ], method = "Polynomial", alpha = 0.025, 
+          mu = 2, sigma = 2)
+```
+

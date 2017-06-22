@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Allison C Fialkowski" />
+
+<meta name="date" content="2017-06-22" />
+
+<title>Benefits of SimMultiCorrData and Comparison to Other Packages</title>
+
+
+
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Benefits of SimMultiCorrData and Comparison to Other Packages</h1>
+<h4 class="author"><em>Allison C Fialkowski</em></h4>
+<h4 class="date"><em>2017-06-22</em></h4>
+
+
+
+<p><code>SimMultiCorrData</code> generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix. It can also produce a single continuous variable. This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009). All variables are generated from standard normal variables with an imposed intermediate correlation matrix. Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman’s Third-Order or Headrick’s Fifth-Order Polynomial Transformation. Binary and ordinal variables are simulated using a modification of <code>GenOrd::ordsample</code>. Count variables are simulated using the inverse cdf method. There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix <code>Sigma</code>. In <strong>Method 1</strong>, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli’s 2012 method). In <strong>Method 2</strong>, the count variables are treated as ordinal (adapting Barbiero and Ferrari’s 2015 modification of <code>GenOrd</code>). There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.</p>
+<div id="benefits-of-this-package" class="section level2">
+<h2>Benefits of this package:</h2>
+<p>The main strengths of <code>SimMultiCorrData</code> are:</p>
+<ol style="list-style-type: decimal">
+<li><p>The user may generate <strong>correlated continuous (normal or non-normal), ordinal (r &gt;= 2 categories), Poisson and/or Negative Binomial variables</strong> simultaneously, based on either theoretical distributions or empirical data.</p></li>
+<li><p>Two distinct methods for generating non-normal continuous variables: <strong>Fleishman’s third-order or Headrick’s fifth-order polynomial transformation</strong>.</p>
+<ul>
+<li>Simulate distributions whose higher moments are unknown or do not exist using Fleishman’s third-order method.</li>
+<li>Accurately reproduce non-normal data up to the sixth moment using Headrick’s fifth-order method.</li>
+<li>Generate data with a wide range of standardized kurtosis values, given skewness and standardized fifth and sixth cumulants, using Headrick’s fifth-order method.</li>
+</ul></li>
+<li><p>Two distinct methods for generating count variables (see <strong>Comparison of Method 1 and Method 2</strong> vignette). The user may test each to see which yields greater simulation accuracy.</p></li>
+<li><p>Calculation of the <strong>precise lower kurtosis boundary</strong> using the Lagrangean constraint equations, instead of an approximation (see <code>calc_lower_skurt</code>).</p></li>
+<li><p><strong>Valid power method pdf checks</strong> during the calculation of the constants for continuous variables, and optional use of a sixth cumulant correction value to enable the discovery of valid pdf constants.</p></li>
+<li><p><strong>Computation of feasible correlation bounds</strong> based on data simulation method (see <code>valid_corr</code> for method 1 or <code>valid_corr2</code> for method 2).</p></li>
+<li><p><strong>Numerous attempts to reproduce the desired correlation matrix</strong>, including correcting for non-positive-definite intermediate correlation matrices and an optional final error loop (see <code>error_loop</code>). This error loop enables reproduction of many correlation structures that can not be achieved through other methods.</p></li>
+<li><p>Function arguments (i.e. <code>seed</code>, <code>n</code>, <code>maxit</code>, <code>epsilon</code>) that allow the user to have <strong>greater control</strong> over simulation accuracy, speed, and reproducibility.</p></li>
+<li><p><strong>Detailed simulation results</strong> include the simulation time (in minutes) and descriptions of the generated variables and the correlation structure.</p></li>
+<li><p>Additional functions to supplement the simulation process:</p>
+<ul>
+<li><strong>Summary functions</strong> that may be used to determine standardized cumulants from theoretical distributions (<code>calc_theory</code>) or a vector of data by the method of moments (<code>calc_moments</code>) or based on Fisher’s k-statistics (<code>calc_fisherk</code>). Additional summary functions compute important statistics for the generated continuous variables.</li>
+<li><strong>Plotting functions</strong> for comparing simulated data to either theoretical distributions or empirical data. The plots display either actual data, cdfs, or pdfs. The cdf plotting functions enable the user to specify a y-value to calculate the cumulative probability. This region on the graph is filled in and the probability is given on the graph. The data values and pdf graphs enable the user to overlay the target distributions. These functions produce <code>ggplot2</code> objects so that the user may save them or further adapt the graphs as necessary.</li>
+</ul></li>
+</ol>
+</div>
+<div id="comparison-to-other-r-packages" class="section level2">
+<h2>Comparison to other R packages:</h2>
+<p>There are several other simulation packages. For example, Barbiero &amp; Ferrari’s (2015) <code>GenOrd</code>, Amatya &amp; Demirtas’ (2016) <code>MultiOrd</code>, Leisch, Kaiser, &amp; Hornik’s (2010) <code>orddata</code>, and Demirtas, Nordgren, &amp; Allozi’s (2017) <code>PoisBinOrdNonNor</code>. The first three generate only binary and ordinal data, while the last generates Poisson, binary, ordinal, and non-normal variables.</p>
+<div id="barbiero-ferraris-2015-genord" class="section level3">
+<h3>Barbiero &amp; Ferrari’s (2015) <code>GenOrd</code></h3>
+<p><code>GenOrd</code> generates discrete random variables (i.e. binary/ ordinal) with given correlation matrix and marginal distributions. The method used to determine the intermediate MVN correlation matrix in <code>GenOrd::ordcont</code> has been modified in <code>SimMultiCorrData</code>’s <code>ordnorm</code> function. It works by setting the intermediate correlation equal to the target correlation of the discrete variables. Each intermediate pairwise correlation is updated until the final pairwise correlation is within a user-specified precision value (<code>epsilon</code>) of the target correlation or the maximum number of iterations (<code>maxit</code>) has been reached. <code>GenOrd::ordcont</code> has been modified in the following ways:</p>
+<ol style="list-style-type: decimal">
+<li>The initial correlation check has been removed because it is assumed the user has done this before simulation using <code>SimMultiCorrData::valid_corr</code> or <code>valid_corr2</code>.</li>
+<li>The final positive-definite check has been removed because this is done on the intermediate correlation matrix <code>Sigma</code> for all variable types, and if necessary, <code>Sigma</code> is converted to the nearest positive-definite matrix using Higham’s (2002) algorithm in <code>Matrix::nearPD</code>.</li>
+<li>The intermediate correlation update function was changed to accommodate more situations.</li>
+</ol>
+<p><code>SimMultiCorrData::ordnorm</code> uses <code>GenOrd::contord</code> to calculate the ordinal correlation obtained from discretizing the normal variables generated from the intermediate correlation matrix <code>Sigma</code>. The reason is because the function does not require random generation of the normal variables, which ensures greater reproducibility.</p>
+<p><code>SimMultiCorrData</code> also improves the way ordinal variables are generated, as compared to <code>GenOrd::ordsample</code>:</p>
+<ol style="list-style-type: decimal">
+<li>The simulation functions <code>SimMultiCorrData::rcorrvar</code> and <code>rcorrvar2</code> allow a user-specified seed, maximum number of iterations, and epsilon value.</li>
+<li><code>GenOrd::ordsample</code> stops if the intermediate correlation matrix <code>Sigma</code> is not positive-definite. As described above, <code>SimMultiCorrData</code> attempts to correct the problem and a warning is given that it may not be possible to produce the desired correlation matrix.</li>
+</ol>
+</div>
+<div id="amatya-demirtas-2016-multiord" class="section level3">
+<h3>Amatya &amp; Demirtas’ (2016) <code>MultiOrd</code></h3>
+<p><code>MultiOrd</code> generates multivariate ordinal data with given correlation matrix and marginal distributions via the <em>binary conversion method</em> of Demirtas (2006). This method computes the binary marginals by collapsing the marginal distributions of the ordinal variables. The intermediate correlation matrix is also computed through an iterative process based on matching the target matrix. Binary data are then converted to ordinal data through a randomization step. This procedure requires the simulation of large samples of binary data in order to maximize accuracy, which requires greater computational time and resources than the methods used in <code>SimMultiCorrData</code>.</p>
+</div>
+<div id="leisch-kaiser-horniks-2010-orddata" class="section level3">
+<h3>Leisch, Kaiser, &amp; Hornik’s (2010) <code>orddata</code></h3>
+<p><code>orddata</code> generates binary and ordinal data through 4 available methods:</p>
+<ol style="list-style-type: decimal">
+<li><em>Mean mapping:</em> this method involves an analytical algorithm for determining the intermediate MVN correlation. It creates the ordinal variables by thresholding the normal variates. The mean mapping method provides a wider correlation range than the binary conversion method, but the run time can be greater, depending on the number of categories and variables.</li>
+<li><em>Binary conversion:</em> Kaiser et al.‘s binary conversion is similar to the method of Demirtas. However, while Demirtas’ method uses simulations to determine the binary correlation required to create the desired ordinal variables, Kaiser et al. developed an algorithm to analytically determine the binary correlation (see Kaiser, Traeger, &amp; Leisch, 2011). The authors note that although the feasible correlation range is smaller than that of Demirtas, the analytical solution decreases computational time.</li>
+<li><em>Monte Carlo simulation:</em> this method generates ordinal values by shifting the variables until the desired correlation structure is achieved.</li>
+<li><em>A “native” method:</em> this method involves a simpler analytical algorithm than the mean mapping method and also thresholds normal variates to generate the ordinal values.</li>
+</ol>
+</div>
+<div id="demirtas-nordgren-allozis-2017-poisbinordnonnor" class="section level3">
+<h3>Demirtas, Nordgren, &amp; Allozi’s (2017) <code>PoisBinOrdNonNor</code></h3>
+<p><code>PoisBinOrdNonNor</code> is one in an extensive series of simulation packages created by Demirtas with additional authors. Other packages include <code>OrdNor</code> (Amatya &amp; Demirtas, 2015), <code>BinNonNor</code> (Inan &amp; Demirtas, 2016), <code>BinOrdNonNor</code> (Demirtas, Wang, &amp; Allozi, 2017), <code>PoisBinOrd</code> (Inan &amp; Demirtas, 2016), <code>PoisNor</code> (Amatya &amp; Demirtas, 2016), and <code>PoisBinOrdNor</code> (Demirtas, Hu, &amp; Allozi, 2017). <code>PoisBinOrdNonNor</code> generates Poisson, binary, ordinal, and non-normal variables. It differs from <code>SimMultiCorrData</code> in the following ways:</p>
+<ol style="list-style-type: decimal">
+<li>The intermediate correlation matrix must be found using a function separate from the simulation function, while <code>SimMultiCorrData</code>’s simulation functions <code>rcorrvar</code> and <code>rcorrvar2</code> allow the user to either provide an intermediate matrix or the matrix is calculated during the simulation.<br />
+</li>
+<li>The intermediate correlations for the Poisson variables are found using the method of Yahav &amp; Shmueli (2012), as in method 1 of <code>SimMultiCorrData</code>. However, <code>PoisBinOrdNonNor</code> does not produce Negative Binomial variables.<br />
+</li>
+<li>Binary intermediate correlations are calculated from tetrachoric correlations based on the method of Demirtas et al. (2012; originally from Piedmonte and Emriche, 1991), as in <code>SimMultiCorrData</code>. However, those for ordinal variables are found using <code>ordcont</code>, which, as previously mentioned, will stop if the intermediate matrix is not positive-definite.<br />
+</li>
+<li>Non-normal variables are generated using Fleishman’s third-order polynomial transformation, which generally yields simulation accuracy inferior to Headrick’s fifth-order transformation and has a smaller range of possible kurtosis values.<br />
+</li>
+<li>The authors do not provide any checks for positive correlation of the continuous variable with the generating standard normal variable or for a valid power method pdf, while <code>SimMultiCorrData</code> contains the functions <code>power_norm_corr</code> and <code>pdf_check</code>. The function that solves for the constants (<code>SimMultiCorrData::find_constants</code>) executes these checks when finding the constants and attempts to produce valid pdf constants. In the case of Headrick’s fifth-order method, the user may specify a sixth cumulant correction value to help find these constants.<br />
+</li>
+<li>The lower kurtosis boundary check in <code>PoisBinOrdNonNor</code> is a simple approximation: <span class="math inline">\(\Large standardized\ kurtosis \ge skew^2 - 2\)</span>. <code>SimMultiCorrData::calc_lower_skurt</code> solves the Lagrangean expressions (as described in Headrick, 2002 and Headrick &amp; Sawilowsky, 2002) that determine the precise lower kurtosis boundary. Examination of the boundaries computed in <code>PoisBinOrdNonNor</code> demonstrates that the approximate boundaries are much lower than the actual Fleishman boundaries, indicating that the guideline is not accurate (see <code>calc_lower_skurt</code> for examples).</li>
+<li><code>PoisBinOrdNonNor</code> does not allow the user to specify a seed for random number generation, or an epsilon value and maximum number of iterations to use when determining the intermediate ordinal correlations. These specifications, as found in <code>SimMultiCorr</code>’s simulation functions <code>rcorrvar</code> and <code>rcorrvar2</code>, are essential for reproducibility and controlling accuracy.<br />
+</li>
+<li>The results include only the generated variables, while <code>SimMultiCorr</code>’s simulation functions produce detailed summaries of the variables, the final correlation matrix, the maximum error between the final and target correlation matrices, and the simulation time.</li>
+</ol>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.</p>
+<p>Barbiero A &amp; Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in Business and Industry, 31: 669-80. .</p>
+<p>Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.</p>
+<p>Olsson U, Drasgow F, &amp; Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47. .</p>
+<p>Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate Non-normal Distributions. Computational Statistics &amp; Data Analysis 40(4):685-711 (<a href="http://www.sciencedirect.com/science/article/pii/S0167947302000725" class="uri">http://www.sciencedirect.com/science/article/pii/S0167947302000725</a>)</p>
+<p>Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.</p>
+<p>Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power Method. Psychometrika, 64, 25-35.</p>
+<p>Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.</p>
+<p>Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.</p>
+<p>Headrick TC, Sheng Y, &amp; Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using Mathematica. Journal of Statistical Software, 19(3), 1 - 17. .</p>
+<p>Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions. Journal of Modern Applied Statistical Methods, 3, 65-71.</p>
+<p>Demirtas H, Hedeker D, &amp; Mermelstein RJ (2012). Simulation of massive public health data by power polynomials. Statistics in Medicine 31:27, 3337-3346.</p>
+<p>Amatya A &amp; Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals. Journal of Statistical Computation and Simulation, 85(15): 3129-39.</p>
+<p>Yahav I &amp; Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic Models in Business and Industry, 28(1): 91-102. .</p>
+<p>Demirtas H &amp; Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds. American Statistician, 65(2): 104-109.</p>
+<p>Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding. New York: Springer-Verlag; 1994. p. 57-107.</p>
+<p>Frechet M. Sur les tableaux de correlation dont les marges sont donnees. Ann. l’Univ. Lyon SectA. 1951;14:53-77.</p>
+<p>Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32:4, (<a href="http://www.jstatsoft.org/v32/i04/" class="uri">http://www.jstatsoft.org/v32/i04/</a>)</p>
+<p>Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2. (<a href="https://CRAN.R-project.org/package=nleqslv" class="uri">https://CRAN.R-project.org/package=nleqslv</a>)</p>
+<p>Vaughan LK, Divers J, Padilla M, Redden DT, Tiwari HK, Pomp D, Allison DB (2009). The use of plasmodes as a supplement to simulations: A simple example evaluating individual admixture estimation methodologies. Comput Stat Data Anal, 53(5):1755-66. .</p>
+<p>Kaiser S, Traeger D, &amp; Leisch F (2011). Generating Correlated Ordinal Random Values. Technical Report Number 94, Department of Statistics, University of Munich. (<a href="https://epub.ub.uni-muenchen.de/12157/1/kaiser-tr-94-ordinal.pdf" class="uri">https://epub.ub.uni-muenchen.de/12157/1/kaiser-tr-94-ordinal.pdf</a>)</p>
+<p>Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given Correlation Matrix and Marginal Distributions. R package version 1.4.0. (<a href="https://CRAN.R-project.org/package=GenOrd" class="uri">https://CRAN.R-project.org/package=GenOrd</a>)</p>
+<p>Amatya A &amp; Demirtas H (2016). MultiOrd: Generation of Multivariate Ordinal Variates. R package version 2.2. (<a href="https://CRAN.R-project.org/package=MultiOrd" class="uri">https://CRAN.R-project.org/package=MultiOrd</a>)</p>
+<p>Leisch F, Kaiser AWS, &amp; Hornik K (2010). orddata: Generation of Artificial Ordinal and Binary Data. R package version 0.1/r4.</p>
+<p>Demirtas H, Nordgren R, &amp; Allozi R (2017). PoisBinOrdNonNor: Generation of Up to Four Different Types of Variables. R package version 1.3. (<a href="https://CRAN.R-project.org/package=PoisBinOrdNonNor" class="uri">https://CRAN.R-project.org/package=PoisBinOrdNonNor</a>)</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+#' @title Fleishman Transformation Hessian Calculation for Lower Boundary of Standardized Kurtosis in Asymmetric Distributions
+#'
+#' @description This function gives the second-order conditions necessary to verify that a kurtosis is a global minimum.  A kurtosis solution from
+#'     \code{\link[SimMultiCorrData]{fleish_skurt_check}} is a global minimum if and only if the determinant of the bordered Hessian, \eqn{H}, is
+#'     less than zero (see Headrick & Sawilowsky, 2002), where
+#'     \deqn{|\bar{H}| = matrix(c(0, dg(c1, c3)/dc1, dg(c1, c3)/dc3,}
+#'     \deqn{dg(c1, c3)/dc1, d^2 F(c1, c3, \lambda)/dc1^2, d^2 F(c1, c3, \lambda)/(dc3 dc1),}
+#'     \deqn{dg(c1, c3)/dc3, d^2 F(c1, c3, \lambda)/(dc1 dc3), d^2 F(c1, c3, \lambda)/dc3^2), 3, 3, byrow = TRUE)}
+#'     Here, \eqn{F(c1, c3, \lambda) = f(c1, c3) + \lambda * [\gamma_{1} - g(c1, c3)]} is the Fleishman Transformation Lagrangean expression
+#'     (see \code{\link[SimMultiCorrData]{fleish_skurt_check}}).  Headrick & Sawilowsky (2002) gave equations for the second-order derivatives
+#'     \eqn{d^2 F/dc1^2}, \eqn{d^2 F/dc3^2}, and \eqn{d^2 F/(dc1 dc3)}.  These were verified and \eqn{dg/dc1} and \eqn{dg/dc3} were calculated
+#'     using \code{\link[stats]{D}}.  This function would not ordinarily be called by the user.
+#'
+#' @param c a vector of constants c1, c3, lambda
+#' @export
+#' @keywords kurtosis, boundary, Fleishman, Hessian
+#' @seealso \code{\link[SimMultiCorrData]{fleish_skurt_check}}, \code{\link[SimMultiCorrData]{calc_lower_skurt}}
+#' @return A list with components:
+#' @return \code{Hessian} the Hessian matrix H
+#' @return \code{H_det} the determinant of H
+#' @references Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+#'
+#' Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
+#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
+#'
+#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35.
+#'
+fleish_Hessian <- function(c) {
+  F_bb <- -(12 * (4 * (3 * c[1]^2) + 34 * (3 * (2 * c[1])) * c[2] +
+                    324 * 2 * c[2]^2) +
+             c[3] * ((8 - 6 * c[1]^4 - 2 * c[1]^6 + 144 * c[1] * c[2] -
+                        144 * c[1]^3 * c[2] - 108 * c[1]^5 * c[2] +
+                        720 * c[2]^2 - 540 * c[1]^2 * c[2]^2 - 2178 *
+                        c[1]^4 * c[2]^2 + 2160 * c[1] * c[2]^3 -
+                        20952 * c[1]^3 * c[2]^3 + 9450 *
+                        c[2]^4 - 106110 * c[1]^2 * c[2]^4 -
+                        283500 * c[1] * c[2]^5 - 330750 *
+                        c[2]^6)^((-1/2) - 1) * ((-1/2) * (144 * c[2] -
+                        (6 * (4 * c[1]^3) + 2 * (6 * c[1]^5)) - 144 *
+                          (3 * c[1]^2) * c[2] - 108 * (5 * c[1]^4) * c[2] -
+                          540 * (2 * c[1]) * c[2]^2 - 2178 *
+                          (4 * c[1]^3) * c[2]^2 + 2160 * c[2]^3 - 20952 *
+                          (3 * c[1]^2) * c[2]^3 - 106110 * (2 * c[1]) *
+                          c[2]^4 - 283500 * c[2]^5)) * ((1/2) * (144 * c[2] -
+                        (6 * (4 * c[1]^3) + 2 * (6 * c[1]^5)) - 144 *
+                          (3 * c[1]^2) * c[2] - 108 * (5 * c[1]^4) * c[2] -
+                          540 * (2 * c[1]) * c[2]^2 - 2178 * (4 * c[1]^3) *
+                          c[2]^2 + 2160 * c[2]^3 - 20952 * (3 * c[1]^2) *
+                          c[2]^3 - 106110 * (2 * c[1]) * c[2]^4 - 283500 *
+                          c[2]^5)) - (8 - 6 * c[1]^4 - 2 * c[1]^6 +
+                        144 * c[1] * c[2] - 144 * c[1]^3 * c[2] - 108 *
+                          c[1]^5 * c[2] + 720 * c[2]^2 - 540 * c[1]^2 *
+                          c[2]^2 - 2178 * c[1]^4 * c[2]^2 + 2160 * c[1] *
+                          c[2]^3 - 20952 * c[1]^3 * c[2]^3 + 9450 * c[2]^4 -
+                          106110 * c[1]^2 * c[2]^4 - 283500 * c[1] * c[2]^5 -
+                          330750 * c[2]^6)^(-1/2) * ((1/2) * (6 * (4 * (3 *
+                        c[1]^2)) + 2 * (6 * (5 * c[1]^4)) + 144 * (3 * (2 *
+                        c[1])) * c[2] + 108 * (5 * (4 * c[1]^3)) * c[2] +
+                       540 * 2 * c[2]^2 + 2178 * (4 * (3 * c[1]^2)) * c[2]^2 +
+                         20952 * (3 * (2 * c[1])) * c[2]^3 +
+                         106110 * 2 * c[2]^4))))
+
+  F_bd <- 12 * (24 - 34 * (3 * c[1]^2) - 324 * (2 * c[1]) * (2 * c[2]) -
+          1170 * (3 * c[2]^2)) - c[3] * ((8 - 6 * c[1]^4 - 2 * c[1]^6 +
+          144 * c[1] * c[2] - 144 * c[1]^3 * c[2] - 108 * c[1]^5 * c[2] +
+          720 * c[2]^2 - 540 * c[1]^2 * c[2]^2 - 2178 * c[1]^4 * c[2]^2 +
+          2160 * c[1] * c[2]^3 - 20952 * c[1]^3 * c[2]^3 + 9450 * c[2]^4 -
+          106110 * c[1]^2 * c[2]^4 - 283500 * c[1] * c[2]^5 - 330750 *
+          c[2]^6)^((-1/2) - 1) * ((-1/2) * (144 * c[1] - 144 * c[1]^3 -
+          108 * c[1]^5 + 720 * (2 * c[2]) - 540 * c[1]^2 * (2 * c[2]) -
+          2178 * c[1]^4 * (2 * c[2]) + 2160 * c[1] * (3 * c[2]^2) -
+          20952 * c[1]^3 * (3 * c[2]^2) + 9450 * (4 * c[2]^3) - 106110 *
+          c[1]^2 * (4 * c[2]^3) - 283500 * c[1] * (5 * c[2]^4) - 330750 *
+          (6 * c[2]^5))) * ((1/2) * (144 * c[2] - (6 * (4 * c[1]^3) + 2 *
+          (6 * c[1]^5)) - 144 * (3 * c[1]^2) * c[2] - 108 * (5 * c[1]^4) *
+          c[2] - 540 * (2 * c[1]) * c[2]^2 - 2178 * (4 * c[1]^3) * c[2]^2 +
+          2160 * c[2]^3 - 20952 * (3 * c[1]^2) * c[2]^3 - 106110 *
+          (2 * c[1]) * c[2]^4 - 283500 * c[2]^5)) + (8 - 6 * c[1]^4 -
+          2 * c[1]^6 + 144 * c[1] * c[2] - 144 * c[1]^3 * c[2] - 108 *
+          c[1]^5 * c[2] + 720 * c[2]^2 - 540 * c[1]^2 * c[2]^2 - 2178 *
+          c[1]^4 * c[2]^2 + 2160 * c[1] * c[2]^3 - 20952 * c[1]^3 * c[2]^3 +
+          9450 * c[2]^4 - 106110 * c[1]^2 * c[2]^4 - 283500 * c[1] * c[2]^5 -
+          330750 * c[2]^6)^(-1/2) * ((1/2) * (144 - 144 * (3 * c[1]^2) -
+          108 * (5 * c[1]^4) - 540 * (2 * c[1]) * (2 * c[2]) - 2178 *
+          (4 * c[1]^3) * (2 * c[2]) + 2160 * (3 * c[2]^2) - 20952 *
+          (3 * c[1]^2) * (3 * c[2]^2) - 106110 * (2 * c[1]) * (4 * c[2]^3) -
+          283500 * (5 * c[2]^4))))
+
+  F_db <- F_bd
+
+  F_dd <- 12 * (150 * 2 - 324 * c[1]^2 * 2 - 1170 * c[1] * (3 * (2 * c[2])) -
+          1665 * (4 * (3 * c[2]^2))) - c[3] * ((8 - 6 * c[1]^4 - 2 * c[1]^6 +
+          144 * c[1] * c[2] - 144 * c[1]^3 * c[2] - 108 * c[1]^5 * c[2] +
+          720 * c[2]^2 - 540 * c[1]^2 * c[2]^2 - 2178 * c[1]^4 * c[2]^2 +
+          2160 * c[1] * c[2]^3 - 20952 * c[1]^3 * c[2]^3 + 9450 * c[2]^4 -
+          106110 * c[1]^2 * c[2]^4 - 283500 * c[1] * c[2]^5 - 330750 *
+          c[2]^6)^(((1/2) - 1) - 1) * (((1/2) - 1) * (144 * c[1] - 144 *
+          c[1]^3 - 108 * c[1]^5 + 720 * (2 * c[2]) - 540 * c[1]^2 *
+          (2 * c[2]) - 2178 * c[1]^4 * (2 * c[2]) + 2160 * c[1] *
+          (3 * c[2]^2) - 20952 * c[1]^3 * (3 * c[2]^2) + 9450 * (4 * c[2]^3) -
+          106110 * c[1]^2 * (4 * c[2]^3) - 283500 * c[1] * (5 * c[2]^4) -
+          330750 * (6 * c[2]^5))) * ((1/2) * (144 * c[1] - 144 * c[1]^3 -
+          108 * c[1]^5 + 720 * (2 * c[2]) - 540 * c[1]^2 * (2 * c[2]) -
+          2178 * c[1]^4 * (2 * c[2]) + 2160 * c[1] * (3 * c[2]^2) - 20952 *
+          c[1]^3 * (3 * c[2]^2) + 9450 * (4 * c[2]^3) - 106110 * c[1]^2 *
+          (4 * c[2]^3) - 283500 * c[1] * (5 * c[2]^4) - 330750 *
+          (6 * c[2]^5))) + (8 - 6 * c[1]^4 - 2 * c[1]^6 + 144 * c[1] * c[2] -
+          144 * c[1]^3 * c[2] - 108 * c[1]^5 * c[2] + 720 * c[2]^2 - 540 *
+          c[1]^2 * c[2]^2 - 2178 * c[1]^4 * c[2]^2 + 2160 * c[1] * c[2]^3 -
+          20952 * c[1]^3 * c[2]^3 + 9450 * c[2]^4 - 106110 * c[1]^2 * c[2]^4 -
+          283500 * c[1] * c[2]^5 - 330750 * c[2]^6)^(-1/2) * ((1/2) *
+          (720 * 2 - 540 * c[1]^2 * 2 - 2178 * c[1]^4 * 2 + 2160 * c[1] *
+          (3 * (2 * c[2])) - 20952 * c[1]^3 * (3 * (2 * c[2])) +
+          9450 * (4 * (3 * c[2]^2)) - 106110 * c[1]^2 * (4 * (3 * c[2]^2)) -
+          283500 * c[1] * (5 * (4 * c[2]^3)) - 330750 * (6 * (5 * c[2]^4)))))
+
+  g_b <- (8 - 6 * c[1]^4 - 2 * c[1]^6 + 144 * c[1] * c[2] -
+            144 * c[1]^3 * c[2] - 108 * c[1]^5 * c[2] + 720 * c[2]^2 -
+            540 * c[1]^2 * c[2]^2 - 2178 * c[1]^4 * c[2]^2 +
+            2160 * c[1] * c[2]^3 - 20952 * c[1]^3 * c[2]^3 + 9450 * c[2]^4 -
+            106110 * c[1]^2 * c[2]^4 - 283500 * c[1] * c[2]^5 -
+            330750 * c[2]^6)^(-1/2) * ((1/2) * (144 * c[2] -
+            (6 * (4 * c[1]^3) + 2 * (6 * c[1]^5)) - 144 * (3 * c[1]^2) *
+            c[2] - 108 * (5 * c[1]^4) * c[2] - 540 * (2 * c[1]) * c[2]^2 -
+            2178 * (4 * c[1]^3) * c[2]^2 + 2160 * c[2]^3 - 20952 *
+            (3 * c[1]^2) * c[2]^3 - 106110 * (2 * c[1]) * c[2]^4 -
+              283500 * c[2]^5))
+
+  g_d <- (8 - 6 * c[1]^4 - 2 * c[1]^6 + 144 * c[1] * c[2] - 144 * c[1]^3 *
+          c[2] - 108 * c[1]^5 * c[2] + 720 * c[2]^2 - 540 * c[1]^2 * c[2]^2 -
+          2178 * c[1]^4 * c[2]^2 + 2160 * c[1] * c[2]^3 - 20952 * c[1]^3 *
+          c[2]^3 + 9450 * c[2]^4 - 106110 * c[1]^2 * c[2]^4 - 283500 * c[1] *
+          c[2]^5 - 330750 * c[2]^6)^(-1/2) * ((1/2) * (144 * c[1] - 144 *
+          c[1]^3 - 108 * c[1]^5 + 720 * (2 * c[2]) - 540 * c[1]^2 *
+          (2 * c[2]) - 2178 * c[1]^4 * (2 * c[2]) + 2160 * c[1] *
+          (3 * c[2]^2) - 20952 * c[1]^3 * (3 * c[2]^2) + 9450 *
+          (4 * c[2]^3) - 106110 * c[1]^2 * (4 * c[2]^3) - 283500 * c[1] *
+          (5 * c[2]^4) - 330750 * (6 * c[2]^5)))
+  H <- matrix(c(0, g_b, g_d, g_b, F_bb, F_db, g_d, F_bd, F_dd), 3, 3,
+              byrow = TRUE)
+  return(list(Hessian = H, H_det = det(H)))
+}

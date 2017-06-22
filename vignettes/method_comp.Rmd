@@ -1,0 +1,122 @@
+---
+title: "Comparison of Method 1 and Method 2"
+author: "Allison C Fialkowski"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparison of Method 1 and Method 2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix `Sigma`.  Note, unless otherwise indicated, the functions referenced below come from `SimMultiCorrData`.
+
+## Methods Used in Both Pathways:
+First, the intermediate correlation calculations which are equivalent in the two pathways will be discussed by variable type.
+
+### Ordinal Variables:
+Correlations are computed pairwise.  If both variables are **binary**, the method of Demirtas et al. (2012) is used to find the *tetrachoric correlation* (code adapted from \code{\link[BinNonNor]{Tetra.Corr.BB}}).  The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale.  The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete.  This method is based on Emrich and Piedmonte's (1991) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution: 
+
+Let $\Large Y_{1}$ and $\Large Y_{2}$ be binary variables with $\Large E[Y_{1}] = Pr(Y_{1} = 1) = p_{1}$, $\Large E[Y_{2}] = Pr(Y_{2} = 1) = p_{2}$, and correlation $\Large \rho_{y1y2}$.  
+
+Let $\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}]$ be the standard bivariate normal cumulative distribution function, given by:
+
+
+$\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}] = \int_{-\infty}^{x_{1}} \int_{-\infty}^{x_{2}} f(z_{1}, z_{2}, \rho_{x1x2}) dz_{1} dz_{2}$,
+
+where
+
+$\Large f(z_{1}, z_{2}, \rho_{x1x2}) = [2\pi\sqrt{1 - \rho_{x1x2}^2}]^{-1} * exp[-0.5(z_{1}^2 - 2\rho_{x1x2}z_{1}z_{2} + z_{2}^2)/(1 - \rho_{x1x2}^2)]$.
+
+Then solving the equation
+
+$\Large \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} + p_{1}p_{2}$
+
+for $\Large \rho_{x1x2}$ gives the intermediate correlation of the standard normal variables needed to generate binary variables with correlation $\Large \rho_{y1y2}$.  Here $\Large z(p)$ indicates the $\Large p^{th}$ quantile of the standard normal distribution.  
+
+To generate the binary variables from the standard normal variables, set $\Large Y_{1} = 1$ if $\Large Z_{1} \le z(p_{1})$ and $\Large Y_{1} = 0$ otherwise.  Similarly, set $\Large Y_{2} = 1$ if $\Large Z_{2} \le z(p_{2})$ and $\Large Y_{2} = 0$ otherwise.  
+
+This ensures:
+
+1. $\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1}$,
+1. $\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2}$,
+1. $\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}$ 
+   $= Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}$ 
+   $= \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}$ 
+   $= \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})}$, and
+1. $\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}$.
+
+**Otherwise**, `ordnorm` is called for each pair.  If the resulting intermediate matrix is not positive-definite, this is corrected for later.
+
+### Continuous Variables:
+Correlations are computed pairwise.  `findintercorr_cont` is called for each pair.
+
+### Continuous-Ordinal Pairs:
+`findintercorr_cont_cat` is called to calculate the intermediate MVN correlation for all Continuous and Ordinal combinations.
+
+Now the two methods will be contrasted.
+
+## Overview of Method 1:
+The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy increases with sample size and the number of repetitions (see `findintercorr`).  Specifying the seed allows for reproducibility.  In addition, method 1 differs from method 2 in the following ways:
+
+1. The intermediate correlation for **count variables** is based on the method of *Yahav & Shmueli (2012)*, which uses a simulation based, logarithmic transformation of the target correlation.  This method becomes less accurate as the variable mean gets closer to zero.
+
+    a) *Poisson variables:* `findintercorr_pois` is called to calculate the intermediate MVN correlation for all variables.
+    b) *Negative Binomial variables:* `findintercorr_nb` is called to calculate the intermediate MVN correlation for all variables.
+
+1. The **ordinal - count variable** correlations are based on an extension of the method of *Amatya & Demirtas (2015)*, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and a simulated upper bound on the correlation between an ordinal variable and the normal variable used to generate it (see Demirtas & Hedeker, 2011).
+
+    a) *Poisson variables:* `findintercorr_cat_pois` is called to calculate the intermediate MVN correlation for all variables.
+    b) *Negative Binomial variables:* `findintercorr_cat_nb` is called to calculate the intermediate MVN correlation for all variables.
+
+1. The **continuous - count variable** correlations are based on an extension of the methods of *Amatya & Demirtas (2015)* and *Demirtas et al. (2012)*, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007).  The intermediate correlations are the ratio of the target correlations to the correction factor.
+
+    a) *Poisson variables:* `findintercorr_cont_pois` is called to calculate the intermediate MVN correlation for all variables.
+    b) *Negative Binomial variables:* `findintercorr_cont_nb` is called to calculate the intermediate MVN correlation for all variables.
+
+### Simulation Process: 
+The algorithm used in the simulation function `rcorrvar` that employs method 1 is as follows:
+
+1. Preliminary checks on the distribution parameters and target correlation matrix `rho` are performed to ensure they are of the correct dimension, format, and/or sign.  This function does NOT verify the feasibility of `rho`, given the distribution parameters.  That should be done first using `valid_corr`,  which checks if `rho` is within the feasible bounds and returns the lower and upper correlation limits.
+
+1. The constants are calculated for the continuous variables using `find_constants`.  If no solutions are found that generate valid power method pdfs, the function will return constants that produce invalid pdfs (or a stop error if no solutions can be found).  Errors regarding constant calculation are the most probable cause of function failure.  Possible solutions include:
+
+    a) changing the seed, or 
+    b) using a list Six of sixth cumulant correction values (if `method` = "Polynomial").  
+    
+1. The support is created for the ordinal variables (if no support provided).
+
+1. The intermediate correlation matrix `Sigma` is calculated using `findintercorr`.  Note that this will return a matrix that is not positive-definite.  If so, there will be a message that it may not be possible to produce variables with the desired distributions.  Also, the algorithm of Higham (2002) is used (see `Matrix::nearPD`) to produce the nearest positive-definite matrix and a message is given.
+
+1. `k <- k_cat + k_cont + k_pois + k_nb` multivariate normal variables with correlation matrix `Sigma` are generated using eigen-value and spectral value decompositions on a X <- n x k MVN(0,1) matrix.
+
+1. The variables are generated from X using the appropriate transformations (see **Variable Types** vignette)
+
+1. The final correlation matrix is calculated, and the maximum error (`maxerr`) from the target correlation matrix is found.
+
+1. If the error loop is specified (`error_loop` = TRUE), it is used on each variable pair to correct the final correlation until it is within epsilon of the target correlation or the maximum number of iterations has been reached.  Additionally, if the extra correction is specified(`extra_correct` = TRUE), if the maximum error within each variable pair is still greater than 0.1, the intermediate correlation is set equal to the target correlation (with the assumption that the calculated final correlation will be less than 0.1 away from the target).
+
+1. Summary statistics are calculated by variable type.
+
+## Overview of Method 2:
+The intermediate correlations used in method 2 are less simulation based than those in method 1  (see `findintercorr2`).  Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible).  In addition, method 2 differs from method 1 in the following ways:
+
+1. The intermediate correlations involving **count variables** are based on the methods of *Barbiero & Ferrari (2012, 2015)*.  The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability.  This truncation factor may differ for each count variable (see `max_count_support`).  The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of `ordnorm`.
+
+1. The **continuous - count variable** correlations are based on an extension of the method of *Demirtas et al. (2012)*, and the count variables are treated as ordinal.  The correction factor is the product of the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007) and the point-polyserial correlation between the ordinalized count variable and the normal variable used to generate it (see Olsson et al., 1982).  The intermediate correlations are the ratio of the target correlations to the correction factor.
+
+    a) *Poisson variables:* `findintercorr_cont_pois2` is called to calculate the intermediate MVN correlation for all variables.
+    b) *Negative Binomial variables:* `findintercorr_cont_nb2` is called to calculate the intermediate MVN correlation for all variables.
+
+### Simulation Process:
+The algorithm used in the simulation function `rcorrvar2` that employs method 2 is similar to that described for `rcorrvar`, with a few modifications:
+
+1. The feasibility of `rho`, given the distribution parameters, should be checked first using the function `valid_corr2`, which checks if `rho` is within the feasible bounds and returns the lower and upper correlation limits.
+
+1. After the support is created for the ordinal variables (if no support is provided), the maximum support for the count variables is determined using `max_count_support`, given truncation value vector `pois_eps` for Poisson variables and/or `nb_eps` for Negative Binomial variables.  The cumulative probability truncation value may differ by variable, but a good value is $0.0001$.  The resulting supports and distribution parameters are used to create marginal lists, consisting of the cumulative probabilities for each count variable.
+
+1. The intermediate correlation matrix `Sigma` is calculated using `findintercorr2`.

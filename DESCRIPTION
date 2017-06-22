@@ -1,0 +1,38 @@
+Package: SimMultiCorrData
+Type: Package
+Title: Simulation of Correlated Data with Multiple Variable Types
+Version: 0.1.0
+Author: Allison Cynthia Fialkowski
+Maintainer: Allison Cynthia Fialkowski <allijazz@uab.edu>
+Description: Generate continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative 
+    Binomial) variables with a specified correlation matrix.  It can also produce a single continuous 
+    variable.  This package can be used to simulate data sets that mimic real-world situations (i.e. 
+    clinical data sets, plasmodes).  All variables are generated from standard normal variables with 
+    an imposed intermediate correlation matrix.  Continuous variables are simulated by 
+    specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized 
+    cumulants using either Fleishman's Third-Order or Headrick's Fifth-Order Polynomial 
+    Transformation.  Binary and ordinal variables are simulated using a modification of GenOrd's 
+    ordsample function.  Count variables are simulated using the inverse cdf method.  There are 
+    two simulation pathways which differ primarily according to the calculation of the 
+    intermediate correlation matrix.  In Method 1, the intercorrelations involving count variables 
+    are determined using a simulation based, logarithmic correlation correction (adapting Yahav 
+    and Shmueli's 2012 method).  In Method 2, the count variables are treated as ordinal 
+    (adapting Barbiero and Ferrari's 2015 modification of GenOrd).  There is an optional error 
+    loop that corrects the final correlation matrix to be within a user-specified precision 
+    value of the target matrix. The package also includes functions to calculate standardized 
+    cumulants for theoretical distributions or from real data sets, check if a target 
+    correlation matrix is within the possible correlation bounds (given the distributions of 
+    the simulated variables), summarize results (numerically or graphically), to verify valid 
+    power method pdfs, and to calculate lower standardized kurtoses bounds.
+Depends: R (>= 3.3.1)
+License: GPL-2
+Imports:
+    BB, nleqslv, MASS, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, BinNonNor, stats, utils
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(wrap = FALSE)
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/AFialkowski/SimMultiCorrData

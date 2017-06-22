@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Allison C Fialkowski" />
+
+<meta name="date" content="2017-06-22" />
+
+<title>Comparison of Method 1 and Method 2</title>
+
+
+
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Comparison of Method 1 and Method 2</h1>
+<h4 class="author"><em>Allison C Fialkowski</em></h4>
+<h4 class="date"><em>2017-06-22</em></h4>
+
+
+
+<p>There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix <code>Sigma</code>. Note, unless otherwise indicated, the functions referenced below come from <code>SimMultiCorrData</code>.</p>
+<div id="methods-used-in-both-pathways" class="section level2">
+<h2>Methods Used in Both Pathways:</h2>
+<p>First, the intermediate correlation calculations which are equivalent in the two pathways will be discussed by variable type.</p>
+<div id="ordinal-variables" class="section level3">
+<h3>Ordinal Variables:</h3>
+<p>Correlations are computed pairwise. If both variables are <strong>binary</strong>, the method of Demirtas et al. (2012) is used to find the <em>tetrachoric correlation</em> (code adapted from ). The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale. The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete. This method is based on Emrich and Piedmonte’s (1991) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution:</p>
+<p>Let <span class="math inline">\(\Large Y_{1}\)</span> and <span class="math inline">\(\Large Y_{2}\)</span> be binary variables with <span class="math inline">\(\Large E[Y_{1}] = Pr(Y_{1} = 1) = p_{1}\)</span>, <span class="math inline">\(\Large E[Y_{2}] = Pr(Y_{2} = 1) = p_{2}\)</span>, and correlation <span class="math inline">\(\Large \rho_{y1y2}\)</span>.</p>
+<p>Let <span class="math inline">\(\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}]\)</span> be the standard bivariate normal cumulative distribution function, given by:</p>
+<p><span class="math inline">\(\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}] = \int_{-\infty}^{x_{1}} \int_{-\infty}^{x_{2}} f(z_{1}, z_{2}, \rho_{x1x2}) dz_{1} dz_{2}\)</span>,</p>
+<p>where</p>
+<p><span class="math inline">\(\Large f(z_{1}, z_{2}, \rho_{x1x2}) = [2\pi\sqrt{1 - \rho_{x1x2}^2}]^{-1} * exp[-0.5(z_{1}^2 - 2\rho_{x1x2}z_{1}z_{2} + z_{2}^2)/(1 - \rho_{x1x2}^2)]\)</span>.</p>
+<p>Then solving the equation</p>
+<p><span class="math inline">\(\Large \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} + p_{1}p_{2}\)</span></p>
+<p>for <span class="math inline">\(\Large \rho_{x1x2}\)</span> gives the intermediate correlation of the standard normal variables needed to generate binary variables with correlation <span class="math inline">\(\Large \rho_{y1y2}\)</span>. Here <span class="math inline">\(\Large z(p)\)</span> indicates the <span class="math inline">\(\Large p^{th}\)</span> quantile of the standard normal distribution.</p>
+<p>To generate the binary variables from the standard normal variables, set <span class="math inline">\(\Large Y_{1} = 1\)</span> if <span class="math inline">\(\Large Z_{1} \le z(p_{1})\)</span> and <span class="math inline">\(\Large Y_{1} = 0\)</span> otherwise. Similarly, set <span class="math inline">\(\Large Y_{2} = 1\)</span> if <span class="math inline">\(\Large Z_{2} \le z(p_{2})\)</span> and <span class="math inline">\(\Large Y_{2} = 0\)</span> otherwise.</p>
+<p>This ensures:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1}\)</span>,</li>
+<li><span class="math inline">\(\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2}\)</span>,</li>
+<li><span class="math inline">\(\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}\)</span> <span class="math inline">\(= Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}\)</span> <span class="math inline">\(= \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}\)</span> <span class="math inline">\(= \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})}\)</span>, and</li>
+<li><span class="math inline">\(\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}\)</span>.</li>
+</ol>
+<p><strong>Otherwise</strong>, <code>ordnorm</code> is called for each pair. If the resulting intermediate matrix is not positive-definite, this is corrected for later.</p>
+</div>
+<div id="continuous-variables" class="section level3">
+<h3>Continuous Variables:</h3>
+<p>Correlations are computed pairwise. <code>findintercorr_cont</code> is called for each pair.</p>
+</div>
+<div id="continuous-ordinal-pairs" class="section level3">
+<h3>Continuous-Ordinal Pairs:</h3>
+<p><code>findintercorr_cont_cat</code> is called to calculate the intermediate MVN correlation for all Continuous and Ordinal combinations.</p>
+<p>Now the two methods will be contrasted.</p>
+</div>
+</div>
+<div id="overview-of-method-1" class="section level2">
+<h2>Overview of Method 1:</h2>
+<p>The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy increases with sample size and the number of repetitions (see <code>findintercorr</code>). Specifying the seed allows for reproducibility. In addition, method 1 differs from method 2 in the following ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>The intermediate correlation for <strong>count variables</strong> is based on the method of <em>Yahav &amp; Shmueli (2012)</em>, which uses a simulation based, logarithmic transformation of the target correlation. This method becomes less accurate as the variable mean gets closer to zero.</p>
+<ol style="list-style-type: lower-alpha">
+<li><em>Poisson variables:</em> <code>findintercorr_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+<li><em>Negative Binomial variables:</em> <code>findintercorr_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+</ol></li>
+<li><p>The <strong>ordinal - count variable</strong> correlations are based on an extension of the method of <em>Amatya &amp; Demirtas (2015)</em>, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and a simulated upper bound on the correlation between an ordinal variable and the normal variable used to generate it (see Demirtas &amp; Hedeker, 2011).</p>
+<ol style="list-style-type: lower-alpha">
+<li><em>Poisson variables:</em> <code>findintercorr_cat_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+<li><em>Negative Binomial variables:</em> <code>findintercorr_cat_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+</ol></li>
+<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the methods of <em>Amatya &amp; Demirtas (2015)</em> and <em>Demirtas et al. (2012)</em>, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick &amp; Kowalchuk, 2007). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
+<ol style="list-style-type: lower-alpha">
+<li><em>Poisson variables:</em> <code>findintercorr_cont_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+<li><em>Negative Binomial variables:</em> <code>findintercorr_cont_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+</ol></li>
+</ol>
+<div id="simulation-process" class="section level3">
+<h3>Simulation Process:</h3>
+<p>The algorithm used in the simulation function <code>rcorrvar</code> that employs method 1 is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Preliminary checks on the distribution parameters and target correlation matrix <code>rho</code> are performed to ensure they are of the correct dimension, format, and/or sign. This function does NOT verify the feasibility of <code>rho</code>, given the distribution parameters. That should be done first using <code>valid_corr</code>, which checks if <code>rho</code> is within the feasible bounds and returns the lower and upper correlation limits.</p></li>
+<li><p>The constants are calculated for the continuous variables using <code>find_constants</code>. If no solutions are found that generate valid power method pdfs, the function will return constants that produce invalid pdfs (or a stop error if no solutions can be found). Errors regarding constant calculation are the most probable cause of function failure. Possible solutions include:</p>
+<ol style="list-style-type: lower-alpha">
+<li>changing the seed, or</li>
+<li>using a list Six of sixth cumulant correction values (if <code>method</code> = “Polynomial”).</li>
+</ol></li>
+<li><p>The support is created for the ordinal variables (if no support provided).</p></li>
+<li><p>The intermediate correlation matrix <code>Sigma</code> is calculated using <code>findintercorr</code>. Note that this will return a matrix that is not positive-definite. If so, there will be a message that it may not be possible to produce variables with the desired distributions. Also, the algorithm of Higham (2002) is used (see <code>Matrix::nearPD</code>) to produce the nearest positive-definite matrix and a message is given.</p></li>
+<li><p><code>k &lt;- k_cat + k_cont + k_pois + k_nb</code> multivariate normal variables with correlation matrix <code>Sigma</code> are generated using eigen-value and spectral value decompositions on a X &lt;- n x k MVN(0,1) matrix.</p></li>
+<li><p>The variables are generated from X using the appropriate transformations (see <strong>Variable Types</strong> vignette)</p></li>
+<li><p>The final correlation matrix is calculated, and the maximum error (<code>maxerr</code>) from the target correlation matrix is found.</p></li>
+<li><p>If the error loop is specified (<code>error_loop</code> = TRUE), it is used on each variable pair to correct the final correlation until it is within epsilon of the target correlation or the maximum number of iterations has been reached. Additionally, if the extra correction is specified(<code>extra_correct</code> = TRUE), if the maximum error within each variable pair is still greater than 0.1, the intermediate correlation is set equal to the target correlation (with the assumption that the calculated final correlation will be less than 0.1 away from the target).</p></li>
+<li><p>Summary statistics are calculated by variable type.</p></li>
+</ol>
+</div>
+</div>
+<div id="overview-of-method-2" class="section level2">
+<h2>Overview of Method 2:</h2>
+<p>The intermediate correlations used in method 2 are less simulation based than those in method 1 (see <code>findintercorr2</code>). Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible). In addition, method 2 differs from method 1 in the following ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>The intermediate correlations involving <strong>count variables</strong> are based on the methods of <em>Barbiero &amp; Ferrari (2012, 2015)</em>. The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability. This truncation factor may differ for each count variable (see <code>max_count_support</code>). The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of <code>ordnorm</code>.</p></li>
+<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the method of <em>Demirtas et al. (2012)</em>, and the count variables are treated as ordinal. The correction factor is the product of the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick &amp; Kowalchuk, 2007) and the point-polyserial correlation between the ordinalized count variable and the normal variable used to generate it (see Olsson et al., 1982). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
+<ol style="list-style-type: lower-alpha">
+<li><em>Poisson variables:</em> <code>findintercorr_cont_pois2</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+<li><em>Negative Binomial variables:</em> <code>findintercorr_cont_nb2</code> is called to calculate the intermediate MVN correlation for all variables.</li>
+</ol></li>
+</ol>
+<div id="simulation-process-1" class="section level3">
+<h3>Simulation Process:</h3>
+<p>The algorithm used in the simulation function <code>rcorrvar2</code> that employs method 2 is similar to that described for <code>rcorrvar</code>, with a few modifications:</p>
+<ol style="list-style-type: decimal">
+<li><p>The feasibility of <code>rho</code>, given the distribution parameters, should be checked first using the function <code>valid_corr2</code>, which checks if <code>rho</code> is within the feasible bounds and returns the lower and upper correlation limits.</p></li>
+<li><p>After the support is created for the ordinal variables (if no support is provided), the maximum support for the count variables is determined using <code>max_count_support</code>, given truncation value vector <code>pois_eps</code> for Poisson variables and/or <code>nb_eps</code> for Negative Binomial variables. The cumulative probability truncation value may differ by variable, but a good value is <span class="math inline">\(0.0001\)</span>. The resulting supports and distribution parameters are used to create marginal lists, consisting of the cumulative probabilities for each count variable.</p></li>
+<li><p>The intermediate correlation matrix <code>Sigma</code> is calculated using <code>findintercorr2</code>.</p></li>
+</ol>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

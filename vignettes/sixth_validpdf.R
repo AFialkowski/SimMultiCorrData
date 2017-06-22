@@ -1,0 +1,144 @@
+## ---- echo = FALSE-------------------------------------------------------
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+library(SimMultiCorrData)
+H_stcum <- matrix(1, nrow = 4, ncol = ncol(Headrick.dist))
+for (i in 1:ncol(H_params)) {
+  if (is.na(H_params[2, i])) {
+    params <- H_params[1, i]
+  } else {
+    params <- as.numeric(H_params[, i])
+  }
+  H_stcum[, i] <- calc_theory(Dist = colnames(H_params)[i], 
+                              params = params)[3:6]
+}
+colnames(H_stcum) <- colnames(Headrick.dist)
+rownames(H_stcum) <- c("skew", "skurtosis", "fifth", "sixth")
+round(H_stcum[, 1:6], 5)
+round(H_stcum[, 7:12], 5)
+round(H_stcum[, 13:18], 5)
+round(H_stcum[, 19:22], 5)
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(1, 20, 1), seq(25.1, 25.2, 0.01),
+            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(1, 20, 1), 
+            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
+            seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(1, 20, 1), NULL, 
+            seq(1, 20, 1), seq(1, 20, 1))
+H_consol <- list()
+
+for (i in 1:ncol(H_stcum)) {
+  H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
+                                skurts = H_stcum[2, i], fifths = H_stcum[3, i],
+                                sixths = H_stcum[4, i], Six = Six[[i]],
+                                cstart = NULL, n = 25, seed = 1234)
+}
+
+H_cons <- matrix(1, nrow = 7, ncol = ncol(Headrick.dist))
+valid <- numeric(ncol(Headrick.dist))
+for (i in 1:ncol(H_stcum)) {
+  H_cons[1:6, i] <- H_consol[[i]]$constants
+  H_cons[7, i] <- ifelse(is.null(H_consol[[i]]$SixCorr1), NA, 
+                         H_consol[[i]]$SixCorr1)
+  valid[i] <- H_consol[[i]]$valid
+}
+colnames(H_cons) <- colnames(Headrick.dist)
+rownames(H_cons) <- c("c0", "c1", "c2", "c3", "c4", "c5", "sixcorr")
+
+## ------------------------------------------------------------------------
+colnames(H_cons)[valid == FALSE]
+
+## ------------------------------------------------------------------------
+round(H_cons[, 1:6], 6)
+round(H_cons[, 7:12], 6)
+round(H_cons[, 13:18], 6)
+round(H_cons[, 19:22], 6)
+
+## ---- warning = FALSE----------------------------------------------------
+seed <- 1234
+Rey <- matrix(c(1, 0.4, 0.4, 1), 2, 2)
+
+# Make sure Rey is within feasible correlation bounds
+valid <- valid_corr(k_cat = 0, k_cont = 2, k_pois = 0, k_nb = 0, 
+                    method = "Polynomial", means = rep(0, 2), 
+                    vars = rep(1, 2), 
+                    skews = H_stcum[1, c("Logistic", "Laplace")], 
+                    skurts = H_stcum[2, c("Logistic", "Laplace")],
+                    fifths = H_stcum[3, c("Logistic", "Laplace")], 
+                    sixths = H_stcum[4, c("Logistic", "Laplace")], 
+                    Six = NULL, rho = Rey, n = 100000, seed = seed)
+
+A <- rcorrvar(n = 10000, k_cont = 2, k_cat = 0, k_pois = 0, k_nb = 0, 
+              method = "Polynomial", means = rep(0, 2), vars = rep(1, 2), 
+              skews = H_stcum[1, c("Logistic", "Laplace")], 
+              skurts = H_stcum[2, c("Logistic", "Laplace")], 
+              fifths = H_stcum[3, c("Logistic", "Laplace")], 
+              sixths = H_stcum[4, c("Logistic", "Laplace")], Six = NULL, 
+              nrand = 100000, rho = Rey, seed = seed, errorloop = FALSE)
+
+# Look at the maximum correlation error.
+A$maxerr
+Acorr_error = round(A$correlations - Rey, 6)
+
+# interquartile-range of correlation errors
+quantile(as.numeric(Acorr_error), 0.25)
+quantile(as.numeric(Acorr_error), 0.75)
+
+## ---- warning = FALSE----------------------------------------------------
+Six <- list(H_cons["sixcorr", "Logistic"], H_cons["sixcorr", "Laplace"])
+
+# Make sure Rey is within feasible correlation bounds
+valid2 <- valid_corr(k_cat = 0, k_cont = 2, k_pois = 0, k_nb = 0, 
+                    method = "Polynomial", means = rep(0, 2), 
+                    vars = rep(1, 2), 
+                    skews = H_stcum[1, c("Logistic", "Laplace")], 
+                    skurts = H_stcum[2, c("Logistic", "Laplace")],
+                    fifths = H_stcum[3, c("Logistic", "Laplace")], 
+                    sixths = H_stcum[4, c("Logistic", "Laplace")], 
+                    Six = Six, rho = Rey, n = 100000, seed = seed)
+
+B <- rcorrvar(n = 10000, k_cont = 2, k_cat = 0, k_pois = 0, k_nb = 0, 
+              method = "Polynomial", means = rep(0, 2), vars = rep(1, 2), 
+              skews = H_stcum[1, c("Logistic", "Laplace")], 
+              skurts = H_stcum[2, c("Logistic", "Laplace")], 
+              fifths = H_stcum[3, c("Logistic", "Laplace")], 
+              sixths = H_stcum[4, c("Logistic", "Laplace")], Six = Six, 
+              nrand = 100000, rho = Rey, seed = seed, errorloop = FALSE)
+
+B$maxerr
+Bcorr_error = round(B$correlations - Rey, 6)
+
+# interquartile-range of correlation errors
+quantile(as.numeric(Bcorr_error), 0.25)
+quantile(as.numeric(Bcorr_error), 0.75)
+
+## ------------------------------------------------------------------------
+# Without the sixth cumulant correction
+round(A$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
+                               "skurtosis", "fifth", "sixth")], 5)
+A$valid.pdf
+
+# With the correction
+round(B$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
+                               "skurtosis", "fifth", "sixth")], 5)
+B$valid.pdf
+
+## ------------------------------------------------------------------------
+# Logistic Distribution
+plot_sim_pdf_theory(sim_y = A$continuous_variables[, 1], 
+                    title = "Logistic Pdf", Dist = "Logistic", 
+                    params = H_params$Logistic)
+plot_sim_pdf_theory(sim_y = B$continuous_variables[, 1], 
+                    title = "Corrected Logistic Pdf", Dist = "Logistic", 
+                    params = H_params$Logistic)
+
+# Laplace Distribution
+plot_sim_pdf_theory(sim_y = A$continuous_variables[, 2], 
+                    title = "Laplace Pdf", Dist = "Laplace", 
+                    params = H_params$Laplace)
+plot_sim_pdf_theory(sim_y = B$continuous_variables[, 2], 
+                    title = "Corrected Laplace Pdf", Dist = "Laplace", 
+                    params = H_params$Laplace)
+

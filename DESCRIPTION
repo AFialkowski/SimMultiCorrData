@@ -23,16 +23,16 @@ Description: Generate continuous (normal or non-normal), binary, ordinal, and co
     cumulants for theoretical distributions or from real data sets, check if a target 
     correlation matrix is within the possible correlation bounds (given the distributions of 
     the simulated variables), summarize results (numerically or graphically), to verify valid 
-    power method pdfs, and to calculate lower standardized kurtoses bounds.
+    power method pdfs, and to calculate lower standardized kurtosis bounds.
 Depends: R (>= 3.3.1)
 License: GPL-2
 Imports:
-    BB, nleqslv, MASS, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, BinNonNor, stats, utils
+    BB, nleqslv, MASS, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, stats, utils
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Suggests: knitr,
-    rmarkdown
+    rmarkdown, printr
 VignetteBuilder: knitr
 URL: https://github.com/AFialkowski/SimMultiCorrData

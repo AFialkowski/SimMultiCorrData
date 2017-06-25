@@ -53,7 +53,7 @@ max_count_support <- function(k_pois, k_nb, lam, pois_eps = NULL,
       if (length(mu) > 0) {
         max_support[i, ] <- append(i, qnbinom(1 - nb_eps[i - k_pois],
                                               size[i - k_pois],
-                                              mu[i - k_pois]))
+                                              mu = mu[i - k_pois]))
       }
     }
   }

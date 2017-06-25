@@ -6,11 +6,11 @@
 \usage{
 plot_sim_theory(sim_y, title = "Simulated Data Values", ylower = NULL,
   yupper = NULL, power_color = "dark blue", overlay = TRUE,
-  target_color = "dark green", target_lty = 2, Dist = c("Beta", "Chisq",
-  "Exponential", "F", "Gamma", "Gaussian", "Laplace", "Logistic", "Lognormal",
-  "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson",
-  "Negative_Binomial"), params = NULL, fx = NULL, lower = NULL,
-  upper = NULL, seed = 1234, sub = 1000)
+  cont_var = TRUE, target_color = "dark green", nbins = 100,
+  Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
+  "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular",
+  "Uniform", "Weibull", "Poisson", "Negative_Binomial"), params = NULL,
+  fx = NULL, lower = NULL, upper = NULL, seed = 1234, sub = 1000)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -21,17 +21,19 @@ plot_sim_theory(sim_y, title = "Simulated Data Values", ylower = NULL,
 
 \item{yupper}{the upper y value (default = NULL, uses maximum simulated y value)}
 
-\item{power_color}{the line color for the simulated variable (default = "dark blue")}
+\item{power_color}{the histogram fill color for the simulated variable (default = "dark blue")}
 
 \item{overlay}{if TRUE (default), the target distribution is also plotted given either a distribution name (and parameters)
 or pdf function fx (with support bounds = lower, upper)}
 
-\item{target_color}{the line color for the target distribution (default = "dark green")}
+\item{cont_var}{TRUE (default) for continuous variables, FALSE for count variables}
 
-\item{target_lty}{the line type for the target distribution (default = 2, dashed line)}
+\item{target_color}{the histogram fill color for the target distribution (default = "dark green")}
+
+\item{nbins}{the number of bins to use when creating the histograms (default = 100)}
 
 \item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull".
+"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial".
 Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
 for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
 rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
@@ -57,16 +59,18 @@ A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
 This plots simulated continuous or count data and overlays data (if \code{overlay} = TRUE) generated from the target
-    distribution, which is specified by name (plus up to 3 parameters) or pdf function (plus support bounds).  The simulated data is
+    distribution, which is specified by name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
+    Due to the integration involved in evaluating the cdf using \code{fx}, only continuous \code{fx} may be supplied.  Both are plotted
+    as histograms.  If a continuous target distribution is specified (\code{cont_var = TRUE}), the simulated data is
     scaled and then transformed (i.e. \eqn{sim_y <- sigma * scale(sim_y) + mu}) so that it has the same mean and variance as the
-    target distribution.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
+    target distribution.  If the variable is Negative Binomial, the parameters must be size and success probability (not mu).
+    It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
     The graph parameters (i.e. \code{title}, \code{power_color}, \code{target_color},
     \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
-# Logistic Distribution
-
+# Logistic Distribution: mean = 0, variance = 1
 seed = 1234
 
 # Find standardized cumulants
@@ -75,28 +79,39 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 # Simulate without the sixth cumulant correction
 # (invalid power method pdf)
 Logvar1 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
-                      skews = stcum[3], skurts = stcum[4],
-                      fifths = stcum[5], sixths = stcum[6],
-                      Six = NULL, n = 10000, seed = seed)
+                       skews = stcum[3], skurts = stcum[4],
+                       fifths = stcum[5], sixths = stcum[6],
+                       n = 10000, seed = seed)
 
 # Plot simulated variable (invalid) and data from theoretical distribution
 plot_sim_theory(sim_y = Logvar1$continuous_variable,
-             title = "Invalid Logistic Simulated Data Values",
-             overlay = TRUE, Dist = "Logistic", params = c(0, 1),
-             seed = seed)
+                title = "Invalid Logistic Simulated Data Values",
+                overlay = TRUE, Dist = "Logistic", params = c(0, 1),
+                seed = seed)
 
 # Simulate with the sixth cumulant correction
 # (valid power method pdf)
 Logvar2 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
-                      skews = stcum[3], skurts = stcum[4],
-                      fifths = stcum[5], sixths = stcum[6],
-                      Six = seq(1.5, 2, 0.05), n = 10000, seed = 1234)
+                       skews = stcum[3], skurts = stcum[4],
+                       fifths = stcum[5], sixths = stcum[6],
+                       Six = seq(1.5, 2, 0.05), n = 10000, seed = seed)
 
 # Plot simulated variable (valid) and data from theoretical distribution
 plot_sim_theory(sim_y = Logvar2$continuous_variable,
-             title = "Valid Logistic Simulated Data Values",
-             overlay = TRUE, Dist = "Logistic", params = c(0, 1),
-             seed = seed)
+                title = "Valid Logistic Simulated Data Values",
+                overlay = TRUE, Dist = "Logistic", params = c(0, 1),
+                seed = seed)
+
+# Simulate 2 Negative Binomial distributions and correlation 0.3
+# using Method 1
+NBvars <- rcorrvar(k_nb = 2, size = c(10, 15), prob = c(0.4, 0.3),
+                   rho = matrix(c(1, 0.3, 0.3, 1), 2, 2), seed = seed)
+
+# Plot pdfs of 1st simulated variable and theoretical distribution
+plot_sim_theory(sim_y = NBvars$Neg_Bin_variable[, 1], overlay = TRUE,
+                cont_var = FALSE, Dist = "Negative_Binomial",
+                params = c(10, 0.4))
+
 }
 
 }
@@ -123,7 +138,7 @@ Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York
 }
 \seealso{
 \code{\link[SimMultiCorrData]{calc_theory}},
-    \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}
+    \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_histogram}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

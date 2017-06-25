@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-22" />
+<meta name="date" content="2017-06-25" />
 
 <title>Benefits of SimMultiCorrData and Comparison to Other Packages</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Benefits of SimMultiCorrData and Comparison to Other Packages</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-22</em></h4>
+<h4 class="date"><em>2017-06-25</em></h4>
 
 
 
@@ -58,7 +58,7 @@
 <li><p>Additional functions to supplement the simulation process:</p>
 <ul>
 <li><strong>Summary functions</strong> that may be used to determine standardized cumulants from theoretical distributions (<code>calc_theory</code>) or a vector of data by the method of moments (<code>calc_moments</code>) or based on Fisher’s k-statistics (<code>calc_fisherk</code>). Additional summary functions compute important statistics for the generated continuous variables.</li>
-<li><strong>Plotting functions</strong> for comparing simulated data to either theoretical distributions or empirical data. The plots display either actual data, cdfs, or pdfs. The cdf plotting functions enable the user to specify a y-value to calculate the cumulative probability. This region on the graph is filled in and the probability is given on the graph. The data values and pdf graphs enable the user to overlay the target distributions. These functions produce <code>ggplot2</code> objects so that the user may save them or further adapt the graphs as necessary.</li>
+<li><strong>Plotting functions</strong> for comparing simulated data to either theoretical distributions or empirical data. The plots display either actual data, cdfs, or pdfs, and work for continuous, ordinal, and/or count variables. The cdf plotting functions enable the user to specify a y-value to calculate the cumulative probability. This region on the graph is filled in and the probability is given on the graph. The data values and pdf graphs enable the user to overlay the target distributions. These functions produce <code>ggplot2</code> objects so that the user may save them or further adapt the graphs as necessary.</li>
 </ul></li>
 </ol>
 </div>
@@ -67,7 +67,7 @@
 <p>There are several other simulation packages. For example, Barbiero &amp; Ferrari’s (2015) <code>GenOrd</code>, Amatya &amp; Demirtas’ (2016) <code>MultiOrd</code>, Leisch, Kaiser, &amp; Hornik’s (2010) <code>orddata</code>, and Demirtas, Nordgren, &amp; Allozi’s (2017) <code>PoisBinOrdNonNor</code>. The first three generate only binary and ordinal data, while the last generates Poisson, binary, ordinal, and non-normal variables.</p>
 <div id="barbiero-ferraris-2015-genord" class="section level3">
 <h3>Barbiero &amp; Ferrari’s (2015) <code>GenOrd</code></h3>
-<p><code>GenOrd</code> generates discrete random variables (i.e. binary/ ordinal) with given correlation matrix and marginal distributions. The method used to determine the intermediate MVN correlation matrix in <code>GenOrd::ordcont</code> has been modified in <code>SimMultiCorrData</code>’s <code>ordnorm</code> function. It works by setting the intermediate correlation equal to the target correlation of the discrete variables. Each intermediate pairwise correlation is updated until the final pairwise correlation is within a user-specified precision value (<code>epsilon</code>) of the target correlation or the maximum number of iterations (<code>maxit</code>) has been reached. <code>GenOrd::ordcont</code> has been modified in the following ways:</p>
+<p><code>GenOrd</code> generates discrete random variables (i.e. binary or ordinal) with given correlation matrix and marginal distributions. The method used to determine the intermediate MVN correlation matrix in <code>GenOrd::ordcont</code> has been modified in <code>SimMultiCorrData</code>’s <code>ordnorm</code> function. It works by setting the intermediate correlation equal to the target correlation of the discrete variables. Each intermediate pairwise correlation is updated until the final pairwise correlation is within a user-specified precision value (<code>epsilon</code>) of the target correlation or the maximum number of iterations (<code>maxit</code>) has been reached. <code>GenOrd::ordcont</code> has been modified in the following ways:</p>
 <ol style="list-style-type: decimal">
 <li>The initial correlation check has been removed because it is assumed the user has done this before simulation using <code>SimMultiCorrData::valid_corr</code> or <code>valid_corr2</code>.</li>
 <li>The final positive-definite check has been removed because this is done on the intermediate correlation matrix <code>Sigma</code> for all variable types, and if necessary, <code>Sigma</code> is converted to the nearest positive-definite matrix using Higham’s (2002) algorithm in <code>Matrix::nearPD</code>.</li>

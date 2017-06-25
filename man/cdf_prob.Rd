@@ -41,7 +41,7 @@ This function calculates a cumulative probability using the theoretical power me
 # Beta(a = 4, b = 2) Distribution:
 con <- find_constants(method = "Polynomial", skews = -0.467707, skurts = -0.375,
                       fifths = 1.403122, sixths = -0.426136)$constants
-cdf_prob(c = con, method = "Polynomial", delta = 0.5, mu = 0, sigma = 1)
+cdf_prob(c = con, method = "Polynomial", delta = 0.5)
 }
 }
 \references{

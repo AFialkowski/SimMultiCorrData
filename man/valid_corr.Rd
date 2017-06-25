@@ -5,8 +5,9 @@
 \title{Determine Correlation Bounds for Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Method 1}
 \usage{
 valid_corr(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
-  method = c("Fleishman", "Polynomial"), means, vars, skews, skurts, fifths,
-  sixths, Six = list(), marginal = list(), lam = NULL, size = NULL,
+  method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
+  skews = NULL, skurts = NULL, fifths = NULL, sixths = NULL,
+  Six = list(), marginal = list(), lam = NULL, size = NULL,
   prob = NULL, mu = NULL, rho = NULL, n = 1e+05, seed = 1234)
 }
 \arguments{
@@ -250,9 +251,8 @@ if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
 valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
                     k_nb = nnb, method = "Polynomial", means = means,
                     vars = vars, skews = M[1, ], skurts = M[2, ],
-                    fifths = M[3, ], sixths = M[4, ], Six = NULL,
-                    marginal = marginal, lam = lam, size = size,
-                    prob = prob, mu = NULL, rho = Rey, n = 100000,
+                    fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+                    lam = lam, size = size, prob = prob, rho = Rey,
                     seed = seed)
 }
 }

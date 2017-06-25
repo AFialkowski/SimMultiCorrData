@@ -2,11 +2,13 @@
 #'
 #' @description This plots the theoretical probability density function: \eqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z))} and target
 #'     pdf.  It is a parametric plot with \eqn{sigma * y + mu}, where \eqn{y = p(z)}, on the x-axis and
-#'     \eqn{f_Z(z)/p'(z)} on the y-axis, where z is vector of n random standard normal numbers (generated with a seed set by user;
-#'     length equal to length of external data vector).  \code{sigma} is the standard deviation and \code{mu} is the mean of the external data set.
+#'     \eqn{f_Z(z)/p'(z)} on the y-axis, where \eqn{z} is vector of \eqn{n} random standard normal numbers (generated with a seed set
+#'     by user; length equal to length of external data vector).  \code{sigma} is the standard deviation and \code{mu} is the mean of the external data set.
 #'     Given a vector of polynomial transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical
 #'     probabilities using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  The target distribution is also plotted given a vector
-#'     of external data.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
+#'     of external data.  This external data is required.  The \eqn{y} values are centered and scaled to have the same mean and standard
+#'     deviation as the external data.  If the user wants to only plot the power method pdf,
+#'     \code{\link[SimMultiCorrData]{plot_pdf_theory}} should be used instead with \code{overlay = FALSE}.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
 #'     \code{power_color}, \code{target_color}, \code{nbins}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
 #' @param c a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
 #'     "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}
@@ -16,7 +18,7 @@
 #' @param ylower the lower y value to use in the plot (default = NULL, uses minimum simulated y value)
 #' @param yupper the upper y value (default = NULL, uses maximum simulated y value)
 #' @param power_color the line color for the power method pdf (default = "dark blue")
-#' @param ext_y a vector of external data
+#' @param ext_y a vector of external data (required)
 #' @param target_color the histogram color for the target pdf (default = "dark green")
 #' @param target_lty the line type for the target pdf (default = 2, dashed line)
 #' @param seed the seed value for random number generation (default = 1234)
@@ -64,8 +66,7 @@
 #' # (invalid power method pdf)
 #' con1 <- find_constants(method = "Polynomial", skews = stcum[3],
 #'                       skurts = stcum[4], fifths = stcum[5],
-#'                       sixths = stcum[6], Six = NULL,
-#'                       n = 25, seed = seed)
+#'                       sixths = stcum[6])
 #'
 #' # Plot invalid power method pdf with external data
 #' plot_pdf_ext(c = con1$constants, method = "Polynomial",
@@ -76,8 +77,7 @@
 #' # (valid power method pdf)
 #' con2 <- find_constants(method = "Polynomial", skews = stcum[3],
 #'                       skurts = stcum[4], fifths = stcum[5],
-#'                       sixths = stcum[6], Six = seq(1.5, 2, 0.05),
-#'                       n = 25, seed = 1234)
+#'                       sixths = stcum[6], Six = seq(1.5, 2, 0.05))
 #'
 #' # Plot invalid power method pdf with external data
 #' plot_pdf_ext(c = con2$constants, method = "Polynomial",
@@ -105,13 +105,13 @@ plot_pdf_ext <- function(c = NULL, method = c("Fleishman", "Polynomial"),
     phi[i] <- dnorm(z[i])
     if (method == "Fleishman") {
       y[i] <- sigma * (c[1] + c[2] * z[i] + c[3] * z[i]^2 + c[4] * z[i]^3) + mu
-      fy[i] <- phi[i]/(c[2] + 2 * c[3] * z[i] + 3 * c[4] * z[i]^2)
+      fy[i] <- phi[i]/(sigma * (c[2] + 2 * c[3] * z[i] + 3 * c[4] * z[i]^2))
     }
     if (method=="Polynomial") {
       y[i] <- sigma * (c[1] + c[2] * z[i] + c[3] * z[i]^2 + c[4] * z[i]^3 +
                          c[5] * z[i]^4 + c[6] * z[i]^5) + mu
-      fy[i] <- phi[i]/(c[2] + 2 * c[3] * z[i] + 3 * c[4] * z[i]^2 +
-                         4 * c[5] * z[i]^3 + 5 * c[6] * z[i]^4)
+      fy[i] <- phi[i]/(sigma * (c[2] + 2 * c[3] * z[i] + 3 * c[4] * z[i]^2 +
+                         4 * c[5] * z[i]^3 + 5 * c[6] * z[i]^4))
     }
   }
   if (is.null(ylower) & is.null(yupper)) {

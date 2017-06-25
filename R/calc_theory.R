@@ -166,5 +166,7 @@ calc_theory <- function(Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
   g2 <- m4/(s^4) - 3
   g3 <- m5/(s^5) - 10 * g1
   g4 <- m6/(s^6) - 15 * g2 - 10 * g1^2 - 15
-  return(c(m, s, g1, g2, g3, g4))
+  stcums <- c(m, s, g1, g2, g3, g4)
+  names(stcums) <- c("mean", "sd", "skew", "kurtosis", "fifth", "sixth")
+  return(stcums)
 }

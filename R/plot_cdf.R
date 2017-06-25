@@ -1,9 +1,9 @@
 #' @title Plot Theoretical Power Method Cumulative Distribution Function
 #'
-#' @description This plots the theoretical power method cumulative distribution function: \cr
+#' @description This plots the theoretical power method cumulative distribution function:
 #'     \eqn{F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))}.
 #'     It is a parametric plot with \eqn{sigma * y + mu}, where \eqn{y = p(z)}, on the x-axis and \eqn{F_Z(z)} on the y-axis,
-#'     where z is vector of n random standard normal numbers (generated with a seed set by user).  Given a vector of polynomial
+#'     where \eqn{z} is vector of \eqn{n} random standard normal numbers (generated with a seed set by user).  Given a vector of polynomial
 #'     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical cumulative probabilities
 #'     using \eqn{F_p(Z)(p(z), F_Z(z))}.  If \code{calc_cprob} = TRUE, the cumulative probability up to \eqn{delta = sigma * y + mu} is
 #'     calculated (see \code{\link[SimMultiCorrData]{cdf_prob}}) and the region on the plot is filled with a dashed horizontal
@@ -14,19 +14,19 @@
 #'     "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}
 #' @param method the method used to generate the continuous variable \eqn{y = p(z)}.  "Fleishman" uses a third-order polynomial
 #'     transformation and "Polynomial" uses Headrick's fifth-order transformation.
-#' @param mu mean for the continuous variable
-#' @param sigma standard deviation for the continuous variable
+#' @param mu mean for the continuous variable (default = 0)
+#' @param sigma standard deviation for the continuous variable (default = 1)
 #' @param title the title for the graph (default = "Cumulative Distribution Function")
 #' @param ylower the lower y value to use in the plot (default = NULL, uses minimum simulated y value)
 #' @param yupper the upper y value (default = NULL, uses maximum simulated y value)
-#' @param calc_cprob if TRUE (default), \code{\link[SimMultiCorrData]{cdf_prob}} is used to find the cumulative probability
+#' @param calc_cprob if TRUE (default = FALSE), \code{\link[SimMultiCorrData]{cdf_prob}} is used to find the cumulative probability
 #'     up to \eqn{delta = sigma * y + mu} and the region on the plot is filled with a dashed horizontal line drawn at \eqn{F_p(Z)(delta)}
 #' @param delta the value \eqn{sigma * y + mu}, where \eqn{y = p(z)}, at which to evaluate the cumulative probability
-#' @param color the line color for the cdf
-#' @param fill the fill color if \code{calc_cprob} = TRUE
-#' @param hline the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE
-#' @param n the number of random standard normal numbers to use in generating \eqn{y = p(z)}
-#' @param seed the seed value for random number generation
+#' @param color the line color for the cdf (default = "dark blue")
+#' @param fill the fill color if \code{calc_cprob} = TRUE (default = "blue)
+#' @param hline the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE (default = "dark green")
+#' @param n the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 10000)
+#' @param seed the seed value for random number generation (default = 1234)
 #' @import stats
 #' @import utils
 #' @import ggplot2
@@ -58,7 +58,7 @@
 #' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 #'
 #' @examples \dontrun{
-#' # Logistic Distribution
+#' # Logistic Distribution: mean = 0, sigma = 1
 #'
 #' # Find standardized cumulants
 #' stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
@@ -67,32 +67,26 @@
 #' # (invalid power method pdf)
 #' con1 <- find_constants(method = "Polynomial", skews = stcum[3],
 #'                       skurts = stcum[4], fifths = stcum[5],
-#'                       sixths = stcum[6], Six = NULL,
-#'                       n = 25, seed = 1234)
+#'                       sixths = stcum[6], n = 25, seed = 1234)
 #'
 #' # Plot cdf with cumulative probability calculated up to delta = 5
-#' plot_cdf(c = con1$constants, method = "Polynomial", mu = 0,
-#'          sigma = 1, title = "Invalid Logistic CDF",
-#'          calc_cprob = TRUE, delta = 5, n = 10000,
-#'          seed = 1234)
+#' plot_cdf(c = con1$constants, method = "Polynomial",
+#'          title = "Invalid Logistic CDF", calc_cprob = TRUE, delta = 5)
 #'
 #' # Find constants with the sixth cumulant correction
 #' # (valid power method pdf)
 #' con2 <- find_constants(method = "Polynomial", skews = stcum[3],
 #'                       skurts = stcum[4], fifths = stcum[5],
-#'                       sixths = stcum[6], Six = seq(1.5, 2, 0.05),
-#'                       n = 25, seed = 1234)
+#'                       sixths = stcum[6], Six = seq(1.5, 2, 0.05))
 #'
 #' # Plot cdf with cumulative probability calculated up to delta = 5
-#' plot_cdf(c = con2$constants, method = "Polynomial", mu = 0,
-#'          sigma = 1, title = "Valid Logistic CDF",
-#'          calc_cprob = TRUE, delta = 5, n = 10000,
-#'          seed = 1234)
+#' plot_cdf(c = con2$constants, method = "Polynomial",
+#'          title = "Valid Logistic CDF", calc_cprob = TRUE, delta = 5)
 #' }
 #'
 plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
                      sigma = 1, title = "Cumulative Distribution Function",
-                     ylower = NULL, yupper = NULL, calc_cprob = TRUE,
+                     ylower = NULL, yupper = NULL, calc_cprob = FALSE,
                      delta = 5, color = "dark blue", fill = "blue",
                      hline = "dark green", n = 10000, seed = 1234) {
   set.seed(seed)
@@ -106,7 +100,7 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
     }
     if (method == "Polynomial") {
       y[i] <- sigma * (c[1] + c[2] * z[i] + c[3] * z[i]^2 + c[4] * z[i]^3 +
-                         c[5] * z^4 + c[6] * z^5) + mu
+                         c[5] * z[i]^4 + c[6] * z[i]^5) + mu
     }
     phi[i] <- pnorm(z[i])
   }
@@ -116,7 +110,7 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   }
   data <- data.frame(y = y, phi = phi)
   data <- data[with(data, order(y)), ]
-  plot1 <- ggplot(data, aes(x = y, y = phi)) + theme_bw() + ggtitle(title) +
+  plot1 <- ggplot(data, aes_(x = ~y, y = ~phi)) + theme_bw() + ggtitle(title) +
     geom_line(colour = color) +
     geom_hline(yintercept = 0, lty = 2, colour = "#333333") +
     geom_hline(yintercept = 1, lty = 2, colour = "#333333") +
@@ -131,14 +125,15 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   if (calc_cprob == TRUE) {
     cprob <- cdf_prob(c = c, method = method, delta = delta, mu = mu,
                       sigma = sigma)
-    data2 <- data.frame(y = data[data$y <= delta, ])
+    data2 <- data.frame(y = data[data[, 1] <= delta, 1],
+                        phi = data[data[, 1] <= delta, 2])
     text_one <- textGrob(paste("Cumulative probability = ",
                                round(cprob$cumulative_prob, 4), ", y = ",
                                round(delta, 4), sep = ""),
                          gp = gpar(fontsize = 11, fontface = "bold",
                                    col = hline))
     plot1 <- plot1 +
-      geom_area(data = data2, aes(x = y, y = phi), fill = fill) +
+      geom_area(data = data2, aes_(x = ~y, y = ~phi), fill = fill) +
       geom_hline(yintercept = cprob$cumulative_prob, lty = 2, colour = hline) +
       annotation_custom(text_one, xmin = 0.5 * (ylower + yupper),
                         xmax = 0.5 * (ylower + yupper), ymin = 1.03,

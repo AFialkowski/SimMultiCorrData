@@ -6,10 +6,11 @@
 \usage{
 plot_sim_pdf_theory(sim_y, title = "Simulated Probability Density Function",
   ylower = NULL, yupper = NULL, power_color = "dark blue",
-  overlay = TRUE, target_color = "dark green", target_lty = 2,
-  Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-  "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular",
-  "Uniform", "Weibull"), params = NULL, fx = NULL)
+  overlay = TRUE, cont_var = TRUE, target_color = "dark green",
+  target_lty = 2, Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
+  "Gaussian", "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t",
+  "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial"),
+  params = NULL, fx = NULL, lower = NULL, upper = NULL)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -25,12 +26,14 @@ plot_sim_pdf_theory(sim_y, title = "Simulated Probability Density Function",
 \item{overlay}{if TRUE (default), the target distribution is also plotted given either a distribution name (and parameters)
 or pdf function fx (with bounds = ylower, yupper)}
 
+\item{cont_var}{TRUE (default) for continuous variables, FALSE for count variables}
+
 \item{target_color}{the line color for the target pdf}
 
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
 
 \item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull".
+"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial".
 Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
 for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
 rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
@@ -41,21 +44,26 @@ comes from the \code{\link[triangle]{triangle}} package.}
 
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
+
+\item{lower}{the lower support bound for \code{fx}}
+
+\item{upper}{the upper support bound for \code{fx}}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
-This plots the pdf of simulated data and overlays the target pdf (if \code{overlay} = TRUE),
-    which is specified by distribution name (plus up to 3 parameters) or pdf function (plus support bounds).  The simulated data is
+This plots the pdf of simulated continuous or count data and overlays the target pdf (if \code{overlay} = TRUE),
+    which is specified by distribution name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
+    If a continuous target distribution is provided (\code{cont_var = TRUE}), the simulated data is
     scaled and then transformed (i.e. \eqn{sim_y <- sigma * scale(sim_y) + mu}) so that it has the same mean and variance as the
-    target distribution.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
+    target distribution.  If the variable is Negative Binomial, the parameters must be size and success probability (not mu).
+    The function returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
     \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
-# Logistic Distribution
-
+# Logistic Distribution: mean = 0, variance = 1
 seed = 1234
 
 # Find standardized cumulants
@@ -64,26 +72,37 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 # Simulate without the sixth cumulant correction
 # (invalid power method pdf)
 Logvar1 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
-                      skews = stcum[3], skurts = stcum[4],
-                      fifths = stcum[5], sixths = stcum[6],
-                      Six = NULL, n = 10000, seed = seed)
+                       skews = stcum[3], skurts = stcum[4],
+                       fifths = stcum[5], sixths = stcum[6],
+                       n = 10000, seed = seed)
 
 # Plot pdfs of simulated variable (invalid) and theoretical distribution
 plot_sim_pdf_theory(sim_y = Logvar1$continuous_variable,
-             title = "Invalid Logistic Simulated PDF", overlay = TRUE,
-             Dist = "Logistic", params = c(0, 1))
+                    title = "Invalid Logistic Simulated PDF",
+                    overlay = TRUE, Dist = "Logistic", params = c(0, 1))
 
 # Simulate with the sixth cumulant correction
 # (valid power method pdf)
 Logvar2 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
-                      skews = stcum[3], skurts = stcum[4],
-                      fifths = stcum[5], sixths = stcum[6],
-                      Six = seq(1.5, 2, 0.05), n = 10000, seed = 1234)
+                       skews = stcum[3], skurts = stcum[4],
+                       fifths = stcum[5], sixths = stcum[6],
+                       Six = seq(1.5, 2, 0.05), n = 10000, seed = seed)
 
 # Plot pdfs of simulated variable (invalid) and theoretical distribution
 plot_sim_pdf_theory(sim_y = Logvar2$continuous_variable,
-             title = "Valid Logistic Simulated PDF", overlay = TRUE,
-             Dist = "Logistic", params = c(0, 1))
+                    title = "Valid Logistic Simulated PDF",
+                    overlay = TRUE, Dist = "Logistic", params = c(0, 1))
+
+# Simulate 2 Negative Binomial distributions and correlation 0.3
+# using Method 1
+NBvars <- rcorrvar(k_nb = 2, size = c(10, 15), prob = c(0.4, 0.3),
+                  rho = matrix(c(1, 0.3, 0.3, 1), 2, 2), seed = seed)
+
+# Plot pdfs of 1st simulated variable and theoretical distribution
+plot_sim_pdf_theory(sim_y = NBvars$Neg_Bin_variable[, 1], overlay = TRUE,
+                    cont_var = FALSE, Dist = "Negative_Binomial",
+                    params = c(10, 0.4))
+
 }
 
 }

@@ -40,5 +40,7 @@ calc_fisherk <- function(x) {
            (n^3 - 3 * n^2 + 2 * n) * s2^3) / (n * (n - 1) * (n - 2) *
                                               (n - 3) * (n - 4) *
                                               (n - 5))
-  return(c(m, s, g1, g2, g3, g4))
+  stcums <- c(m, s, g1, g2, g3, g4)
+  names(stcums) <- c("mean", "sd", "skew", "kurtosis", "fifth", "sixth")
+  return(stcums)
 }

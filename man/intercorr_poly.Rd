@@ -9,17 +9,10 @@ intercorr_poly(r, c, a)
 \arguments{
 \item{r}{either a scalar, in which case it represents pairwise intermediate correlation between standard normal variables,
 or a vector of 3 values, in which case:
-\deqn{r[1]*r[2] = \rho_{z1,z2} = intermediate correlation between standard normal variables Z1 and Z2}
-\deqn{r[1]*r[3] = \rho_{z1,z3} = intermediate correlation between standard normal variables Z1 and Z3}
-\deqn{r[2]*r[3] = \rho_{z2,z3} = intermediate correlation between standard normal variables Z2 and Z3}
+\deqn{r[1]*r[2] = \rho_{z1,z2},\ r[1]*r[3] = \rho_{z1,z3},\ r[2]*r[3] = \rho_{z2,z3}}
 or a vector of 4 values, in which case:
-\deqn{r0 = r[5]*r[6]}
-\deqn{r0*r[1]*r[2] = \rho_{z1,z2} = intermediate correlation between standard normal variables Z1 and Z2}
-\deqn{r0*r[1]*r[3] = \rho_{z1,z3} = intermediate correlation between standard normal variables Z1 and Z3}
-\deqn{r0*r[2]*r[3] = \rho_{z2,z3} = intermediate correlation between standard normal variables Z2 and Z3}
-\deqn{r0*r[1]*r[4] = \rho_{z1,z4} = intermediate correlation between standard normal variables Z1 and Z4}
-\deqn{r0*r[2]*r[4] = \rho_{z2,z4} = intermediate correlation between standard normal variables Z2 and Z4}
-\deqn{r0*r[3]*r[4] = \rho_{z3,z4} = intermediate correlation between standard normal variables Z3 and Z4}}
+\deqn{r0 = r[5]*r[6],\ r0*r[1]*r[2] = \rho_{z1,z2},\ r0*r[1]*r[3] = \rho_{z1,z3}}
+\deqn{r0*r[2]*r[3] = \rho_{z2,z3},\ r0*r[1]*r[4] = \rho_{z1,z4},\ r0*r[2]*r[4] = \rho_{z2,z4},\ r0*r[3]*r[4] = \rho_{z3,z4}}}
 
 \item{c}{a matrix with either 2, 3, or 4 rows, each a vector of constants c0, c1, c2, c3, like that returned by
 \code{\link[SimMultiCorrData]{find_constants}}}

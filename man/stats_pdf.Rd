@@ -49,7 +49,7 @@ This function calculates the 100*\code{alpha} percent symmetric trimmed mean (0 
 con <- find_constants(method = "Polynomial", skews = -0.467707,
                       skurts = -0.375, fifths = 1.403122,
                       sixths = -0.426136)$constants
-stats_pdf(c = con, method = "Polynomial", alpha = 0.025, mu = 0, sigma = 1)
+stats_pdf(c = con, method = "Polynomial", alpha = 0.025)
 }
 }
 \references{

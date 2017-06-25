@@ -47,6 +47,7 @@
 #' @return \code{constants} a data.frame of the constants
 #' @return \code{continuous_variable} a data.frame of the generated continuous variable
 #' @return \code{summary_continuous} a data.frame containing a summary of the variable
+#' @return \code{summary_targetcont} a data.frame containing a summary of the target variable
 #' @return \code{sixth_correction} the sixth cumulant correction value
 #' @return \code{valid.pdf} "TRUE" if constants generate a valid pdf, else "FALSE"
 #' @return \code{Constants_Time} the time in minutes required to calculate the constants
@@ -79,10 +80,8 @@
 #' # 2) Simulate the variable:
 #' H_exp <- nonnormvar1("Polynomial", means = 2, vars = 2, skews = stcums[3],
 #'                     skurts = stcums[4], fifths = stcums[5],
-#'                     sixths = stcums[6], Six = NULL, cstart = NULL,
-#'                     n = 10000, seed = 1234)
+#'                     sixths = stcums[6], n = 10000, seed = 1234)
 #'
-#' names(H_exp)
 #' H_exp$constants
 #' #           c0        c1       c2         c3          c4           c5
 #' # 1 -0.3077396 0.8005605 0.318764 0.03350012 -0.00367481 0.0001587076
@@ -127,7 +126,7 @@
 #' # 7) Plot a parametric graph of Y* and Y:
 #'
 #' plot_sim_pdf_theory(sim_y = as.numeric(H_exp$continuous_variable[, 1]),
-#'                     overlay = TRUE, Dist = "Exponential", params = 0.5)
+#'                     Dist = "Exponential", params = 0.5)
 #'
 #' # Note we can also plot the empirical cdf and show the cumulative
 #' # probability up to y_star:
@@ -136,7 +135,6 @@
 #'              calc_cprob = TRUE, delta = y_star)
 #'
 #' }
-
 nonnormvar1 <- function(method = c("Fleishman", "Polynomial"), means = 0,
                         vars = 1, skews = 0, skurts = 0,
                         fifths = 0, sixths = 0, Six = NULL,
@@ -179,6 +177,10 @@ nonnormvar1 <- function(method = c("Fleishman", "Polynomial"), means = 0,
                                   sim_fifths, sim_sixths))
   colnames(cont_sum) <- c("Distribution", "n", "mean", "sd", "median", "min",
                           "max", "skew", "skurtosis", "fifth", "sixth")
+  target_sum <- as.data.frame(cbind(1, means, sqrt(vars), skews, skurts,
+                                    fifths, sixths))
+  colnames(target_sum) <- c("Distribution", "mean", "sd", "skew", "skurtosis",
+                            "fifth", "sixth")
   stop.time <- Sys.time()
   Time.constants <- round(difftime(stop.time.constants, start.time.constants,
                                    units = "min"), 3)
@@ -187,7 +189,9 @@ nonnormvar1 <- function(method = c("Fleishman", "Polynomial"), means = 0,
   cat("Total Simulation time:", Time, "minutes \n")
   result <- list(constants = as.data.frame(constants),
                  continuous_variable = as.data.frame(Yb),
-                 summary_continuous = cont_sum, sixth_correction = SixCorr,
+                 summary_continuous = cont_sum,
+                 summary_targetcont = target_sum,
+                 sixth_correction = SixCorr,
                  valid.pdf = cons$valid, Constants_Time = Time.constants,
                  Simulation_Time = Time)
   result

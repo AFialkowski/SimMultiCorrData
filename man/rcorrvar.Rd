@@ -5,12 +5,12 @@
 \title{Generation of Correlated Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Method 1}
 \usage{
 rcorrvar(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
-  method = c("Fleishman", "Polynomial"), means, vars, skews, skurts, fifths,
-  sixths, Six = list(), marginal = list(), support = list(),
-  nrand = 1e+05, lam = NULL, size = NULL, prob = NULL, mu = NULL,
-  Sigma = NULL, rho = NULL, cstart = NULL, seed = 1234,
-  errorloop = FALSE, epsilon = 0.001, maxit = 1000,
-  extra_correct = TRUE)
+  method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
+  skews = NULL, skurts = NULL, fifths = NULL, sixths = NULL,
+  Six = list(), marginal = list(), support = list(), nrand = 1e+05,
+  lam = NULL, size = NULL, prob = NULL, mu = NULL, Sigma = NULL,
+  rho = NULL, cstart = NULL, seed = 1234, errorloop = FALSE,
+  epsilon = 0.001, maxit = 1000, extra_correct = TRUE)
 }
 \arguments{
 \item{n}{the sample size (i.e. the length of each simulated variable; default = 10000)}
@@ -97,7 +97,8 @@ If \bold{ordinal variables} are produced:
 
     \code{ordinal_variables} the generated ordinal variables,
 
-    \code{summary_categorical} a list, where the i-th element contains a cumulative probability table for ordinal variable Y_i
+    \code{summary_ordinal} a list, where the i-th element contains a data.frame with column 1 = target cumulative probabilities and
+    column 2 = simulated cumulative probabilities for ordinal variable Y_i
 
 If \bold{continuous variables} are produced:
 
@@ -106,6 +107,8 @@ If \bold{continuous variables} are produced:
     \code{continuous_variables} the generated continuous variables,
 
     \code{summary_continuous} a data.frame containing a summary of each variable,
+
+    \code{summary_targetcont} a data.frame containing a summary of the target variables,
 
     \code{sixth_correction} a vector of sixth cumulant correction values,
 
@@ -152,7 +155,9 @@ This function simulates \code{k_cat} ordinal, \code{k_cont} continuous, \code{k_
     a specified correlation matrix \code{rho}.  The variables are generated from multivariate normal variables with intermediate correlation
     matrix \code{Sigma}, calculated by \code{\link[SimMultiCorrData]{findintercorr}}, and then transformed.  The \emph{ordering} of the
     variables in \code{rho} must be \emph{ordinal} (r >= 2 categories), \emph{continuous}, \emph{Poisson}, and \emph{Negative Binomial}
-    (note that it is possible for \code{k_cat}, \code{k_cont}, \code{k_pois}, and/or \code{k_nb} to be 0).
+    (note that it is possible for \code{k_cat}, \code{k_cont}, \code{k_pois}, and/or \code{k_nb} to be 0).  The vignette
+    \bold{Overall Workflow for Data Simulation} provides a detailed example discussing the step-by-step simulation process and comparing
+    methods 1 and 2.
 }
 \section{Overview of Method 1}{
 
@@ -260,60 +265,49 @@ if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
 valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
                     k_nb = nnb, method = "Polynomial", means = means,
                     vars = vars, skews = M[1, ], skurts = M[2, ],
-                    fifths = M[3, ], sixths = M[4, ], Six = NULL,
-                    marginal = marginal, lam = lam, size = size,
-                    prob = prob, mu = NULL, rho = Rey, n = 100000,
+                    fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+                    lam = lam, size = size, prob = prob, rho = Rey,
                     seed = seed)
 
 # Simulate variables without error loop
 A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               k_nb = nnb, method = "Polynomial", means = means, vars = vars,
               skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], Six = NULL, marginal = marginal,
-              support = list(), nrand = 100000,
-              lam = lam, size = size, prob = prob, mu = NULL,
-              Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-              errorloop = FALSE, epsilon = 0.001, maxit = 1000,
-              extra_correct = TRUE)
+              sixths = M[4, ], marginal = marginal, lam = lam, size = size,
+              prob = prob, rho = Rey, seed = seed)
 
+# Look at the maximum correlation error
 A$maxerr
 Acorr_error = round(A$correlations - Rey, 6)
-Acorr_error
 
 # interquartile-range of correlation errors
 quantile(as.numeric(Acorr_error), 0.25)
 quantile(as.numeric(Acorr_error), 0.75)
 
-# Simulate variables with error loop
+# Simulate variables with error loop (using default settings of
+# epsilon = 0.001 and maxit = 1000)
 B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               k_nb = nnb, method = "Polynomial", means = means, vars = vars,
               skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], Six = NULL, marginal = marginal,
-              support = list(), nrand = 100000,
-              lam = lam, size = size, prob = prob, mu = NULL,
-              Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-              errorloop = TRUE, epsilon = 0.001, maxit = 1000,
-              extra_correct = TRUE)
+              sixths = M[4, ], marginal = marginal, lam = lam, size = size,
+              prob = prob, rho = Rey, seed = seed, errorloop = TRUE)
 
+# Look at the maximum correlation error
 B$maxerr
 Bcorr_error = round(B$correlations - Rey, 6)
-Bcorr_error
 
 # interquartile-range of correlation errors
 quantile(as.numeric(Bcorr_error), 0.25)
 quantile(as.numeric(Bcorr_error), 0.75)
 
 # Look at results
-names(B)
-
 # Ordinal variables
-marginal
-B$summary_categorical
+B$summary_ordinal
 
 # Continuous variables
 round(B$constants, 6)
-t(M)
 round(B$summary_continuous, 6)
+round(B$summary_targetcont, 6)
 B$valid.pdf
 
 # Count variables
@@ -324,7 +318,7 @@ B$summary_Neg_Bin
 
 # t (df = 10) (2nd continuous variable)
 # 1) Simulated Data CDF (find cumulative probability up to y = 0.5)
-plot_sim_cdf(B$continuous_variables[, 2], delta = 0.5)
+plot_sim_cdf(B$continuous_variables[, 2], calc_cprob = TRUE, delta = 0.5)
 
 # 2) Simulated Data and Target Distribution PDFs
 plot_sim_pdf_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
@@ -334,7 +328,7 @@ plot_sim_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
 
 # Chisq (df = 4) (3rd continuous variable)
 # 1) Simulated Data CDF (find cumulative probability up to y = 0.5)
-plot_sim_cdf(B$continuous_variables[, 3], delta = 0.5)
+plot_sim_cdf(B$continuous_variables[, 3], calc_cprob = TRUE, delta = 0.5)
 
 # 2) Simulated Data and Target Distribution PDFs
 plot_sim_pdf_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
@@ -342,59 +336,6 @@ plot_sim_pdf_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
 # 3) Simulated Data and Target Distribution
 plot_sim_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
 
-# Compare to Method 2
-# Make sure Rey is within upper and lower correlation limits
-valid2 <- valid_corr2(k_cat = ncat, k_cont = ncont, k_pois = npois,
-                     k_nb = nnb, method = "Polynomial", means = means,
-                     vars = vars, skews = M[1, ], skurts = M[2, ],
-                     fifths = M[3, ], sixths = M[4, ], Six = NULL,
-                     marginal = marginal, lam = lam,
-                     pois_eps = rep(0.0001, npois),
-                     size = size, prob = prob, mu = NULL,
-                     nb_eps = rep(0.0001, nnb),
-                     rho = Rey, n = 100000, seed = seed)
-
-# Simulate variables without error loop
-C <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-               k_nb = nnb, method = "Polynomial", means = means,
-               vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], Six = NULL,
-               marginal = marginal, support = list(),
-               lam = lam, pois_eps = rep(0.0001, npois),
-               size = size, prob = prob, mu = NULL,
-               nb_eps = rep(0.0001, nnb),
-               Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-               errorloop = FALSE, epsilon = 0.001, maxit = 1000,
-               extra_correct = TRUE)
-
-C$maxerr
-Ccorr_error = round(C$correlations - Rey, 6)
-Ccorr_error
-
-# interquartile-range of correlation errors
-quantile(as.numeric(Ccorr_error), 0.25)
-quantile(as.numeric(Ccorr_error), 0.75)
-
-# Simulate variables with error loop
-D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-               k_nb = nnb, method = "Polynomial", means = means,
-               vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], Six = NULL,
-               marginal = marginal, support = list(),
-               lam = lam, pois_eps = rep(0.0001, npois),
-               size = size, prob = prob, mu = NULL,
-               nb_eps = rep(0.0001, nnb),
-               Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-               errorloop = TRUE, epsilon = 0.001, maxit = 1000,
-               extra_correct = TRUE)
-
-D$maxerr
-Dcorr_error = round(D$correlations - Rey, 6)
-Dcorr_error
-
-# interquartile-range of correlation errors
-quantile(as.numeric(Dcorr_error), 0.25)
-quantile(as.numeric(Dcorr_error), 0.75)
 }
 }
 \references{

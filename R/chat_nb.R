@@ -37,7 +37,7 @@ chat_nb <- function(size, prob, mu = NULL, n_unif = 10000, seed = 1234) {
     chat <- cor(qnbinom(u, size, prob), qnorm(u, 0, 1))
   }
   if (length(mu) > 0) {
-    chat <- cor(qnbinom(u, size, mu), qnorm(u, 0, 1))
+    chat <- cor(qnbinom(u, size, mu = mu), qnorm(u, 0, 1))
   }
   return(chat)
 }

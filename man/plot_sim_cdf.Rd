@@ -5,7 +5,7 @@
 \title{Plot Simulated (Empirical) Power Method Cumulative Distribution Function}
 \usage{
 plot_sim_cdf(sim_y, title = "Empirical Cumulative Distribution Function",
-  ylower = NULL, yupper = NULL, calc_cprob = TRUE, delta = 5,
+  ylower = NULL, yupper = NULL, calc_cprob = FALSE, delta = 5,
   color = "dark blue", fill = "blue", hline = "dark green")
 }
 \arguments{
@@ -17,33 +17,38 @@ plot_sim_cdf(sim_y, title = "Empirical Cumulative Distribution Function",
 
 \item{yupper}{the upper y value (default = NULL, uses maximum simulated y value)}
 
-\item{calc_cprob}{if TRUE (default), \code{\link[SimMultiCorrData]{sim_cdf_prob}} is used to find the empirical cumulative probability
-up to y = delta and the region on the plot is filled with a dashed horizontal line drawn at Fn(delta)}
+\item{calc_cprob}{if TRUE (default = FALSE) and \code{sim_y} is continuous, \code{\link[SimMultiCorrData]{sim_cdf_prob}} is used to find the empirical cumulative probability
+up to y = delta and the region on the plot is filled with a dashed horizontal line drawn at \eqn{Fn(delta)}}
 
-\item{delta}{the value y at which to evaluate the cumulative probability}
+\item{delta}{the value y at which to evaluate the cumulative probability (default = 5)}
 
-\item{color}{the line color for the cdf}
+\item{color}{the line color for the cdf (default = "dark blue")}
 
-\item{fill}{the fill color if calc_cprob = TRUE}
+\item{fill}{the fill color if \code{calc_cprob} = TRUE (default = "blue)}
 
-\item{hline}{the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE}
+\item{hline}{the dashed horizontal line color drawn at \code{delta} if \code{calc_cprob} = TRUE (default = "dark green")}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
-This plots the cumulative distribution function of simulated data using the empirical cdf Fn (see \code{\link[ggplot2]{stat_ecdf}}).
-    Fn is a step function with jumps i/n at observation values, where i is the number of tied observations at that value. Missing values are
-    ignored.  For observations y= (y1,y2, ... yn), Fn is the fraction of observations less or equal to t, i.e.,
-    \eqn{Fn(t) = sum[yi <= t]/n}.  If \code{calc_cprob} = TRUE, the cumulative probability up to \eqn{y = delta} is
-    calculated (see \code{\link[SimMultiCorrData]{sim_cdf_prob}}) and the region on the plot is filled with a dashed horizontal line drawn
-    at Fn(delta).  The cumulative probability is stated on top of the line.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
+This plots the cumulative distribution function of simulated continuous, ordinal, or count data using the empirical cdf
+    \eqn{Fn} (see \code{\link[ggplot2]{stat_ecdf}}).
+    \eqn{Fn} is a step function with jumps \eqn{i/n} at observation values, where \eqn{i} is the number of tied observations at that
+    value. Missing values are
+    ignored.  For observations \eqn{y = (y1, y2, ..., yn)}, \eqn{Fn} is the fraction of observations less or equal to \eqn{t}, i.e.,
+    \eqn{Fn(t) = sum[yi <= t]/n}.  If \code{calc_cprob} = TRUE and the variable is \emph{continuous}, the cumulative probability up to
+    \eqn{y = delta} is calculated (see \code{\link[SimMultiCorrData]{sim_cdf_prob}}) and the region on the plot is filled with a
+    dashed horizontal line drawn at Fn(delta).  The cumulative probability is stated on top of the line.
+    This fill option does not work for ordinal or count variables.  The function returns a
+    \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
     The graph parameters (i.e. \code{title}, \code{color}, \code{fill}, \code{hline}) are \code{\link[ggplot2]{ggplot2}} parameters.
     It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
-# Logistic Distribution
+# Logistic Distribution: mean = 0, variance = 1
+seed = 1234
 
 # Find standardized cumulants
 stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
@@ -52,8 +57,7 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 # (invalid power method pdf)
 Logvar1 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
                       skews = stcum[3], skurts = stcum[4],
-                      fifths = stcum[5], sixths = stcum[6],
-                      Six = NULL, n = 10000, seed = 1234)
+                      fifths = stcum[5], sixths = stcum[6], seed = seed)
 
 # Plot cdf with cumulative probability calculated up to delta = 5
 plot_sim_cdf(sim_y = Logvar1$continuous_variable,
@@ -65,12 +69,21 @@ plot_sim_cdf(sim_y = Logvar1$continuous_variable,
 Logvar2 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
                       skews = stcum[3], skurts = stcum[4],
                       fifths = stcum[5], sixths = stcum[6],
-                      Six = seq(1.5, 2, 0.05), n = 10000, seed = 1234)
+                      Six = seq(1.5, 2, 0.05), seed = seed)
 
 # Plot cdf with cumulative probability calculated up to delta = 5
 plot_sim_cdf(sim_y = Logvar2$continuous_variable,
              title = "Valid Logistic Empirical CDF",
              calc_cprob = TRUE, delta = 5)
+
+# Simulate one binary and one ordinal variable (4 categories) with
+# correlation 0.3
+Ordvars = rcorrvar(k_cat = 2, marginal = list(0.4, c(0.2, 0.5, 0.7)),
+                   rho = matrix(c(1, 0.3, 0.3, 1), 2, 2), seed = seed)
+
+# Plot cdf of 2nd variable
+plot_sim_cdf(Ordvars$ordinal_variables[, 2])
+
 }
 
 }

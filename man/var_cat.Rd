@@ -31,6 +31,6 @@ Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient.
 \seealso{
 \code{\link[SimMultiCorrData]{ordnorm}}, \code{\link[SimMultiCorrData]{rcorrvar}},
     \code{\link[SimMultiCorrData]{rcorrvar2}}, \code{\link[SimMultiCorrData]{findintercorr_cont_cat}},
-    \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}}, \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}}
+    \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}}, \cr \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}}
 }
 \keyword{variance}

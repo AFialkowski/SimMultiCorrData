@@ -41,14 +41,13 @@ for $\Large \rho_{x1x2}$ gives the intermediate correlation of the standard norm
 To generate the binary variables from the standard normal variables, set $\Large Y_{1} = 1$ if $\Large Z_{1} \le z(p_{1})$ and $\Large Y_{1} = 0$ otherwise.  Similarly, set $\Large Y_{2} = 1$ if $\Large Z_{2} \le z(p_{2})$ and $\Large Y_{2} = 0$ otherwise.  
 
 This ensures:
-
-1. $\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1}$,
-1. $\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2}$,
-1. $\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}$ 
-   $= Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}$ 
-   $= \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}$ 
-   $= \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})}$, and
-1. $\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}$.
+\[\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1},\]
+\[\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2},\]
+\[\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}\]
+\[\Large = Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}\]
+\[\Large = \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}\]
+\[\Large = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})},\]
+\[\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}.\]
 
 **Otherwise**, `ordnorm` is called for each pair.  If the resulting intermediate matrix is not positive-definite, this is corrected for later.
 

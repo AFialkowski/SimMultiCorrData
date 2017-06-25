@@ -208,14 +208,14 @@
 #' valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
 #'                     k_nb = nnb, method = "Polynomial", means = means,
 #'                     vars = vars, skews = M[1, ], skurts = M[2, ],
-#'                     fifths = M[3, ], sixths = M[4, ], Six = NULL,
-#'                     marginal = marginal, lam = lam, size = size,
-#'                     prob = prob, mu = NULL, rho = Rey, n = 100000,
+#'                     fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+#'                     lam = lam, size = size, prob = prob, rho = Rey,
 #'                     seed = seed)
 #' }
 valid_corr <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
                        method = c("Fleishman", "Polynomial"),
-                       means, vars, skews, skurts, fifths, sixths,
+                       means =  NULL, vars =  NULL, skews =  NULL,
+                       skurts =  NULL, fifths =  NULL, sixths =  NULL,
                        Six = list(), marginal = list(),
                        lam = NULL, size = NULL,
                        prob = NULL, mu = NULL, rho = NULL,

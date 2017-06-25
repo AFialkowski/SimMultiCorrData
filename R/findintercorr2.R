@@ -202,8 +202,7 @@
 #' for (i in 1:ncol(M)) {
 #'  con[i, ] <- find_constants(method = "Polynomial", skews = M[1, i],
 #'                             skurts = M[2, i], fifths = M[3, i],
-#'                             sixths = M[4, i], Six = NULL,
-#'                             cstart = NULL, n = 25, seed = seed)
+#'                             sixths = M[4, i])
 #' }
 #'
 #' # Binary and Ordinal Distributions
@@ -243,22 +242,20 @@
 #' valid <- valid_corr2(k_cat = ncat, k_cont = ncont, k_pois = npois,
 #'                      k_nb = nnb, method = "Polynomial", means = means,
 #'                      vars = vars, skews = M[1, ], skurts = M[2, ],
-#'                      fifths = M[3, ], sixths = M[4, ], Six = NULL,
+#'                      fifths = M[3, ], sixths = M[4, ],
 #'                      marginal = marginal, lam = lam,
 #'                      pois_eps = rep(0.0001, npois),
-#'                      size = size, prob = prob, mu = NULL,
+#'                      size = size, prob = prob,
 #'                      nb_eps = rep(0.0001, nnb),
-#'                      rho = Rey, n = 100000, seed = seed)
+#'                      rho = Rey, seed = seed)
 #'
 #' # Find intermediate correlation
 #' Sigma2 <- findintercorr2(n = n, k_cont = ncont, k_cat = ncat,
 #'                          k_pois = npois, k_nb = nnb,
 #'                          method = "Polynomial", constants = con,
-#'                          marginal = marginal, support = list(),
-#'                          lam = lam, size = size, prob = prob, mu = NULL,
-#'                          pois_eps = rep(0.0001, npois),
-#'                          nb_eps = rep(0.0001, nnb),
-#'                          rho = Rey, epsilon = 0.001, maxit = 1000)
+#'                          marginal = marginal, lam = lam, size = size,
+#'                          prob = prob, pois_eps = rep(0.0001, npois),
+#'                          nb_eps = rep(0.0001, nnb), rho = Rey)
 #' Sigma2
 #'
 #' }
@@ -324,7 +321,7 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
         nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], prob[i])
       }
       if (length(mu) > 0) {
-        nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], mu[i])
+        nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], mu = mu[i])
       }
       nb_prob[[i]][nb_max[i, 3] + 1] <- 1 - sum(nb_prob[[i]][1:nb_max[i, 3]])
       nb_marg[[i]] <- cumsum(nb_prob[[i]])

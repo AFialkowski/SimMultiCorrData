@@ -3,23 +3,24 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 library(SimMultiCorrData)
-
+library(printr)
 stcums <- calc_theory(Dist = "Exponential", params = 0.5)
-stcums
+as.matrix(t(stcums))
 
-## ------------------------------------------------------------------------
+## ---- warning = FALSE, message = FALSE-----------------------------------
 H_exp <- nonnormvar1("Polynomial", means = stcums[1], vars = stcums[2]^2, 
                      skews = stcums[3], skurts = stcums[4], 
-                     fifths = stcums[5], sixths = stcums[6], Six = NULL, 
-                     cstart = NULL, n = 10000, seed = 1234)
+                     fifths = stcums[5], sixths = stcums[6], n = 10000, 
+                     seed = 1234)
 
-names(H_exp)
-# Look at constants
-H_exp$constants
+## ------------------------------------------------------------------------
+as.matrix(H_exp$constants, nrow = 1, ncol = 6, byrow = TRUE)
 
-# Look at summary
-round(H_exp$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
-                               "skurtosis", "fifth", "sixth")], 5)
+## ------------------------------------------------------------------------
+as.matrix(round(H_exp$summary_continuous[, c("Distribution", "mean", "sd", 
+                                             "skew", "skurtosis", "fifth", 
+                                             "sixth")], 5), nrow = 1, ncol = 7,
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
 H_exp$valid.pdf
@@ -41,15 +42,15 @@ z_prime
 ## ------------------------------------------------------------------------
 1 - pnorm(z_prime)
 
-## ------------------------------------------------------------------------
-plot_sim_pdf_theory(sim_y = as.numeric(H_exp$continuous_variable[, 1]), 
-                    overlay = TRUE, Dist = "Exponential", params = 0.5)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_pdf_theory(sim_y = H_exp$continuous_variable[, 1], 
+                    Dist = "Exponential", params = 0.5)
 
-## ------------------------------------------------------------------------
-plot_sim_cdf(sim_y = as.numeric(H_exp$continuous_variable[, 1]), 
-             calc_cprob = TRUE, delta = y_star)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_cdf(sim_y = H_exp$continuous_variable[, 1], calc_cprob = TRUE, 
+             delta = y_star)
 
-## ------------------------------------------------------------------------
-stats_pdf(c = H_exp$constants[1, ], method = "Polynomial", alpha = 0.025, 
-          mu = 2, sigma = 2)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(stats_pdf(c = H_exp$constants[1, ], method = "Polynomial", 
+                    alpha = 0.025, mu = stcums[1], sigma = stcums[2]))) 
 

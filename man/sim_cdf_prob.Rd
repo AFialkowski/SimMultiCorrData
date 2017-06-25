@@ -20,10 +20,10 @@ A list with components:
 }
 \description{
 This function calculates a cumulative probability using simulated data and
-    Martin Maechler's \code{\link[stats]{ecdf}} function.  Fn is a step function with jumps i/n at observation
-    values, where i is the number of tied observations at that value. Missing values are ignored. For
-    observations y= (y1,y2, ... yn), Fn is the fraction of observations less or equal to t, i.e.,
-    \eqn{Fn(t) = sum[yi <= t]/n}.
+    Martin Maechler's \code{\link[stats]{ecdf}} function.  \eqn{Fn} is a step function with jumps \eqn{i/n} at observation
+    values, where \eqn{i} is the number of tied observations at that value. Missing values are ignored. For
+    observations \eqn{y = (y1, y2, ..., yn)}, \eqn{Fn} is the fraction of observations less or equal to \eqn{t}, i.e.,
+    \eqn{Fn(t) = sum[yi <= t]/n}.  This works for continuous, ordinal, or count variables.
 }
 \examples{
 # Beta(a = 4, b = 2) Distribution:

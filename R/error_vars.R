@@ -160,7 +160,7 @@ error_vars <- function(marginal, support, method, means, vars, constants, lam,
     if (length(mu) > 0) {
       Y_nb[, r - (k_cat + k_cont + k_pois)] <-
         qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu[r - (k_cat + k_cont + k_pois)])
+                mu = mu[r - (k_cat + k_cont + k_pois)])
     }
     rho_calc[q, r] <-
       cor(cbind(Y_cat[, q], Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
@@ -252,7 +252,7 @@ error_vars <- function(marginal, support, method, means, vars, constants, lam,
     if (length(mu) > 0) {
       Y_nb[, r - (k_cat + k_cont + k_pois)] <-
         qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu[r - (k_cat + k_cont + k_pois)])
+                mu = mu[r - (k_cat + k_cont + k_pois)])
     }
     rho_calc[q, r] <- cor(cbind(Yb[, (q - k_cat)],
                                 Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
@@ -282,7 +282,7 @@ error_vars <- function(marginal, support, method, means, vars, constants, lam,
     if (length(mu) > 0) {
       Y_nb[, r - (k_cat + k_cont + k_pois)] <-
         qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu[r - (k_cat + k_cont + k_pois)])
+                mu = mu[r - (k_cat + k_cont + k_pois)])
     }
     rho_calc[q, r] <- cor(cbind(Y_pois[, (q - (k_cat + k_cont))],
                                 Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
@@ -303,10 +303,10 @@ error_vars <- function(marginal, support, method, means, vars, constants, lam,
     if (length(mu) > 0) {
       Y_nb[, q - (k_cat + k_cont + k_pois)] <-
         qnbinom(pnorm(X_nb[, 1]), size[q - (k_cat + k_cont + k_pois)],
-                mu[q - (k_cat + k_cont + k_pois)])
+                mu = mu[q - (k_cat + k_cont + k_pois)])
       Y_nb[, r - (k_cat + k_cont + k_pois)] <-
         qnbinom(pnorm(X_nb[, 2]), size[r - (k_cat + k_cont + k_pois)],
-                mu[r - (k_cat + k_cont + k_pois)])
+                mu = mu[r - (k_cat + k_cont + k_pois)])
     }
     rho_calc[q, r] <- cor(cbind(Y_nb[, (q - (k_cat + k_cont + k_pois))],
                                 Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]

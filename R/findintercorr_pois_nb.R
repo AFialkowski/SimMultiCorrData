@@ -66,8 +66,8 @@ findintercorr_pois_nb <- function(rho_pois_nb, lam, size, prob, mu = NULL,
         mincor <- cor(qpois(u, lam[i]), qnbinom(1 - u, size[j], prob[j]))
       }
       if (length(mu > 0)) {
-        maxcor <- cor(qpois(u, lam[i]), qnbinom(u, size[j], mu[j]))
-        mincor <- cor(qpois(u, lam[i]), qnbinom(1 - u, size[j], mu[j]))
+        maxcor <- cor(qpois(u, lam[i]), qnbinom(u, size[j], mu = mu[j]))
+        mincor <- cor(qpois(u, lam[i]), qnbinom(1 - u, size[j], mu = mu[j]))
       }
       a <- -(maxcor * mincor)/(maxcor + mincor)
       b <- log((maxcor + a)/a)

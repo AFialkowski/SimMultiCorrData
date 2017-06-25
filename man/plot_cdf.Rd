@@ -6,7 +6,7 @@
 \usage{
 plot_cdf(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   sigma = 1, title = "Cumulative Distribution Function", ylower = NULL,
-  yupper = NULL, calc_cprob = TRUE, delta = 5, color = "dark blue",
+  yupper = NULL, calc_cprob = FALSE, delta = 5, color = "dark blue",
   fill = "blue", hline = "dark green", n = 10000, seed = 1234)
 }
 \arguments{
@@ -16,9 +16,9 @@ plot_cdf(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
 \item{method}{the method used to generate the continuous variable \eqn{y = p(z)}.  "Fleishman" uses a third-order polynomial
 transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 
-\item{mu}{mean for the continuous variable}
+\item{mu}{mean for the continuous variable (default = 0)}
 
-\item{sigma}{standard deviation for the continuous variable}
+\item{sigma}{standard deviation for the continuous variable (default = 1)}
 
 \item{title}{the title for the graph (default = "Cumulative Distribution Function")}
 
@@ -26,29 +26,29 @@ transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 
 \item{yupper}{the upper y value (default = NULL, uses maximum simulated y value)}
 
-\item{calc_cprob}{if TRUE (default), \code{\link[SimMultiCorrData]{cdf_prob}} is used to find the cumulative probability
+\item{calc_cprob}{if TRUE (default = FALSE), \code{\link[SimMultiCorrData]{cdf_prob}} is used to find the cumulative probability
 up to \eqn{delta = sigma * y + mu} and the region on the plot is filled with a dashed horizontal line drawn at \eqn{F_p(Z)(delta)}}
 
 \item{delta}{the value \eqn{sigma * y + mu}, where \eqn{y = p(z)}, at which to evaluate the cumulative probability}
 
-\item{color}{the line color for the cdf}
+\item{color}{the line color for the cdf (default = "dark blue")}
 
-\item{fill}{the fill color if \code{calc_cprob} = TRUE}
+\item{fill}{the fill color if \code{calc_cprob} = TRUE (default = "blue)}
 
-\item{hline}{the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE}
+\item{hline}{the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE (default = "dark green")}
 
-\item{n}{the number of random standard normal numbers to use in generating \eqn{y = p(z)}}
+\item{n}{the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 10000)}
 
-\item{seed}{the seed value for random number generation}
+\item{seed}{the seed value for random number generation (default = 1234)}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
-This plots the theoretical power method cumulative distribution function: \cr
+This plots the theoretical power method cumulative distribution function:
     \eqn{F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))}.
     It is a parametric plot with \eqn{sigma * y + mu}, where \eqn{y = p(z)}, on the x-axis and \eqn{F_Z(z)} on the y-axis,
-    where z is vector of n random standard normal numbers (generated with a seed set by user).  Given a vector of polynomial
+    where \eqn{z} is vector of \eqn{n} random standard normal numbers (generated with a seed set by user).  Given a vector of polynomial
     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical cumulative probabilities
     using \eqn{F_p(Z)(p(z), F_Z(z))}.  If \code{calc_cprob} = TRUE, the cumulative probability up to \eqn{delta = sigma * y + mu} is
     calculated (see \code{\link[SimMultiCorrData]{cdf_prob}}) and the region on the plot is filled with a dashed horizontal
@@ -58,7 +58,7 @@ This plots the theoretical power method cumulative distribution function: \cr
 }
 \examples{
 \dontrun{
-# Logistic Distribution
+# Logistic Distribution: mean = 0, sigma = 1
 
 # Find standardized cumulants
 stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
@@ -67,27 +67,21 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 # (invalid power method pdf)
 con1 <- find_constants(method = "Polynomial", skews = stcum[3],
                       skurts = stcum[4], fifths = stcum[5],
-                      sixths = stcum[6], Six = NULL,
-                      n = 25, seed = 1234)
+                      sixths = stcum[6], n = 25, seed = 1234)
 
 # Plot cdf with cumulative probability calculated up to delta = 5
-plot_cdf(c = con1$constants, method = "Polynomial", mu = 0,
-         sigma = 1, title = "Invalid Logistic CDF",
-         calc_cprob = TRUE, delta = 5, n = 10000,
-         seed = 1234)
+plot_cdf(c = con1$constants, method = "Polynomial",
+         title = "Invalid Logistic CDF", calc_cprob = TRUE, delta = 5)
 
 # Find constants with the sixth cumulant correction
 # (valid power method pdf)
 con2 <- find_constants(method = "Polynomial", skews = stcum[3],
                       skurts = stcum[4], fifths = stcum[5],
-                      sixths = stcum[6], Six = seq(1.5, 2, 0.05),
-                      n = 25, seed = 1234)
+                      sixths = stcum[6], Six = seq(1.5, 2, 0.05))
 
 # Plot cdf with cumulative probability calculated up to delta = 5
-plot_cdf(c = con2$constants, method = "Polynomial", mu = 0,
-         sigma = 1, title = "Valid Logistic CDF",
-         calc_cprob = TRUE, delta = 5, n = 10000,
-         seed = 1234)
+plot_cdf(c = con2$constants, method = "Polynomial",
+         title = "Valid Logistic CDF", calc_cprob = TRUE, delta = 5)
 }
 
 }

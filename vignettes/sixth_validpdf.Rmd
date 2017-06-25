@@ -16,12 +16,13 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation, Headrick & Kowalchuk (2007) propose that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and the smallest value that generates a valid pdf is chosen.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explains how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
 
 ## Example
-The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.
+The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.  (Note that the `printr` package is invoked to display the tables.)
 
 ### Step 1) Find the theoretical standardized cumulants for each distribution.
 The parameters are stored in `H_params`.  The order of the columns corresponds to the order of the columns in `Headrick.dist`.  The columns of `H_params` are named as inputs for `calc_theory`.  Please see the appropriate R help page concerning the parameterization of each distribution.
 ```{r, warning = FALSE, message = FALSE}
 library(SimMultiCorrData)
+library(printr)
 H_stcum <- matrix(1, nrow = 4, ncol = ncol(Headrick.dist))
 for (i in 1:ncol(H_params)) {
   if (is.na(H_params[2, i])) {
@@ -39,6 +40,7 @@ round(H_stcum[, 7:12], 5)
 round(H_stcum[, 13:18], 5)
 round(H_stcum[, 19:22], 5)
 ```
+
 Note that the standardized cumulants match those found by Headrick, except for the Gamma($\Large \alpha = 10,\ \beta = 10$) distribution.  Either there is a mistake in Headrick's table, or he is using a different parameterization.
 
 ### Step 2) Use the cumulants to find the constants for each distribution.
@@ -53,9 +55,8 @@ H_consol <- list()
 
 for (i in 1:ncol(H_stcum)) {
   H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
-                                skurts = H_stcum[2, i], fifths = H_stcum[3, i],
-                                sixths = H_stcum[4, i], Six = Six[[i]],
-                                cstart = NULL, n = 25, seed = 1234)
+                                 skurts = H_stcum[2, i], fifths = H_stcum[3, i],
+                                 sixths = H_stcum[4, i], Six = Six[[i]])
 }
 
 H_cons <- matrix(1, nrow = 7, ncol = ncol(Headrick.dist))
@@ -88,7 +89,7 @@ round(H_cons[, 19:22], 6)
 
 1. The Logistic($\Large 0, 1$), Triangular($\Large 0, 1$), t($\Large df = 7$), Beta($\Large \alpha = 4,\ \beta = 1.5$), and Beta($\Large \alpha = 4,\ \beta = 1.25$) required relatively small sixth cumulant corrections.
 
-1. The Laplace($\Large 0, 1$) required the Largest correction at 25.14.
+1. The Laplace($\Large 0, 1$) required the largest correction at 25.14.
 
 ### Step 5) Simulate distributions
 We will choose the **Logistic($\Large 0, 1$)** and **Laplace($\Large 0, 1$) distributions** for illustration.
@@ -99,30 +100,33 @@ seed <- 1234
 Rey <- matrix(c(1, 0.4, 0.4, 1), 2, 2)
 
 # Make sure Rey is within feasible correlation bounds
-valid <- valid_corr(k_cat = 0, k_cont = 2, k_pois = 0, k_nb = 0, 
-                    method = "Polynomial", means = rep(0, 2), 
-                    vars = rep(1, 2), 
+valid <- valid_corr(k_cont = 2, method = "Polynomial", 
+                    means = rep(0, 2), vars = rep(1, 2), 
                     skews = H_stcum[1, c("Logistic", "Laplace")], 
                     skurts = H_stcum[2, c("Logistic", "Laplace")],
                     fifths = H_stcum[3, c("Logistic", "Laplace")], 
                     sixths = H_stcum[4, c("Logistic", "Laplace")], 
-                    Six = NULL, rho = Rey, n = 100000, seed = seed)
+                    rho = Rey, seed = seed)
 
-A <- rcorrvar(n = 10000, k_cont = 2, k_cat = 0, k_pois = 0, k_nb = 0, 
-              method = "Polynomial", means = rep(0, 2), vars = rep(1, 2), 
+A <- rcorrvar(n = 10000, k_cont = 2, method = "Polynomial", 
+              means = rep(0, 2), vars = rep(1, 2), 
               skews = H_stcum[1, c("Logistic", "Laplace")], 
               skurts = H_stcum[2, c("Logistic", "Laplace")], 
               fifths = H_stcum[3, c("Logistic", "Laplace")], 
-              sixths = H_stcum[4, c("Logistic", "Laplace")], Six = NULL, 
-              nrand = 100000, rho = Rey, seed = seed, errorloop = FALSE)
-
-# Look at the maximum correlation error.
-A$maxerr
+              sixths = H_stcum[4, c("Logistic", "Laplace")], 
+              rho = Rey, seed = seed)
+```
+Look at the maximum correlation error:
+```{r}
+cat(paste("The maximum correlation error is ", round(A$maxerr, 5), ".", 
+          sep = ""))
+```
+Look at the interquartile-range of correlation errors:
+```{r}
 Acorr_error = round(A$correlations - Rey, 6)
-
-# interquartile-range of correlation errors
-quantile(as.numeric(Acorr_error), 0.25)
-quantile(as.numeric(Acorr_error), 0.75)
+cat(paste("The IQR of correlation errors is [", 
+          round(quantile(as.numeric(Acorr_error), 0.25), 5), ", ",
+          round(quantile(as.numeric(Acorr_error), 0.75), 5), "].", sep = ""))
 ```
 
 Second, simulate *with the sixth cumulant correction*.
@@ -130,55 +134,67 @@ Second, simulate *with the sixth cumulant correction*.
 Six <- list(H_cons["sixcorr", "Logistic"], H_cons["sixcorr", "Laplace"])
 
 # Make sure Rey is within feasible correlation bounds
-valid2 <- valid_corr(k_cat = 0, k_cont = 2, k_pois = 0, k_nb = 0, 
-                    method = "Polynomial", means = rep(0, 2), 
-                    vars = rep(1, 2), 
-                    skews = H_stcum[1, c("Logistic", "Laplace")], 
-                    skurts = H_stcum[2, c("Logistic", "Laplace")],
-                    fifths = H_stcum[3, c("Logistic", "Laplace")], 
-                    sixths = H_stcum[4, c("Logistic", "Laplace")], 
-                    Six = Six, rho = Rey, n = 100000, seed = seed)
+valid2 <- valid_corr(k_cont = 2, method = "Polynomial", 
+                     means = rep(0, 2), vars = rep(1, 2), 
+                     skews = H_stcum[1, c("Logistic", "Laplace")], 
+                     skurts = H_stcum[2, c("Logistic", "Laplace")],
+                     fifths = H_stcum[3, c("Logistic", "Laplace")], 
+                     sixths = H_stcum[4, c("Logistic", "Laplace")], 
+                     Six = Six, rho = Rey, seed = seed)
 
-B <- rcorrvar(n = 10000, k_cont = 2, k_cat = 0, k_pois = 0, k_nb = 0, 
-              method = "Polynomial", means = rep(0, 2), vars = rep(1, 2), 
+B <- rcorrvar(n = 10000, k_cont = 2, method = "Polynomial", 
+              means = rep(0, 2), vars = rep(1, 2), 
               skews = H_stcum[1, c("Logistic", "Laplace")], 
               skurts = H_stcum[2, c("Logistic", "Laplace")], 
               fifths = H_stcum[3, c("Logistic", "Laplace")], 
               sixths = H_stcum[4, c("Logistic", "Laplace")], Six = Six, 
-              nrand = 100000, rho = Rey, seed = seed, errorloop = FALSE)
-
-B$maxerr
+              rho = Rey, seed = seed)
+```
+Look at the maximum correlation error:
+```{r}
+cat(paste("The maximum correlation error is ", round(B$maxerr, 5), ".", 
+          sep = ""))
+```
+Look at the interquartile-range of correlation errors:
+```{r}
 Bcorr_error = round(B$correlations - Rey, 6)
-
-# interquartile-range of correlation errors
-quantile(as.numeric(Bcorr_error), 0.25)
-quantile(as.numeric(Bcorr_error), 0.75)
+cat(paste("The IQR of correlation errors is [", 
+          round(quantile(as.numeric(Bcorr_error), 0.25), 5), ", ",
+          round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
 ```
 
 Now *compare the results numerically*.
-```{r}
-# Without the sixth cumulant correction
-round(A$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
-                               "skurtosis", "fifth", "sixth")], 5)
-A$valid.pdf
 
-# With the correction
-round(B$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
-                               "skurtosis", "fifth", "sixth")], 5)
+Without the sixth cumulant correction:
+```{r}
+as.matrix(round(A$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
+                               "skurtosis", "fifth", "sixth")], 5), nrow = 2, 
+          ncol = 7, byrow = TRUE)
+A$valid.pdf
+```
+
+With the correction:
+```{R}
+as.matrix(round(B$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
+                               "skurtosis", "fifth", "sixth")], 5), nrow = 2,
+          ncol = 7, byrow = TRUE)
 B$valid.pdf
 ```
 
-*Compare the results graphically*.
-```{r}
-# Logistic Distribution
+*Compare the results graphically*.   
+
+Logistic Distribution:
+```{r, warning = FALSE, message = FALSE}
 plot_sim_pdf_theory(sim_y = A$continuous_variables[, 1], 
                     title = "Logistic Pdf", Dist = "Logistic", 
                     params = H_params$Logistic)
 plot_sim_pdf_theory(sim_y = B$continuous_variables[, 1], 
                     title = "Corrected Logistic Pdf", Dist = "Logistic", 
                     params = H_params$Logistic)
+```
 
-# Laplace Distribution
+Laplace Distribution:
+```{r, warning = FALSE, message = FALSE}
 plot_sim_pdf_theory(sim_y = A$continuous_variables[, 2], 
                     title = "Laplace Pdf", Dist = "Laplace", 
                     params = H_params$Laplace)

@@ -80,7 +80,7 @@ findintercorr_cont_nb <- function(method, constants, rho_cont_nb, size, prob,
     for (i in 1:nrow(rho_cont_nb)) {
       for (j in 1:ncol(rho_cont_nb)) {
         Sigma_cont_nb[i, j] <-
-          rho_cont_nb[i, j]/(chat_nb(size[j], mu[j], n_unif = nrand,
+          rho_cont_nb[i, j]/(chat_nb(size[j], mu = mu[j], n_unif = nrand,
                                      seed = seed) *
                                power_norm_corr(constants[i, ],
                                                method))

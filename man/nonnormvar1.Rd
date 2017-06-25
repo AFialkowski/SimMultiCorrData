@@ -47,6 +47,8 @@ A list with the following components:
 
 \code{summary_continuous} a data.frame containing a summary of the variable
 
+\code{summary_targetcont} a data.frame containing a summary of the target variable
+
 \code{sixth_correction} the sixth cumulant correction value
 
 \code{valid.pdf} "TRUE" if constants generate a valid pdf, else "FALSE"
@@ -86,10 +88,8 @@ stcums <- calc_theory(Dist = "Exponential", params = 0.5) # rate = 1/mean
 # 2) Simulate the variable:
 H_exp <- nonnormvar1("Polynomial", means = 2, vars = 2, skews = stcums[3],
                     skurts = stcums[4], fifths = stcums[5],
-                    sixths = stcums[6], Six = NULL, cstart = NULL,
-                    n = 10000, seed = 1234)
+                    sixths = stcums[6], n = 10000, seed = 1234)
 
-names(H_exp)
 H_exp$constants
 #           c0        c1       c2         c3          c4           c5
 # 1 -0.3077396 0.8005605 0.318764 0.03350012 -0.00367481 0.0001587076
@@ -134,7 +134,7 @@ z_prime
 # 7) Plot a parametric graph of Y* and Y:
 
 plot_sim_pdf_theory(sim_y = as.numeric(H_exp$continuous_variable[, 1]),
-                    overlay = TRUE, Dist = "Exponential", params = 0.5)
+                    Dist = "Exponential", params = 0.5)
 
 # Note we can also plot the empirical cdf and show the cumulative
 # probability up to y_star:

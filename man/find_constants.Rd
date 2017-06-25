@@ -92,45 +92,12 @@ find_constants("Fleishman", 0, 3)
 
 # Logistic Distribution
 find_constants(method = "Polynomial", skews = 0, skurts = 6/5, fifths = 0,
-               sixths = 48/7, Six = NULL, cstart = NULL, n = 25,
-               seed = 1234)
+               sixths = 48/7)
 
 # with correction to sixth cumulant
 find_constants(method = "Polynomial", skews = 0, skurts = 6/5, fifths = 0,
-               sixths = 48/7, Six = seq(1.7, 2, by = 0.05), cstart = NULL,
-               n = 25, seed = 1234)
+               sixths = 48/7, Six = seq(1.7, 2, by = 0.01))
 
-# Compute fifth-order power method approximations to empirical pdfs based on
-# means taken from n = 252 men.
-# Example taken from Headrick TC, Sheng Y, & Hodis FA (2007) Figure 3.
-
-skews <- c(-0.020, 1.198, 0.102, 0.145)
-skurts <- c(-0.327, 5.142, -0.420, -0.351)
-fifths <- c(-0.376, 28.298, -0.114, 0.474)
-sixths <- c(2.148, 144.431, 1.724, 2.735)
-Six2 <- seq(85, 90, by = 1)
-Six4 <- seq(1, 5, by = 1)
-
-for (i in 1:length(skews)) {
-  cat(paste("i = ", i, "\\n", sep = ""))
-  print(find_constants(method = "Polynomial", skews = skews[i],
-                       skurts = skurts[i], fifths = fifths[i],
-                       sixths = sixths[i], Six = NULL))
-  cat("\\n")
-}
-
-# Try sixth cumulant correction:
-i <- 2
-con <- find_constants(method = "Polynomial", skews = skews[i],
-                      skurts = skurts[i], fifths = fifths[i],
-                      sixths = sixths[i], Six = Six2)
-con
-
-i <- 4
-con <- find_constants(method = "Polynomial", skews = skews[i],
-                      skurts = skurts[i], fifths = fifths[i],
-                      sixths = sixths[i], Six = Six4)
-con
 }
 }
 \references{

@@ -47,7 +47,7 @@
 #' con <- find_constants(method = "Polynomial", skews = -0.467707,
 #'                       skurts = -0.375, fifths = 1.403122,
 #'                       sixths = -0.426136)$constants
-#' stats_pdf(c = con, method = "Polynomial", alpha = 0.025, mu = 0, sigma = 1)
+#' stats_pdf(c = con, method = "Polynomial", alpha = 0.025)
 #' }
 stats_pdf <- function(c, method = c("Fleishman", "Polynomial"), alpha = 0.025,
                       mu = 0, sigma = 1, lower = -10, upper = 10, sub = 1000) {

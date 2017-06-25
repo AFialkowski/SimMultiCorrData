@@ -4,6 +4,7 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 library(SimMultiCorrData)
+library(printr)
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -61,7 +62,7 @@ if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
   Rey <- as.matrix(nearPD(Rey, corr = T, keepDiag = T)$mat)
 }
 
-## ------------------------------------------------------------------------
+## ---- warning = FALSE----------------------------------------------------
 Lower <- list()
 
 # vector of standardized kurtosis values to add in case only invalid power 
@@ -72,9 +73,7 @@ start.time <- Sys.time()
 for (i in 1:ncol(M)) {
   Lower[[i]] <- calc_lower_skurt(method = "Polynomial", skews = M[1, i], 
                                  fifths = M[3, i], sixths = M[4, i], 
-                                 Skurt = Skurt, Six = NULL, xstart = NULL, 
-                                 seed = 104, n = 50)
-  print(i)
+                                 Skurt = Skurt, seed = 104)
 }
 stop.time <- Sys.time()
 Time <- round(difftime(stop.time, start.time, units = "min"), 3)
@@ -83,40 +82,44 @@ cat("Total computation time:", Time, "minutes \n")
 # Note the message given for Distribution 1 (Normal).
 
 ## ------------------------------------------------------------------------
-Lower[[1]]$Min # note valid.pdf = "FALSE"
-
-Lower[[2]]$Min
-Lower[[2]]$SkurtCorr1
-
-Lower[[3]]$Min
-Lower[[3]]$SkurtCorr1
-
-Lower[[4]]$Min
-Lower[[4]]$SkurtCorr1
-
-Lower[[5]]$Min
-Lower[[5]]$SkurtCorr1
+as.matrix(Lower[[1]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
+                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
 
 ## ------------------------------------------------------------------------
+as.matrix(Lower[[2]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
+                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+Lower[[2]]$SkurtCorr1
+
+## ------------------------------------------------------------------------
+as.matrix(Lower[[3]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
+                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+Lower[[3]]$SkurtCorr1
+
+## ------------------------------------------------------------------------
+as.matrix(Lower[[4]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
+                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+Lower[[4]]$SkurtCorr1
+
+## ------------------------------------------------------------------------
+as.matrix(Lower[[5]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
+                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+Lower[[5]]$SkurtCorr1
+
+## ---- warning = FALSE----------------------------------------------------
 # Make sure Rey is within upper and lower correlation limits
 valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
                     k_nb = nnb, method = "Polynomial", means = means,
                     vars = vars, skews = M[1, ], skurts = M[2, ],
-                    fifths = M[3, ], sixths = M[4, ], Six = NULL,
-                    marginal = marginal, lam = lam, size = size,
-                    prob = prob, mu = NULL, rho = Rey, n = 100000,
+                    fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+                    lam = lam, size = size, prob = prob, rho = Rey, 
                     seed = seed)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               k_nb = nnb, method = "Polynomial", means = means, vars = vars,
               skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], Six = NULL, marginal = marginal,
-              support = list(), nrand = 100000,
-              lam = lam, size = size, prob = prob, mu = NULL,
-              Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-              errorloop = FALSE, epsilon = 0.001, maxit = 1000,
-              extra_correct = TRUE)
+              sixths = M[4, ], marginal = marginal,
+              lam = lam, size = size, prob = prob, rho = Rey, seed = seed)
 
 ## ------------------------------------------------------------------------
 cat(paste("The maximum correlation error without the error loop is ", 
@@ -132,12 +135,8 @@ cat(paste("The IQR of correlation errors without the error loop is [",
 B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               k_nb = nnb, method = "Polynomial", means = means, vars = vars,
               skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], Six = NULL, marginal = marginal,
-              support = list(), nrand = 100000,
-              lam = lam, size = size, prob = prob, mu = NULL,
-              Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-              errorloop = TRUE, epsilon = 0.001, maxit = 1000,
-              extra_correct = TRUE)
+              sixths = M[4, ], marginal = marginal, lam = lam, size = size, 
+              prob = prob, rho = Rey, seed = seed, errorloop = TRUE)
 
 ## ------------------------------------------------------------------------
 cat(paste("The maximum correlation error with the error loop is ", 
@@ -150,61 +149,87 @@ cat(paste("The IQR of correlation errors with the error loop is [",
           round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
 
 ## ------------------------------------------------------------------------
-marginal
+knitr::kable(B$summary_ordinal[[1]], caption = "Variable 1")
+knitr::kable(B$summary_ordinal[[2]], caption = "Variable 2")
+knitr::kable(B$summary_ordinal[[3]], caption = "Variable 3")
+knitr::kable(B$summary_ordinal[[4]], caption = "Variable 4")
+knitr::kable(B$summary_ordinal[[5]], caption = "Variable 5")
 
 ## ------------------------------------------------------------------------
-B$summary_categorical
+as.matrix(B$summary_Poisson[, c(1, 3:6, 8:9)], nrow = 3, ncol = 7, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-B$summary_Poisson
-B$summary_Neg_Bin
+as.matrix(B$summary_Neg_Bin[, c(1, 3:7, 9:10)], nrow = 2, ncol = 8, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-round(B$constants, 6)
+as.matrix(round(B$constants, 6), nrow = 5, ncol = 6, byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-t(M)
+as.matrix(round(B$summary_targetcont, 5), nrow = 5, ncol = 7, byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-round(B$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
-                               "skurtosis", "fifth", "sixth")], 5)
+as.matrix(round(B$summary_continuous[, c("Distribution", "mean", "sd", 
+                                         "skew", "skurtosis", "fifth", 
+                                         "sixth")], 5), nrow = 5, ncol = 7, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
 B$valid.pdf
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = B$constants[1, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = B$constants[1, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = B$constants[2, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = B$constants[2, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = B$constants[3, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = B$constants[3, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = B$constants[4, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = B$constants[4, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = B$constants[5, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = B$constants[5, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-plot_sim_cdf(B$continuous_variables[, 2], delta = 0.5)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_cdf(B$continuous_variables[, 2], calc_cprob = TRUE, delta = 0.5)
 
-## ------------------------------------------------------------------------
+## ---- warning = FALSE, message = FALSE-----------------------------------
 plot_sim_pdf_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
 
-## ------------------------------------------------------------------------
-plot_sim_cdf(B$continuous_variables[, 3], delta = 0.5)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_cdf(B$continuous_variables[, 3], calc_cprob = TRUE, delta = 0.5)
 
-## ------------------------------------------------------------------------
+## ---- warning = FALSE, message = FALSE-----------------------------------
 plot_sim_pdf_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
 
-## ------------------------------------------------------------------------
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_cdf(B$ordinal_variables[, 5])
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_theory(B$Poisson_variables[, 2], cont_var = FALSE, Dist = "Poisson", 
+                params = 5)
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_pdf_theory(B$Poisson_variables[, 2], cont_var = FALSE, 
+                    Dist = "Poisson", params = 5)
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_theory(B$Neg_Bin_variables[, 1], cont_var = FALSE, 
+                Dist = "Negative_Binomial", params = c(3, 0.2))
+
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_pdf_theory(B$Neg_Bin_variables[, 1], cont_var = FALSE, 
+                Dist = "Negative_Binomial", params = c(3, 0.2))
+
+## ---- warning = FALSE----------------------------------------------------
 pois_eps <- rep(0.0001, npois)
 nb_eps <- rep(0.0001, nnb)
 
@@ -212,25 +237,17 @@ nb_eps <- rep(0.0001, nnb)
 valid2 <- valid_corr2(k_cat = ncat, k_cont = ncont, k_pois = npois,
                      k_nb = nnb, method = "Polynomial", means = means,
                      vars = vars, skews = M[1, ], skurts = M[2, ],
-                     fifths = M[3, ], sixths = M[4, ], Six = NULL,
-                     marginal = marginal, lam = lam,
-                     pois_eps = pois_eps,
-                     size = size, prob = prob, mu = NULL,
-                     nb_eps = nb_eps,
-                     rho = Rey, n = 100000, seed = seed)
+                     fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+                     lam = lam, pois_eps = pois_eps, size = size, 
+                     prob = prob, nb_eps = nb_eps, rho = Rey, seed = seed)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 C <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                k_nb = nnb, method = "Polynomial", means = means,
                vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], Six = NULL,
-               marginal = marginal, support = list(),
-               lam = lam, pois_eps = pois_eps,
-               size = size, prob = prob, mu = NULL,
-               nb_eps = nb_eps,
-               Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-               errorloop = FALSE, epsilon = 0.001, maxit = 1000,
-               extra_correct = TRUE)
+               fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+               lam = lam, pois_eps = pois_eps, size = size, prob = prob, 
+               nb_eps = nb_eps, rho = Rey, seed = seed)
 
 ## ------------------------------------------------------------------------
 cat(paste("The maximum correlation error without the error loop is ", 
@@ -246,14 +263,9 @@ cat(paste("The IQR of correlation errors without the error loop is [",
 D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                k_nb = nnb, method = "Polynomial", means = means,
                vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], Six = NULL,
-               marginal = marginal, support = list(),
-               lam = lam, pois_eps = pois_eps,
-               size = size, prob = prob, mu = NULL,
-               nb_eps = nb_eps,
-               Sigma = NULL, rho = Rey, cstart = NULL, seed = seed,
-               errorloop = TRUE, epsilon = 0.001, maxit = 1000,
-               extra_correct = TRUE)
+               fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+               lam = lam, pois_eps = pois_eps, size = size, prob = prob, 
+               nb_eps = nb_eps, rho = Rey, seed = seed, errorloop = TRUE)
 
 ## ------------------------------------------------------------------------
 cat(paste("The maximum correlation error with the error loop is ", 
@@ -266,57 +278,65 @@ cat(paste("The IQR of correlation errors with the error loop is [",
           round(quantile(as.numeric(Dcorr_error), 0.75), 5), "].", sep = ""))
 
 ## ------------------------------------------------------------------------
-marginal
+knitr::kable(D$summary_ordinal[[1]], caption = "Variable 1")
+knitr::kable(D$summary_ordinal[[2]], caption = "Variable 2")
+knitr::kable(D$summary_ordinal[[3]], caption = "Variable 3")
+knitr::kable(D$summary_ordinal[[4]], caption = "Variable 4")
+knitr::kable(D$summary_ordinal[[5]], caption = "Variable 5")
 
 ## ------------------------------------------------------------------------
-D$summary_categorical
+as.matrix(D$summary_Poisson[, c(1, 3:6, 8:9)], nrow = 3, ncol = 7, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-D$summary_Poisson
-D$summary_Neg_Bin
+as.matrix(D$summary_Neg_Bin[, c(1, 3:7, 9:10)], nrow = 2, ncol = 8, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-round(D$constants, 6)
+as.matrix(round(D$summary_targetcont, 5), nrow = 5, ncol = 7, byrow = TRUE)
 
 ## ------------------------------------------------------------------------
-t(M)
-
-## ------------------------------------------------------------------------
-round(D$summary_continuous[, c("Distribution", "mean", "sd", "skew", 
-                               "skurtosis", "fifth", "sixth")], 5)
+as.matrix(round(D$summary_continuous[, c("Distribution", "mean", "sd", 
+                                         "skew", "skurtosis", "fifth", 
+                                         "sixth")], 5), nrow = 5, ncol = 7, 
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
 D$valid.pdf
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = D$constants[1, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = D$constants[1, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = D$constants[2, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = D$constants[2, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = D$constants[3, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = D$constants[3, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = D$constants[4, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = D$constants[4, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-round(stats_pdf(c = D$constants[5, ], method = "Polynomial", alpha = 0.025, mu = 0, 
-          sigma = 1), 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+as.matrix(t(round(stats_pdf(c = D$constants[5, ], method = "Polynomial", 
+                            alpha = 0.025), 4)))
 
-## ------------------------------------------------------------------------
-plot_sim_cdf(D$continuous_variables[, 2], delta = 0.5)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_theory(D$Poisson_variables[, 2], cont_var = FALSE, Dist = "Poisson", 
+                params = 5)
 
-## ------------------------------------------------------------------------
-plot_sim_pdf_theory(D$continuous_variables[, 2], Dist = "t", params = 10)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_pdf_theory(D$Poisson_variables[, 2], cont_var = FALSE, 
+                    Dist = "Poisson", params = 5)
 
-## ------------------------------------------------------------------------
-plot_sim_cdf(D$continuous_variables[, 3], delta = 0.5)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_theory(D$Neg_Bin_variables[, 1], cont_var = FALSE, 
+                Dist = "Negative_Binomial", params = c(3, 0.2))
 
-## ------------------------------------------------------------------------
-plot_sim_pdf_theory(D$continuous_variables[, 3], Dist = "Chisq", params = 4)
+## ---- warning = FALSE, message = FALSE-----------------------------------
+plot_sim_pdf_theory(D$Neg_Bin_variables[, 1], cont_var = FALSE, 
+                    Dist = "Negative_Binomial", params = c(3, 0.2))
 

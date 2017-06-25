@@ -210,17 +210,16 @@
 #' valid <- valid_corr2(k_cat = ncat, k_cont = ncont, k_pois = npois,
 #'                      k_nb = nnb, method = "Polynomial", means = means,
 #'                      vars = vars, skews = M[1, ], skurts = M[2, ],
-#'                      fifths = M[3, ], sixths = M[4, ], Six = NULL,
-#'                      marginal = marginal, lam = lam,
-#'                      pois_eps = rep(0.0001, npois),
-#'                      size = size, prob = prob, mu = NULL,
-#'                      nb_eps = rep(0.0001, nnb),
-#'                      rho = Rey, n = 100000, seed = seed)
+#'                      fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+#'                      lam = lam, pois_eps = rep(0.0001, npois),
+#'                      size = size, prob = prob, nb_eps = rep(0.0001, nnb),
+#'                      rho = Rey, seed = seed)
 #'
 #' }
 valid_corr2 <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
                        method = c("Fleishman", "Polynomial"),
-                       means, vars, skews, skurts, fifths, sixths,
+                       means =  NULL, vars =  NULL, skews =  NULL,
+                       skurts =  NULL, fifths =  NULL, sixths =  NULL,
                        Six = list(), marginal = list(),
                        lam = NULL, pois_eps = NULL,
                        size = NULL, prob = NULL, mu = NULL,
@@ -322,7 +321,7 @@ valid_corr2 <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
         nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], prob[i])
       }
       if (length(mu) > 0) {
-        nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], mu[i])
+        nb_prob[[i]] <- dnbinom(0:nb_max[i, 3], size[i], mu = mu[i])
       }
       nb_prob[[i]][nb_max[i, 3] + 1] <-
         1 - sum(nb_prob[[i]][1:nb_max[i, 3]])

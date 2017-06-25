@@ -33,12 +33,12 @@
 #' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
 #'     Journal of Modern Applied Statistical Methods, 3, 65-71.
 #' @examples \dontrun{
-#' # Chi-squared (df = 1) Distribution
+#' # Chi-squared (df = 1) Distribution (invalid power method pdf)
 #' con <- find_constants(method = "Polynomial", skews = sqrt(8), skurts = 12,
 #'                       fifths = 48*sqrt(2), sixths = 480)$constants
 #' pdf_check(c = con, method = "Polynomial")
 #'
-#' # Beta (a = 4, b = 2) Distribution
+#' # Beta (a = 4, b = 2) Distribution (valid power method pdf)
 #' con <- find_constants(method = "Polynomial", skews = -0.467707,
 #'                       skurts = -0.375, fifths = 1.403122,
 #'                       sixths = -0.426136)$constants

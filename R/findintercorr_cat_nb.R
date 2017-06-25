@@ -69,7 +69,7 @@ findintercorr_cat_nb <- function(rho_cat_nb, marginal, size, prob,
       }
       if (length(mu) > 0) {
         Sigma_cat_nb[i, j] <-
-          rho_cat_nb[i, j]/(chat_nb(size[j], mu[j], n_unif = nrand,
+          rho_cat_nb[i, j]/(chat_nb(size[j], mu = mu[j], n_unif = nrand,
                                     seed = seed) * cor(yord[order(yord)],
                                                        n2[order(n2)]))
       }

@@ -65,10 +65,10 @@ findintercorr_nb <- function(rho_nb, size, prob, mu = NULL, nrand = 100000,
                       qnbinom(1 - u, size[j], prob[j]))
       }
       if (length(mu) > 0) {
-        maxcor <- cor(qnbinom(u, size[i], mu[i]),
-                      qnbinom(u, size[j], mu[j]))
-        mincor <- cor(qnbinom(u, size[i], mu[i]),
-                      qnbinom(1 - u, size[j], mu[j]))
+        maxcor <- cor(qnbinom(u, size[i], mu = mu[i]),
+                      qnbinom(u, size[j], mu = mu[j]))
+        mincor <- cor(qnbinom(u, size[i], mu = mu[i]),
+                      qnbinom(1 - u, size[j], mu = mu[j]))
       }
       a <- -(maxcor * mincor)/(maxcor + mincor)
       b <- log((maxcor + a)/a)

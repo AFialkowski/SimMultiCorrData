@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-22" />
+<meta name="date" content="2017-06-25" />
 
 <title>Comparison of Method 1 and Method 2</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Comparison of Method 1 and Method 2</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-22</em></h4>
+<h4 class="date"><em>2017-06-25</em></h4>
 
 
 
@@ -52,13 +52,7 @@
 <p><span class="math inline">\(\Large \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} + p_{1}p_{2}\)</span></p>
 <p>for <span class="math inline">\(\Large \rho_{x1x2}\)</span> gives the intermediate correlation of the standard normal variables needed to generate binary variables with correlation <span class="math inline">\(\Large \rho_{y1y2}\)</span>. Here <span class="math inline">\(\Large z(p)\)</span> indicates the <span class="math inline">\(\Large p^{th}\)</span> quantile of the standard normal distribution.</p>
 <p>To generate the binary variables from the standard normal variables, set <span class="math inline">\(\Large Y_{1} = 1\)</span> if <span class="math inline">\(\Large Z_{1} \le z(p_{1})\)</span> and <span class="math inline">\(\Large Y_{1} = 0\)</span> otherwise. Similarly, set <span class="math inline">\(\Large Y_{2} = 1\)</span> if <span class="math inline">\(\Large Z_{2} \le z(p_{2})\)</span> and <span class="math inline">\(\Large Y_{2} = 0\)</span> otherwise.</p>
-<p>This ensures:</p>
-<ol style="list-style-type: decimal">
-<li><span class="math inline">\(\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1}\)</span>,</li>
-<li><span class="math inline">\(\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2}\)</span>,</li>
-<li><span class="math inline">\(\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}\)</span> <span class="math inline">\(= Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}\)</span> <span class="math inline">\(= \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}\)</span> <span class="math inline">\(= \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})}\)</span>, and</li>
-<li><span class="math inline">\(\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}\)</span>.</li>
-</ol>
+<p>This ensures: <span class="math display">\[\Large E[Y_{1}] = Pr(Y_{1} = 1) = Pr(Z_{1} \le z(p_{1})) = p_{1},\]</span> <span class="math display">\[\Large E[Y_{2}] = Pr(Y_{2} = 1) = Pr(Z_{2} \le z(p_{2})) = p_{2},\]</span> <span class="math display">\[\Large Cov(Y_{1}, Y_{2}) = Pr(Y_{1} = 1, Y_{2} = 1) - p_{1}p_{2}\]</span> <span class="math display">\[\Large = Pr(Z_{1} \le z(p_{1}), Z_{2} \le z(p_{2})) - p_{1}p_{2}\]</span> <span class="math display">\[\Large = \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] - p_{1}p_{2}\]</span> <span class="math display">\[\Large = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})},\]</span> <span class="math display">\[\Large Cor(Y_{1}, Y_{2}) = Cov(Y_{1}, Y_{2})/\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} = \rho_{y1y2}.\]</span></p>
 <p><strong>Otherwise</strong>, <code>ordnorm</code> is called for each pair. If the resulting intermediate matrix is not positive-definite, this is corrected for later.</p>
 </div>
 <div id="continuous-variables" class="section level3">

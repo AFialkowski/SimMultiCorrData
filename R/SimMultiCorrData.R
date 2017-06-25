@@ -15,6 +15,7 @@
 #'     matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results,
 #'     numerically or graphically, to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.
 #'
+#' @seealso Useful link: \url{https://github.com/AFialkowski/SimMultiCorrData}
 #' @section Vignettes:
 #' There are several vignettes which accompany this package that may help the user understand the simulation and analysis methods.
 #'
@@ -52,6 +53,7 @@
 #' \code{\link[SimMultiCorrData]{pdf_check}}, \code{\link[SimMultiCorrData]{sim_cdf_prob}}, \code{\link[SimMultiCorrData]{stats_pdf}}
 #'
 #' 8 \emph{graphing} functions:
+#'
 #' \code{\link[SimMultiCorrData]{plot_cdf}}, \code{\link[SimMultiCorrData]{plot_pdf_ext}}, \code{\link[SimMultiCorrData]{plot_pdf_theory}},
 #' \code{\link[SimMultiCorrData]{plot_sim_cdf}}, \code{\link[SimMultiCorrData]{plot_sim_ext}}, \cr
 #' \code{\link[SimMultiCorrData]{plot_sim_pdf_ext}},
@@ -65,22 +67,21 @@
 #' and 30 \emph{auxiliary} functions (should not normally be called by the user, but are called by other functions):
 #'
 #' \code{\link[SimMultiCorrData]{calc_final_corr}}, \code{\link[SimMultiCorrData]{chat_nb}}, \code{\link[SimMultiCorrData]{chat_pois}},
-#' \code{\link[SimMultiCorrData]{denom_corr_cat}}, \code{\link[SimMultiCorrData]{error_loop}}, \cr
-#' \code{\link[SimMultiCorrData]{error_vars}},
+#' \code{\link[SimMultiCorrData]{denom_corr_cat}}, \code{\link[SimMultiCorrData]{error_loop}}, \code{\link[SimMultiCorrData]{error_vars}}, \cr
 #' \code{\link[SimMultiCorrData]{findintercorr}}, \code{\link[SimMultiCorrData]{findintercorr2}},
 #' \code{\link[SimMultiCorrData]{findintercorr_cat_nb}}, \code{\link[SimMultiCorrData]{findintercorr_cat_pois}}, \cr
 #' \code{\link[SimMultiCorrData]{findintercorr_cont}},
 #' \code{\link[SimMultiCorrData]{findintercorr_cont_cat}},
-#' \code{\link[SimMultiCorrData]{findintercorr_cont_nb}}, \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}},
-#' \code{\link[SimMultiCorrData]{findintercorr_cont_pois}}, \cr
-#' \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}},
+#' \code{\link[SimMultiCorrData]{findintercorr_cont_nb}}, \cr
+#' \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}}, \code{\link[SimMultiCorrData]{findintercorr_cont_pois}},
+#' \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}}, \cr
 #' \code{\link[SimMultiCorrData]{findintercorr_nb}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},
 #' \code{\link[SimMultiCorrData]{findintercorr_pois_nb}}, \code{\link[SimMultiCorrData]{fleish}}, \cr
 #' \code{\link[SimMultiCorrData]{fleish_Hessian}},
 #' \code{\link[SimMultiCorrData]{fleish_skurt_check}}, \code{\link[SimMultiCorrData]{intercorr_fleish}},
-#' \code{\link[SimMultiCorrData]{intercorr_poly}}, \code{\link[SimMultiCorrData]{max_count_support}}, \cr
-#' \code{\link[SimMultiCorrData]{ordnorm}},
-#' \code{\link[SimMultiCorrData]{poly}}, \code{\link[SimMultiCorrData]{poly_skurt_check}}, \code{\link[SimMultiCorrData]{separate_rho}},
+#' \code{\link[SimMultiCorrData]{intercorr_poly}}, \cr
+#' \code{\link[SimMultiCorrData]{max_count_support}}, \code{\link[SimMultiCorrData]{ordnorm}},
+#' \code{\link[SimMultiCorrData]{poly}}, \code{\link[SimMultiCorrData]{poly_skurt_check}}, \code{\link[SimMultiCorrData]{separate_rho}}, \cr
 #' \code{\link[SimMultiCorrData]{var_cat}}
 #'
 #' @docType package

@@ -175,19 +175,17 @@
 #' F_lower <- list()
 #' for (i in 1:nrow(G)) {
 #'   F_lower[[i]] <- calc_lower_skurt("Fleishman", G[i, 1], Skurt = Skurt,
-#'                                    seed = 104, n = 50)
+#'                                    seed = 104)
 #' }
 #'
 #' # Headrick's Fifth-order transformation
 #' H_lower <- list()
 #' for (i in 1:nrow(G)) {
 #'   H_lower[[i]] <- calc_lower_skurt("Polynomial", G[i, 1], G[i, 2], G[i, 3],
-#'                                    Skurt = Skurt, Six = Six, seed = 104,
-#'                                    n = 50)
+#'                                    Skurt = Skurt, Six = Six, seed = 104)
 #' }
 #'
 #' # Approximate boundary from PoisBinOrdNonNor
-#' # (see BinNonNor::validation.skewness.kurtosis)
 #' PBON_lower <- G$g1^2 - 2
 #'
 #' # Compare results:

@@ -206,8 +206,7 @@
 #' for (i in 1:ncol(M)) {
 #'  con[i, ] <- find_constants(method = "Polynomial", skews = M[1, i],
 #'                             skurts = M[2, i], fifths = M[3, i],
-#'                             sixths = M[4, i], Six = NULL,
-#'                             cstart = NULL, n = 25, seed = seed)
+#'                             sixths = M[4, i])
 #' }
 #'
 #' # Binary and Ordinal Distributions
@@ -247,18 +246,15 @@
 #' valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
 #'                     k_nb = nnb, method = "Polynomial", means = means,
 #'                     vars = vars, skews = M[1, ], skurts = M[2, ],
-#'                     fifths = M[3, ], sixths = M[4, ], Six = NULL,
-#'                     marginal = marginal, lam = lam, size = size,
-#'                     prob = prob, mu = NULL, rho = Rey, n = 100000,
+#'                     fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+#'                     lam = lam, size = size, prob = prob, rho = Rey,
 #'                     seed = seed)
 #'
 #' # Find intermediate correlation
 #' Sigma1 <- findintercorr(n = n, k_cont = ncont, k_cat = ncat, k_pois = npois,
 #'                         k_nb = nnb, method = "Polynomial", constants = con,
-#'                         marginal = marginal, support = list(),
-#'                         nrand = 100000, lam = lam, size = size, prob = prob,
-#'                         mu = NULL, rho = Rey, seed = seed, epsilon = 0.001,
-#'                         maxit = 1000)
+#'                         marginal = marginal, lam = lam, size = size,
+#'                         prob = prob, rho = Rey, seed = seed)
 #' Sigma1
 #'
 #' }

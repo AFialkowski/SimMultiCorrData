@@ -17,25 +17,29 @@ plot_sim_ext(sim_y, title = "Simulated Data Values", ylower = NULL,
 
 \item{yupper}{the upper y value (default = NULL, uses maximum simulated y value)}
 
-\item{power_color}{the line color for the simulated variable (default = "dark blue")}
+\item{power_color}{the histogram fill color for the simulated variable (default = "dark blue")}
 
-\item{ext_y}{a vector of external data}
+\item{ext_y}{a vector of external data (required)}
 
-\item{target_color}{the histogram color for the target data (default = "dark green")}
+\item{target_color}{the histogram fill color for the target data (default = "dark green")}
 
-\item{nbins}{the number of bins to use in generating the histogram (default = 100)}
+\item{nbins}{the number of bins to use in generating the histograms (default = 100)}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
-This plots simulated continuous or count data and overlays external data (as a histogram).
-    It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title}, \code{power_color},
-    \code{target_color}, \code{nbins}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+This plots simulated continuous or count data and overlays external data, both as histograms.
+    The external data is a required input.  The simulated data is centered and scaled to have the same mean and variance as the external
+    data set.  If the user wants to only plot simulated data, \code{\link[SimMultiCorrData]{plot_sim_theory}} should be used instead
+    with \code{overlay = FALSE}.
+    It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
+    The graph parameters (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{nbins}) are
+    \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
-# Logistic Distribution
+# Logistic Distribution: mean = 0, variance = 1
 
 seed = 1234
 
@@ -51,7 +55,7 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 Logvar1 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
                       skews = stcum[3], skurts = stcum[4],
                       fifths = stcum[5], sixths = stcum[6],
-                      Six = NULL, n = 10000, seed = seed)
+                      n = 10000, seed = seed)
 
 # Plot simulated variable and external data
 plot_sim_ext(sim_y = Logvar1$continuous_variable,
@@ -63,12 +67,25 @@ plot_sim_ext(sim_y = Logvar1$continuous_variable,
 Logvar2 <- nonnormvar1(method = "Polynomial", means = 0, vars = 1,
                       skews = stcum[3], skurts = stcum[4],
                       fifths = stcum[5], sixths = stcum[6],
-                      Six = seq(1.5, 2, 0.05), n = 10000, seed = 1234)
+                      Six = seq(1.5, 2, 0.05), n = 10000, seed = seed)
 
 # Plot simulated variable and external data
 plot_sim_ext(sim_y = Logvar2$continuous_variable,
              title = "Valid Logistic Simulated Data Values",
              ext_y = ext_y)
+
+# Simulate 2 Poisson distributions (means = 10, 15) and correlation 0.3
+# using Method 1
+Pvars <- rcorrvar(k_pois = 2, lam = c(10, 15),
+                  rho = matrix(c(1, 0.3, 0.3, 1), 2, 2), seed = seed)
+
+# Simulate "external" data set
+set.seed(seed)
+ext_y <- rpois(10000, 10)
+
+# Plot 1st simulated variable and external data
+plot_sim_ext(sim_y = Pvars$Poisson_variable[, 1], ext_y = ext_y)
+
 }
 
 }
@@ -94,7 +111,7 @@ Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate No
 Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 }
 \seealso{
-\code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}, \code{\link[ggplot2]{geom_histogram}}
+\code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_histogram}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

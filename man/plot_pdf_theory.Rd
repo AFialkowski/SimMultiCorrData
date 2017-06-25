@@ -4,12 +4,13 @@
 \alias{plot_pdf_theory}
 \title{Plot Theoretical Power Method Probability Density Function and Target PDF by Distribution Name or Function}
 \usage{
-plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"),
-  title = "Probability Density Function", ylower = NULL, yupper = NULL,
-  power_color = "dark blue", overlay = TRUE, target_color = "dark green",
-  target_lty = 2, Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
-  "Gaussian", "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t",
-  "Triangular", "Uniform", "Weibull"), params = NULL, fx = NULL, n = 100,
+plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
+  sigma = 1, title = "Probability Density Function", ylower = NULL,
+  yupper = NULL, power_color = "dark blue", overlay = TRUE,
+  target_color = "dark green", target_lty = 2, Dist = c("Beta", "Chisq",
+  "Exponential", "F", "Gamma", "Gaussian", "Laplace", "Logistic", "Lognormal",
+  "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull"),
+  params = NULL, fx = NULL, lower = NULL, upper = NULL, n = 100,
   seed = 1234)
 }
 \arguments{
@@ -19,18 +20,24 @@ plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"),
 \item{method}{the method used to generate the continuous variable \eqn{y = p(z)}.  "Fleishman" uses a third-order polynomial
 transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 
+\item{mu}{the desired mean for the continuous variable (used if \code{overlay = FALSE}, otherwise variable centered to have the
+same mean as the target distribution)}
+
+\item{sigma}{the desired standard deviation for the continuous variable (used if \code{overlay = FALSE}, otherwise variable scaled
+to have the same standard deviation as the target distribution)}
+
 \item{title}{the title for the graph (default = "Probability Density Function")}
 
 \item{ylower}{the lower y value to use in the plot (default = NULL, uses minimum simulated y value)}
 
 \item{yupper}{the upper y value (default = NULL, uses maximum simulated y value)}
 
-\item{power_color}{the line color for the power method pdf}
+\item{power_color}{the line color for the power method pdf (default = "dark blue)}
 
 \item{overlay}{if TRUE (default), the target distribution is also plotted given either a distribution name (and parameters)
 or pdf function fx (with bounds = ylower, yupper)}
 
-\item{target_color}{the line color for the target pdf}
+\item{target_color}{the line color for the target pdf (default = "dark green")}
 
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
 
@@ -47,9 +54,13 @@ comes from the \code{\link[triangle]{triangle}} package.}
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
 
-\item{n}{the number of random standard normal numbers to use in generating y = p(z)}
+\item{lower}{the lower support bound for \code{fx}}
 
-\item{seed}{the seed value for random number generation}
+\item{upper}{the upper support bound for \code{fx}}
+
+\item{n}{the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 100)}
+
+\item{seed}{the seed value for random number generation (default = 1234)}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
@@ -57,14 +68,15 @@ A \code{\link[ggplot2]{ggplot2}} object.
 \description{
 This plots the theoretical probability density function: \eqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z))} and target
     pdf (if overlay = TRUE).  It is a parametric plot with \eqn{sigma * y + mu}, where \eqn{y = p(z)}, on the x-axis and
-    \eqn{f_Z(z)/p'(z)} on the y-axis,
-    where z is vector of n random standard normal numbers (generated with a seed set by user).  Given a vector of polynomial
+    \eqn{f_Z(z)/p'(z)} on the y-axis, where \eqn{z} is vector of \eqn{n} random standard normal numbers (generated with a seed set by
+    user).  Given a vector of polynomial
     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical probabilities
     using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  If \code{overlay} = TRUE, the target distribution is also plotted given either a
-    distribution name (plus up to 3 parameters) or a pdf.
+    distribution name (plus up to 3 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
+    scaled and then transformed so that it has the same mean and variance as the target distribution.
     It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
-    (i.e. \code{title}, \code{power_color},
-    \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+    (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.
+    It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
@@ -77,27 +89,23 @@ stcum <- calc_theory(Dist = "Logistic", params = c(0, 1))
 # (invalid power method pdf)
 con1 <- find_constants(method = "Polynomial", skews = stcum[3],
                       skurts = stcum[4], fifths = stcum[5],
-                      sixths = stcum[6], Six = NULL,
-                      n = 25, seed = 1234)
+                      sixths = stcum[6])
 
 # Plot invalid power method pdf with theoretical pdf overlayed
 plot_pdf_theory(c = con1$constants, method = "Polynomial",
          title = "Invalid Logistic PDF", overlay = TRUE,
-         Dist = "Logistic", params = c(0, 1), n = 100,
-         seed = 1234)
+         Dist = "Logistic", params = c(0, 1))
 
 # Find constants with the sixth cumulant correction
 # (valid power method pdf)
 con2 <- find_constants(method = "Polynomial", skews = stcum[3],
                       skurts = stcum[4], fifths = stcum[5],
-                      sixths = stcum[6], Six = seq(1.5, 2, 0.05),
-                      n = 25, seed = 1234)
+                      sixths = stcum[6], Six = seq(1.5, 2, 0.05))
 
 # Plot valid power method pdf with theoretical pdf overlayed
 plot_pdf_theory(c = con2$constants, method = "Polynomial",
          title = "Valid Logistic PDF", overlay = TRUE,
-         Dist = "Logistic", params = c(0, 1), n = 100,
-         seed = 1234)
+         Dist = "Logistic", params = c(0, 1))
 }
 
 }

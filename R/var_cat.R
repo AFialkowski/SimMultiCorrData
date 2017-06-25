@@ -14,7 +14,7 @@
 #' @keywords variance
 #' @seealso \code{\link[SimMultiCorrData]{ordnorm}}, \code{\link[SimMultiCorrData]{rcorrvar}},
 #'     \code{\link[SimMultiCorrData]{rcorrvar2}}, \code{\link[SimMultiCorrData]{findintercorr_cont_cat}},
-#'     \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}}, \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}}
+#'     \code{\link[SimMultiCorrData]{findintercorr_cont_pois2}}, \cr \code{\link[SimMultiCorrData]{findintercorr_cont_nb2}}
 #' @return A scalar equal to the variance
 #' @references Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
 #'     \doi{10.1007/BF02294164}.

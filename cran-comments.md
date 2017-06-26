@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Modified the examples in the vignettes so they take less time to build.
+* Added DOI entries for references in DESCRIPTION.
+
 ## Test environments
 * local OS 'Windows 10' install, 'R 3.4.0'
 * 'win-builder' (devel and release)

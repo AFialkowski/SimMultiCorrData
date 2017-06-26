@@ -23,18 +23,22 @@ round(H_stcum[, 13:18], 5)
 round(H_stcum[, 19:22], 5)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
-Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(1, 20, 1), seq(25.1, 25.2, 0.01),
-            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(1, 20, 1), 
+Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(0.5, 2, 0.5), seq(25.1, 25.2, 0.01),
+            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(0.5, 2, 0.5), 
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
-            seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(1, 20, 1), NULL, 
-            seq(1, 20, 1), seq(1, 20, 1))
+            seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(0.5, 2, 0.5), 
+            NULL, seq(0.5, 2, 0.5), seq(0.5, 2, 0.5))
 H_consol <- list()
 
+start.time <- Sys.time()
 for (i in 1:ncol(H_stcum)) {
   H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
                                  skurts = H_stcum[2, i], fifths = H_stcum[3, i],
                                  sixths = H_stcum[4, i], Six = Six[[i]])
 }
+stop.time <- Sys.time()
+Time <- round(difftime(stop.time, start.time, units = "min"), 3)
+cat("Total computation time:", Time, "minutes \n")
 
 H_cons <- matrix(1, nrow = 7, ncol = ncol(Headrick.dist))
 valid <- numeric(ncol(Headrick.dist))
@@ -116,6 +120,9 @@ Bcorr_error = round(B$correlations - Rey, 6)
 cat(paste("The IQR of correlation errors is [", 
           round(quantile(as.numeric(Bcorr_error), 0.25), 5), ", ",
           round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
+
+## ------------------------------------------------------------------------
+as.matrix(round(A$summary_targetcont, 5), nrow = 2, ncol = 7, byrow = TRUE)
 
 ## ------------------------------------------------------------------------
 as.matrix(round(A$summary_continuous[, c("Distribution", "mean", "sd", "skew", 

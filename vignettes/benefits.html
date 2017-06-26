@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-25" />
+<meta name="date" content="2017-06-26" />
 
 <title>Benefits of SimMultiCorrData and Comparison to Other Packages</title>
 
@@ -32,11 +32,11 @@
 
 <h1 class="title toc-ignore">Benefits of SimMultiCorrData and Comparison to Other Packages</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-25</em></h4>
+<h4 class="date"><em>2017-06-26</em></h4>
 
 
 
-<p><code>SimMultiCorrData</code> generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix. It can also produce a single continuous variable. This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009). All variables are generated from standard normal variables with an imposed intermediate correlation matrix. Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman’s Third-Order or Headrick’s Fifth-Order Polynomial Transformation. Binary and ordinal variables are simulated using a modification of <code>GenOrd::ordsample</code>. Count variables are simulated using the inverse cdf method. There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix <code>Sigma</code>. In <strong>Method 1</strong>, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli’s 2012 method). In <strong>Method 2</strong>, the count variables are treated as ordinal (adapting Barbiero and Ferrari’s 2015 modification of <code>GenOrd</code>). There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.</p>
+<p><code>SimMultiCorrData</code> generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix. It can also produce a single continuous variable. This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009). All variables are generated from standard normal variables with an imposed intermediate correlation matrix. Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman’s Third-Order or Headrick’s Fifth-Order Polynomial Transformation. Binary and ordinal variables are simulated using a modification of <code>GenOrd::ordsample</code>. Count variables are simulated using the inverse cdf method. There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix <code>Sigma</code>. In <strong>Method 1</strong>, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli’s 2012 method <a href="DOI:10.1002/asmb.901" class="uri">DOI:10.1002/asmb.901</a>). In <strong>Method 2</strong>, the count variables are treated as ordinal (adapting Barbiero and Ferrari’s 2015 modification of <code>GenOrd</code> <a href="DOI:10.1002/asmb.2072" class="uri">DOI:10.1002/asmb.2072</a>). There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.</p>
 <div id="benefits-of-this-package" class="section level2">
 <h2>Benefits of this package:</h2>
 <p>The main strengths of <code>SimMultiCorrData</code> are:</p>

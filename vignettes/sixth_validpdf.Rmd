@@ -44,20 +44,24 @@ round(H_stcum[, 19:22], 5)
 Note that the standardized cumulants match those found by Headrick, except for the Gamma($\Large \alpha = 10,\ \beta = 10$) distribution.  Either there is a mistake in Headrick's table, or he is using a different parameterization.
 
 ### Step 2) Use the cumulants to find the constants for each distribution.
-The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time.  If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. `Six = seq(0.1, 50, 0.1)`.  In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen.
+The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time.  If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. `Six = seq(0.1, 10, 0.1)`.  In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen.
 ```{r, warning = FALSE, message = FALSE}
-Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(1, 20, 1), seq(25.1, 25.2, 0.01),
-            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(1, 20, 1), 
+Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(0.5, 2, 0.5), seq(25.1, 25.2, 0.01),
+            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(0.5, 2, 0.5), 
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
-            seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(1, 20, 1), NULL, 
-            seq(1, 20, 1), seq(1, 20, 1))
+            seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(0.5, 2, 0.5), 
+            NULL, seq(0.5, 2, 0.5), seq(0.5, 2, 0.5))
 H_consol <- list()
 
+start.time <- Sys.time()
 for (i in 1:ncol(H_stcum)) {
   H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
                                  skurts = H_stcum[2, i], fifths = H_stcum[3, i],
                                  sixths = H_stcum[4, i], Six = Six[[i]])
 }
+stop.time <- Sys.time()
+Time <- round(difftime(stop.time, start.time, units = "min"), 3)
+cat("Total computation time:", Time, "minutes \n")
 
 H_cons <- matrix(1, nrow = 7, ncol = ncol(Headrick.dist))
 valid <- numeric(ncol(Headrick.dist))
@@ -116,11 +120,13 @@ A <- rcorrvar(n = 10000, k_cont = 2, method = "Polynomial",
               sixths = H_stcum[4, c("Logistic", "Laplace")], 
               rho = Rey, seed = seed)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error is ", round(A$maxerr, 5), ".", 
           sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Acorr_error = round(A$correlations - Rey, 6)
@@ -150,11 +156,13 @@ B <- rcorrvar(n = 10000, k_cont = 2, method = "Polynomial",
               sixths = H_stcum[4, c("Logistic", "Laplace")], Six = Six, 
               rho = Rey, seed = seed)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error is ", round(B$maxerr, 5), ".", 
           sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Bcorr_error = round(B$correlations - Rey, 6)
@@ -163,7 +171,14 @@ cat(paste("The IQR of correlation errors is [",
           round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
 ```
 
+In both cases, the correlation errors are small, indicating that the error loop does not need to be used.
+
 Now *compare the results numerically*.
+
+Target distributions:
+```{r}
+as.matrix(round(A$summary_targetcont, 5), nrow = 2, ncol = 7, byrow = TRUE)
+```
 
 Without the sixth cumulant correction:
 ```{r}

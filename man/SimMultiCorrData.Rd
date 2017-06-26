@@ -14,8 +14,8 @@ This package generates continuous (normal or non-normal), binary, ordinal, and c
     ordinal variables are simulated using a modification of \code{\link[GenOrd]{GenOrd-package}}'s \code{\link[GenOrd]{ordsample}} function.
     Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation
     of the intermediate correlation matrix.  In \bold{Method 1}, the intercorrelations involving count variables are determined using a simulation based,
-    logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method).  In \bold{Method 2}, the count variables are treated as ordinal
-    (adapting Barbiero and Ferrari's 2015 modification of \code{\link[GenOrd]{GenOrd-package}}).  There is an optional error loop that corrects the
+    logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method <DOI:10.1002/asmb.901>).  In \bold{Method 2}, the count variables are treated as ordinal
+    (adapting Barbiero and Ferrari's 2015 modification of \code{\link[GenOrd]{GenOrd-package}} <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the
     final correlation matrix to be within a user-specified precision value. The package also
     includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation
     matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results,

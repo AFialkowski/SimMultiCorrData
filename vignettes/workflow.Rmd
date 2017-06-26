@@ -33,23 +33,18 @@ A **step-by-step guideline** for data simulation is as follows:
 1. **Summarize the results graphically**.  Comparing the simulated data to the target distribution demonstrates simulation accuracy.  The graphing functions provided in this package can be used to display simulated data values, pdfs, or cdfs.  The target distributions (either by theoretical distribution name or given an empirical data set) can be added to the data value or pdf plots.  Cumulative probabilities can be added to the cdf plots (for continuous variables).
 
 ## Example
-The following example generates 5 continuous, 2 binary, 3 ordinal, 3 Poisson, and 2 Negative Binomial variables.  The standardized cumulants produce power method constants that yield valid pdfs, so no sixth cumulant corrections are needed.  (Note that the `printr` package is invoked to display the tables.)
+The following example generates 3 continuous, 1 binary, 1 ordinal, 3 Poisson, and 2 Negative Binomial variables.  The standardized cumulants produce power method constants that yield valid pdfs, so no sixth cumulant corrections are needed.  See the **Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs** vignette for examples of using the sixth cumulant correction.  (Note that the `printr` package is invoked to display the tables.)
 
 The **continuous variables** come from the following distributions:
 
 1. Normal($\Large 0, 1$)
-1. t ($\Large df = 10$)
 1. Chisq ($\Large df = 4$)
 1. Beta ($\Large \alpha = 4, \beta = 2$)
-1. Gamma ($\Large \alpha = 4, \beta = 4$)
 
 The **ordinal variables** have the following cumulative probabilities:
 
 1. 0.3 (*2 categories*)
-1. 0.4 (*2 categories*)
-1. c(0.1, 0.5) (*3 categories*)
-1. c(0.3, 0.6, 0.9) (*4 categories*)
-1. c(0.2, 0.4, 0.7, 0.8) (*5 categories*)
+1. c(0.2, 0.5, 0.9) (*4 categories*)
 
 The last probability in each case is assumed to be 1, and should not be included.  The binary variables do not have to be listed first.
 
@@ -79,24 +74,16 @@ seed <- 1234
 n <- 10000
 
 # Continuous Distributions
-Dist <- c("Gaussian", "t", "Chisq", "Beta", "Gamma")
+Dist <- c("Gaussian", "Chisq", "Beta")
 
 # Calculate standardized cumulants
 M1 <- calc_theory(Dist = "Gaussian", params = c(0, 1))
-M2 <- calc_theory(Dist = "t", params = 10)
-M3 <- calc_theory(Dist = "Chisq", params = 4)
-M4 <- calc_theory(Dist = "Beta", params = c(4, 2))
-M5 <- calc_theory(Dist = "Gamma", params = c(4, 4))
-M <- cbind(M1, M2, M3, M4, M5)
-M <- round(M[-c(1:2),], digits = 6)
-colnames(M) <- Dist
-rownames(M) <- c("skew", "skurtosis", "fifth", "sixth")
-means <- rep(0, length(Dist))
-vars <- rep(1, length(Dist))
+M2 <- calc_theory(Dist = "Chisq", params = 4)
+M3 <- calc_theory(Dist = "Beta", params = c(4, 2))
+M <- cbind(M1, M2, M3)
 
 # Binary and Ordinal Distributions
-marginal <- list(0.3, 0.4, c(0.1, 0.5), c(0.3, 0.6, 0.9),
-                 c(0.2, 0.4, 0.7, 0.8))
+marginal <- list(0.3, c(0.2, 0.5, 0.9))
 support <- list() # default support will be generated inside simulation
 
 # Poisson Distributions
@@ -111,12 +98,12 @@ ncont <- ncol(M)
 npois <- length(lam)
 nnb <- length(size)
 
-# Create correlation matrix from a uniform distribution (-0.8, 0.8)
+# Create correlation matrix from a uniform distribution (-0.7, 0.7)
 set.seed(seed)
 Rey <- diag(1, nrow = (ncat + ncont + npois + nnb))
 for (i in 1:nrow(Rey)) {
   for (j in 1:ncol(Rey)) {
-    if (i > j) Rey[i, j] <- runif(1, -0.8, 0.8)
+    if (i > j) Rey[i, j] <- runif(1, -0.7, 0.7)
     Rey[j, i] <- Rey[i, j]
   }
 }
@@ -133,15 +120,15 @@ Since this step takes considerable computation time, the user may wish to calcul
 ```{r, warning = FALSE}
 Lower <- list()
 
-# vector of standardized kurtosis values to add in case only invalid power 
+# list of standardized kurtosis values to add in case only invalid power 
 #     method pdfs are produced
-Skurt <- seq(0.01, 0.35, 0.01)
+Skurt <- list(seq(0.5, 2, 0.5), seq(0.02, 0.05, 0.01), seq(0.02, 0.05, 0.01))
 
 start.time <- Sys.time()
 for (i in 1:ncol(M)) {
-  Lower[[i]] <- calc_lower_skurt(method = "Polynomial", skews = M[1, i], 
-                                 fifths = M[3, i], sixths = M[4, i], 
-                                 Skurt = Skurt, seed = 104)
+  Lower[[i]] <- calc_lower_skurt(method = "Polynomial", skews = M[3, i], 
+                                 fifths = M[5, i], sixths = M[6, i], 
+                                 Skurt = Skurt[[i]], seed = 104)
 }
 stop.time <- Sys.time()
 Time <- round(difftime(stop.time, start.time, units = "min"), 3)
@@ -152,53 +139,38 @@ cat("Total computation time:", Time, "minutes \n")
 
 In each case, the lower kurtosis boundary calculated from the original Lagrangean constraint equations (see `poly_skurt_check`) generates constants that yield an invalid power method pdf.  This is indicated by the fact that each `Invalid.C` data.frame contains solutions (i.e. see `Lower[[2]]$Invalid.C`).  
 
-For Distributions 2 - 5, lower kurtosis values that generate constants that yield valid power method pdfs could be found by adding the values displayed in `SkurtCorr1` to the original lower kurtosis boundary.  For Distribution 1 (Normal), no kurtosis addition (of those specified in `Skurt`) generated constants that yield a valid pdf.  This does not cause a problem since the simulated variable has a valid power method pdf.
+For Distributions 2 and 3, lower kurtosis values that generate constants that yield valid power method pdfs could be found by adding the values displayed in `SkurtCorr1` to the original lower kurtosis boundary.  For Distribution 1 (Normal), no kurtosis addition (of those specified in `Skurt`) generated constants that yield a valid pdf.  This does not cause a problem since the simulated variable has a valid power method pdf.
 
 Look at lower kurtosis boundaries and sixth cumulant corrections:
 
 1) **Normal($\Large 0,1$) Distribution:**
 ```{r}
 as.matrix(Lower[[1]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
-                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+                              "skurtosis")], 
+          nrow = 1, ncol = 5, byrow = TRUE) 
 ```
 
-Note that `valid.pdf = FALSE`, which means that a kurtosis correction could not be found that yielded constants that produce a valid power method pdf.  The original lower kurtosis boundary (see `Lower[[1]]$Min`) is -0.2829743.  The standardized kurtosis for the distribution (0) falls above this boundary.
+Note that `valid.pdf = FALSE`, which means that a kurtosis correction could not be found that yielded constants that produce a valid power method pdf.  The original lower kurtosis boundary (see `Lower[[1]]$Min`) is `r round(Lower[[1]]$Min[, "skurtosis"], 6)`.  The standardized kurtosis for the distribution (0) falls above this boundary.
 
-2) **t($\Large df = 10$) Distribution:**
+2) **Chisq($\Large df = 4$) Distribution:**
 ```{r}
 as.matrix(Lower[[2]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
-                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+                              "skurtosis")], 
+          nrow = 1, ncol = 5, byrow = TRUE) 
 Lower[[2]]$SkurtCorr1
 ```
 
-The original lower kurtosis boundary (see `Lower[[2]]$Invalid.C`) of -1.370823 has been increased to -1.050823, so that `Lower[[2]]$SkurtCorr1` = 0.32.  The standardized kurtosis for the distribution (1) falls above this boundary.
+The original lower kurtosis boundary (see `Lower[[2]]$Invalid.C`) of `r round(min(Lower[[2]]$Invalid.C[, "skurtosis"]), 6)` has been increased to `r round(Lower[[2]]$Min[, "skurtosis"], 6)`, so that the kurtosis correction is `r Lower[[2]]$SkurtCorr1`.  The standardized kurtosis for the distribution (3) is approximately equal to this boundary. This does not cause a problem since the simulated variable has a valid power method pdf.
 
-3) **Chisq($\Large df = 4$) Distribution:**
+3) **Beta($\Large \alpha = 4, \beta = 2$) Distribution:**
 ```{r}
 as.matrix(Lower[[3]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
-                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
+                              "skurtosis")], 
+          nrow = 1, ncol = 5, byrow = TRUE) 
 Lower[[3]]$SkurtCorr1
 ```
 
-The original lower kurtosis boundary (see `Lower[[3]]$Invalid.C`) of 2.975960 has been increased to 3.00596, so that `Lower[[3]]$SkurtCorr1` = 0.03.  The standardized kurtosis for the distribution (3) is approximately equal to this boundary.  This does not cause a problem since the simulated variable has a valid power method pdf.
-
-4) **Beta($\Large \alpha = 4, \beta = 2$) Distribution:**
-```{r}
-as.matrix(Lower[[4]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
-                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
-Lower[[4]]$SkurtCorr1
-```
-
-The original lower kurtosis boundary (see `Lower[[4]]$Invalid.C`) of -0.3922664 has been increased to -0.3722664, so that `Lower[[4]]$SkurtCorr1` = 0.02.  The standardized kurtosis for the distribution (-0.375) falls below this boundary.  This does not cause a problem since the simulated variable has a valid power method pdf.
-
-5) **Gamma($\Large \alpha = 4, \beta = 4$) Distribution:**
-```{r}
-as.matrix(Lower[[5]]$Min[1, c("skew", "fifth", "sixth", "valid.pdf", 
-                              "skurtosis")], nrow = 1, ncol = 5, byrow = TRUE) 
-Lower[[5]]$SkurtCorr1
-```
-
-The original lower kurtosis boundary (see `Lower[[5]]$Invalid.C`) of 1.461163 has been increased to 1.501163, so that `Lower[[5]]$SkurtCorr1` = 0.04.  The standardized kurtosis for the distribution (1.5) falls below this boundary.  This does not cause a problem since the simulated variable has a valid power method pdf.
+The original lower kurtosis boundary (see `Lower[[3]]$Invalid.C`) of `r round(min(Lower[[3]]$Invalid.C[, "skurtosis"]), 6)` has been increased to `r round(Lower[[3]]$Min[, "skurtosis"], 6)`, so that the kurtosis correction is `r Lower[[3]]$SkurtCorr1`.  The standardized kurtosis for the distribution (-0.2727) falls above this boundary. 
 
 The remaining steps vary by simulation method:
 
@@ -207,9 +179,9 @@ The remaining steps vary by simulation method:
 ```{r, warning = FALSE}
 # Make sure Rey is within upper and lower correlation limits
 valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
-                    k_nb = nnb, method = "Polynomial", means = means,
-                    vars = vars, skews = M[1, ], skurts = M[2, ],
-                    fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+                    k_nb = nnb, method = "Polynomial", means =  M[1, ],
+                    vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ],
+                    fifths = M[5, ], sixths = M[6, ], marginal = marginal, 
                     lam = lam, size = size, prob = prob, rho = Rey, 
                     seed = seed)
 ```
@@ -218,16 +190,18 @@ valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
 Simulate variables without the error loop.
 ```{r, warning = FALSE, message = FALSE}
 A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-              k_nb = nnb, method = "Polynomial", means = means, vars = vars,
-              skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], marginal = marginal,
+              k_nb = nnb, method = "Polynomial", means =  M[1, ], 
+              vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ], 
+              fifths = M[5, ], sixths = M[6, ], marginal = marginal,
               lam = lam, size = size, prob = prob, rho = Rey, seed = seed)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error without the error loop is ", 
           round(A$maxerr, 5), ".", sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Acorr_error = round(A$correlations - Rey, 6)
@@ -235,6 +209,7 @@ cat(paste("The IQR of correlation errors without the error loop is [",
           round(quantile(as.numeric(Acorr_error), 0.25), 5), ", ",
           round(quantile(as.numeric(Acorr_error), 0.75), 5), "].", sep = ""))
 ```
+
 Note the **warning messages** produced above (suppressed in execution for this vignette).  These indicate:
 
 1. It may not be possible to generate the desired correlation matrix with ordinal variables having the specified marginals, and
@@ -246,16 +221,19 @@ This presents an excellent situation for using the error loop.
 Simulate variables with the error loop (using default settings of `epsilon` = 0.001 and `maxit` = 1000).
 ```{r, warning = FALSE, message = FALSE}
 B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-              k_nb = nnb, method = "Polynomial", means = means, vars = vars,
-              skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], marginal = marginal, lam = lam, size = size, 
-              prob = prob, rho = Rey, seed = seed, errorloop = TRUE)
+              k_nb = nnb, method = "Polynomial", means =  M[1, ], 
+              vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ], 
+              fifths = M[5, ], sixths = M[6, ], marginal = marginal,
+              lam = lam, size = size, prob = prob, rho = Rey, seed = seed, 
+              errorloop = TRUE)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error with the error loop is ", 
           round(B$maxerr, 5), ".", sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Bcorr_error = round(B$correlations - Rey, 6)
@@ -271,9 +249,6 @@ The simulation utilizing the error loop provides better results and will be chos
 ```{r}
 knitr::kable(B$summary_ordinal[[1]], caption = "Variable 1")
 knitr::kable(B$summary_ordinal[[2]], caption = "Variable 2")
-knitr::kable(B$summary_ordinal[[3]], caption = "Variable 3")
-knitr::kable(B$summary_ordinal[[4]], caption = "Variable 4")
-knitr::kable(B$summary_ordinal[[5]], caption = "Variable 5")
 ```
 
 **2) Count variables**   
@@ -294,19 +269,19 @@ as.matrix(B$summary_Neg_Bin[, c(1, 3:7, 9:10)], nrow = 2, ncol = 8,
 
 Constants:
 ```{r}
-as.matrix(round(B$constants, 6), nrow = 5, ncol = 6, byrow = TRUE)
+as.matrix(round(B$constants, 6), nrow = 3, ncol = 6, byrow = TRUE)
 ```
 
 Target distributions:
 ```{r}
-as.matrix(round(B$summary_targetcont, 5), nrow = 5, ncol = 7, byrow = TRUE)
+as.matrix(round(B$summary_targetcont, 5), nrow = 3, ncol = 7, byrow = TRUE)
 ```
 
 Simulated distributions:
 ```{r}
 as.matrix(round(B$summary_continuous[, c("Distribution", "mean", "sd", 
                                          "skew", "skurtosis", "fifth", 
-                                         "sixth")], 5), nrow = 5, ncol = 7, 
+                                         "sixth")], 5), nrow = 3, ncol = 7, 
           byrow = TRUE)
 ```
 
@@ -322,59 +297,35 @@ as.matrix(t(round(stats_pdf(c = B$constants[1, ], method = "Polynomial",
                             alpha = 0.025), 4)))
 ```
 
-2) t ($\Large df = 10$) Distribution
+2) Chisq ($\Large df = 4$) Distribution
 ```{r, warning = FALSE, message = FALSE}
 as.matrix(t(round(stats_pdf(c = B$constants[2, ], method = "Polynomial", 
                             alpha = 0.025), 4)))
 ```
 
-3) Chisq ($\Large df = 4$) Distribution
+3) Beta ($\Large \alpha = 4, \beta = 2$) Distribution
 ```{r, warning = FALSE, message = FALSE}
 as.matrix(t(round(stats_pdf(c = B$constants[3, ], method = "Polynomial", 
                             alpha = 0.025), 4)))
 ```
 
-4) Beta ($\Large \alpha = 4, \beta = 2$) Distribution
-```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = B$constants[4, ], method = "Polynomial", 
-                            alpha = 0.025), 4)))
-```
-
-5) Gamma ($\Large \alpha = 4, \beta = 4$) Distribution
-```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = B$constants[5, ], method = "Polynomial", 
-                            alpha = 0.025), 4)))
-```
-
 #### Step 6: Summarize the results graphically
-Look at the t ($\Large df = 10$) distribution ($\Large 2^{nd}$ continuous variable):
+Look at the Chisq ($\Large df = 4$) distribution ($\Large 2^{nd}$ continuous variable):
 
-1) Simulated Data CDF (find cumulative probability up to y = 0.5)
+1) Simulated Data CDF (find cumulative probability up to y = 10)
 ```{r, warning = FALSE, message = FALSE}
-plot_sim_cdf(B$continuous_variables[, 2], calc_cprob = TRUE, delta = 0.5)
+plot_sim_cdf(B$continuous_variables[, 2], calc_cprob = TRUE, delta = 10)
 ```
 
 2) Simulated Data and Target Distribution PDFs
 ```{r, warning = FALSE, message = FALSE}
-plot_sim_pdf_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
+plot_sim_pdf_theory(B$continuous_variables[, 2], Dist = "Chisq", params = 4)
 ```
 
-Look at the Chisq ($\Large df = 4$) distribution ($\Large 3^{rd}$ continuous variable):
-
-1) Simulated Data CDF (find cumulative probability up to y = 0.5)
-```{r, warning = FALSE, message = FALSE}
-plot_sim_cdf(B$continuous_variables[, 3], calc_cprob = TRUE, delta = 0.5)
-```
-
-2) Simulated Data and Target Distribution PDFs
-```{r, warning = FALSE, message = FALSE}
-plot_sim_pdf_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
-```
-
-Look at the empirical cdf of the $\Large 5^{th}$ ordinal distribution:
+Look at the empirical cdf of the $\Large 2^{nd}$ ordinal distribution:
 
 ```{r, warning = FALSE, message = FALSE}
-plot_sim_cdf(B$ordinal_variables[, 5])
+plot_sim_cdf(B$ordinal_variables[, 2])
 ```
 
 Look at the Poisson ($\Large \lambda = 5$) distribution ($\Large 2^{nd}$ Poisson variable):
@@ -415,28 +366,30 @@ nb_eps <- rep(0.0001, nnb)
 
 # Make sure Rey is within upper and lower correlation limits
 valid2 <- valid_corr2(k_cat = ncat, k_cont = ncont, k_pois = npois,
-                     k_nb = nnb, method = "Polynomial", means = means,
-                     vars = vars, skews = M[1, ], skurts = M[2, ],
-                     fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
-                     lam = lam, pois_eps = pois_eps, size = size, 
-                     prob = prob, nb_eps = nb_eps, rho = Rey, seed = seed)
+                      k_nb = nnb, method = "Polynomial", means =  M[1, ],
+                      vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ],
+                      fifths = M[5, ], sixths = M[6, ], marginal = marginal, 
+                      lam = lam, pois_eps = pois_eps, size = size, 
+                      prob = prob, nb_eps = nb_eps, rho = Rey, seed = seed)
 ```
 
 #### Step 4: Generate the variables
 Simulate variables without the error loop.
 ```{r, warning = FALSE, message = FALSE}
 C <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-               k_nb = nnb, method = "Polynomial", means = means,
-               vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+               k_nb = nnb, method = "Polynomial", means =  M[1, ], 
+               vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ], 
+               fifths = M[5, ], sixths = M[6, ], marginal = marginal, 
                lam = lam, pois_eps = pois_eps, size = size, prob = prob, 
                nb_eps = nb_eps, rho = Rey, seed = seed)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error without the error loop is ", 
           round(C$maxerr, 5), ".", sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Ccorr_error = round(C$correlations - Rey, 6)
@@ -450,17 +403,19 @@ These results indicate that for these distributions, **Method 1** and **Method 2
 Simulate variables with the error loop (using default settings of `epsilon` = 0.001 and `maxit` = 1000).
 ```{r, warning = FALSE, message = FALSE}
 D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-               k_nb = nnb, method = "Polynomial", means = means,
-               vars = vars, skews = M[1, ], skurts = M[2, ],
-               fifths = M[3, ], sixths = M[4, ], marginal = marginal, 
+               k_nb = nnb, method = "Polynomial", means =  M[1, ], 
+               vars =  (M[2, ])^2, skews = M[3, ], skurts = M[4, ], 
+               fifths = M[5, ], sixths = M[6, ], marginal = marginal, 
                lam = lam, pois_eps = pois_eps, size = size, prob = prob, 
                nb_eps = nb_eps, rho = Rey, seed = seed, errorloop = TRUE)
 ```
+
 Look at the maximum correlation error:
 ```{r}
 cat(paste("The maximum correlation error with the error loop is ", 
           round(D$maxerr, 5), ".", sep = ""))
 ```
+
 Look at the interquartile-range of correlation errors:
 ```{r}
 Dcorr_error = round(D$correlations - Rey, 6)
@@ -476,9 +431,6 @@ The simulation utilizing the error loop provides better results and will be chos
 ```{r}
 knitr::kable(D$summary_ordinal[[1]], caption = "Variable 1")
 knitr::kable(D$summary_ordinal[[2]], caption = "Variable 2")
-knitr::kable(D$summary_ordinal[[3]], caption = "Variable 3")
-knitr::kable(D$summary_ordinal[[4]], caption = "Variable 4")
-knitr::kable(D$summary_ordinal[[5]], caption = "Variable 5")
 ```
 
 **2) Count variables**   
@@ -501,14 +453,14 @@ The constants are the same for both methods.
 
 Target distributions:
 ```{r}
-as.matrix(round(D$summary_targetcont, 5), nrow = 5, ncol = 7, byrow = TRUE)
+as.matrix(round(D$summary_targetcont, 5), nrow = 3, ncol = 7, byrow = TRUE)
 ```
 
 Simulated distributions:
 ```{r}
 as.matrix(round(D$summary_continuous[, c("Distribution", "mean", "sd", 
                                          "skew", "skurtosis", "fifth", 
-                                         "sixth")], 5), nrow = 5, ncol = 7, 
+                                         "sixth")], 5), nrow = 3, ncol = 7, 
           byrow = TRUE)
 ```
 
@@ -524,27 +476,15 @@ as.matrix(t(round(stats_pdf(c = D$constants[1, ], method = "Polynomial",
                             alpha = 0.025), 4)))
 ```
 
-2) t ($\Large df = 10$) Distribution
+2) Chisq ($\Large df = 4$) Distribution
 ```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = D$constants[2, ], method = "Polynomial", 
+as.matrix(t(round(stats_pdf(c = B$constants[2, ], method = "Polynomial", 
                             alpha = 0.025), 4)))
 ```
 
-3) Chisq ($\Large df = 4$) Distribution
+3) Beta ($\Large \alpha = 4, \beta = 2$) Distribution
 ```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = D$constants[3, ], method = "Polynomial", 
-                            alpha = 0.025), 4)))
-```
-
-4) Beta ($\Large \alpha = 4, \beta = 2$) Distribution
-```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = D$constants[4, ], method = "Polynomial", 
-                            alpha = 0.025), 4)))
-```
-
-5) Gamma ($\Large \alpha = 4, \beta = 4$) Distribution
-```{r, warning = FALSE, message = FALSE}
-as.matrix(t(round(stats_pdf(c = D$constants[5, ], method = "Polynomial", 
+as.matrix(t(round(stats_pdf(c = B$constants[3, ], method = "Polynomial", 
                             alpha = 0.025), 4)))
 ```
 

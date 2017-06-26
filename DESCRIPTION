@@ -16,14 +16,15 @@ Description: Generate continuous (normal or non-normal), binary, ordinal, and co
     two simulation pathways which differ primarily according to the calculation of the 
     intermediate correlation matrix.  In Method 1, the intercorrelations involving count variables 
     are determined using a simulation based, logarithmic correlation correction (adapting Yahav 
-    and Shmueli's 2012 method).  In Method 2, the count variables are treated as ordinal 
-    (adapting Barbiero and Ferrari's 2015 modification of GenOrd).  There is an optional error 
-    loop that corrects the final correlation matrix to be within a user-specified precision 
-    value of the target matrix. The package also includes functions to calculate standardized 
-    cumulants for theoretical distributions or from real data sets, check if a target 
-    correlation matrix is within the possible correlation bounds (given the distributions of 
-    the simulated variables), summarize results (numerically or graphically), to verify valid 
-    power method pdfs, and to calculate lower standardized kurtosis bounds.
+    and Shmueli's 2012 method <DOI:10.1002/asmb.901>).  In Method 2, the count variables are 
+    treated as ordinal (adapting Barbiero and Ferrari's 2015 modification of GenOrd 
+    <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the final 
+    correlation matrix to be within a user-specified precision value of the target matrix.  
+    The package also includes functions to calculate standardized cumulants for theoretical 
+    distributions or from real data sets, check if a target correlation matrix is within the 
+    possible correlation bounds (given the distributions of the simulated variables), 
+    summarize results (numerically or graphically), to verify valid power method pdfs, and 
+    to calculate lower standardized kurtosis bounds.
 Depends: R (>= 3.3.1)
 License: GPL-2
 Imports:

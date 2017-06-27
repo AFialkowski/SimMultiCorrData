@@ -89,29 +89,7 @@ This function simulates the continuous, ordinal (r >= 2 categories), Poisson, or
     This function would not ordinarily be called directly by the user.
 }
 \references{
-Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
-
-Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
-Correlation Matrix and Marginal Distributions. R package version 1.4.0. \cr
-\url{https://CRAN.R-project.org/package=GenOrd}.
-
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Please see references for \code{\link[SimMultiCorrData]{error_loop}}.
 }
 \seealso{
 \code{\link[GenOrd]{ordcont}}, \code{\link[SimMultiCorrData]{rcorrvar}}, \code{\link[SimMultiCorrData]{rcorrvar2}},

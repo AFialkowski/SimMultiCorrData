@@ -1,7 +1,7 @@
 #' @title Calculate Intermediate MVN Correlation for Poisson Variables: Method 1
 #'
 #' @description This function calculates a \code{k_pois x k_pois} intermediate matrix of correlations for the
-#'     Poisson variables using the method of Yahav & Shmueli (2012). The intermediate correlation between Z1 and Z2 (the
+#'     Poisson variables using the method of Yahav & Shmueli (2012, \doi{10.1002/asmb.901}). The intermediate correlation between Z1 and Z2 (the
 #'     standard normal variables used to generate the Poisson variables Y1 and Y2 via the inverse cdf method) is
 #'     calculated using a logarithmic transformation of the target correlation.  First, the upper and lower Frechet-Hoeffding bounds
 #'     (mincor, maxcor) \eqn{\rho_{y1,y2}} are simulated.  Then the intermediate correlation is found as follows:
@@ -32,28 +32,30 @@
 #'     \code{\link[SimMultiCorrData]{findintercorr_pois_nb}},
 #'     \code{\link[SimMultiCorrData]{findintercorr}}, \code{\link[SimMultiCorrData]{rcorrvar}}
 #' @return the \code{k_pois x k_pois} intermediate correlation matrix for the Poisson variables
-#' @references Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
-#'     Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
-#'
+#' @references
 #' Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
-#'     Journal of Statistical Computation and Simulation, 85(15): 3129-39.
-#'
-#' Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
-#'     American Statistician, 65(2): 104-109.
-#'
-#' Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
-#'     New York: Springer-Verlag; 1994. p. 57-107.
-#'
-#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+#'     Journal of Statistical Computation and Simulation, 85(15): 3129-39. \doi{10.1080/00949655.2014.953534}.
 #'
 #' Amatya A & Demirtas H (2016). PoisNor: Simultaneous Generation of Multivariate Data with Poisson and Normal Marginals.
 #'     R package version 1.1. \url{https://CRAN.R-project.org/package=PoisNor}
+#'
+#' Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
+#'     American Statistician, 65(2): 104-109.
 #'
 #' Demirtas H, Hu Y, & Allozi R (2017). PoisBinOrdNor: Data Generation with Poisson, Binary, Ordinal and Normal
 #'     Components. R package version 1.4. \url{https://CRAN.R-project.org/package=PoisBinOrdNor}
 #'
 #' Demirtas H, Nordgren R, & Allozi R (2017). PoisBinOrdNonNor: Generation of Up to Four Different
 #'     Types of Variables. R package version 1.3. \url{https://CRAN.R-project.org/package=PoisBinOrdNonNor}
+#'
+#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+#'
+#' Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
+#'     New York: Springer-Verlag; 1994. p. 57-107.
+#'
+#' Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
+#'     Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
+#'
 findintercorr_pois <- function(rho_pois, lam, nrand = 100000, seed = 1234) {
   set.seed(seed)
   u <- runif(nrand, 0, 1)

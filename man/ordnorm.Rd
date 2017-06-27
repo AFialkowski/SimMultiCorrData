@@ -39,7 +39,8 @@ A list with the following components:
 This function calculates the intermediate MVN correlation needed to generate a variable described by
     a discrete marginal distribution and associated finite support.  This includes ordinal (r >= 2 categories) variables
     or variables that are treated as ordinal (i.e. count variables in the Barbiero & Ferrari, 2015 method used in
-    \code{\link[SimMultiCorrData]{rcorrvar2}}).  The function is a modification of  Barbiero & Ferrari's \code{\link[GenOrd]{ordcont}}
+    \code{\link[SimMultiCorrData]{rcorrvar2}}, \doi{10.1002/asmb.2072}).  The function is a modification of  Barbiero & Ferrari's
+    \code{\link[GenOrd]{ordcont}}
     function in \code{\link[GenOrd]{GenOrd-package}}.  It works by setting the intermediate MVN correlation equal to the target
     correlation and updating each intermediate pairwise correlation until the final pairwise correlation is within epsilon of the
     target correlation or the maximum number of iterations has been reached.  This function uses \code{\link[GenOrd]{contord}}
@@ -63,14 +64,14 @@ This function calculates the intermediate MVN correlation needed to generate a v
     using the method of Higham (2002) and the \code{\link[Matrix]{nearPD}} function.
 }
 \references{
-Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
-
 Barbiero A, Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models
     in Business and Industry, 31: 669-80. \doi{10.1002/asmb.2072}.
 
 Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
     Correlation Matrix and Marginal Distributions. R package version 1.4.0.
     \url{https://CRAN.R-project.org/package=GenOrd}
+
+Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589. \doi{10.1080/00273171.2012.692630}.
 }
 \seealso{
 \code{\link[GenOrd]{ordcont}}, \code{\link[SimMultiCorrData]{rcorrvar}}, \code{\link[SimMultiCorrData]{rcorrvar2}},

@@ -17,11 +17,11 @@ A scalar
 }
 \description{
 This function calculates part of the the denominator used to find intercorrelations involving ordinal variables
-    or variables that are treated as ordinal (i.e. count variables in the Barbiero & Ferrari, 2015 method used in
-    \code{\link[SimMultiCorrData]{rcorrvar2}}).  It uses the formula given by Olsson, Drasgow, & Dorans (1982) in
+    or variables that are treated as ordinal (i.e. count variables in the method used in
+    \code{\link[SimMultiCorrData]{rcorrvar2}}).  It uses the formula given by Olsson et al. (1982, \doi{10.1007/BF02294164}) in
     describing polyserial and point-polyserial correlations.  For an ordinal variable with r >= 2 categories, the value is given by:
-    \deqn{\sum_{j = 1}^{r-1} \phi(\tau_{j})*(y_{j+1} - y_{j})}, where
-    \deqn{\phi(\tau) = (2\pi)^{-1/2} * exp(-0.5 * \tau^2)}.  Here, \eqn{y_{j}} is the j-th support
+    \deqn{\sum_{j = 1}^{r-1} \phi(\tau_{j})*(y_{j+1} - y_{j}),} where
+    \deqn{\phi(\tau) = (2\pi)^{-1/2} * exp(-0.5 * \tau^2).}  Here, \eqn{y_{j}} is the j-th support
     value and \eqn{\tau_{j}} is \eqn{\Phi^{-1}(\sum_{i=1}^{j} Pr(Y = y_{i}))}.  This function would not ordinarily be called directly by the user.
 }
 \references{

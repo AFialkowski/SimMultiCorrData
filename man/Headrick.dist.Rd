@@ -13,7 +13,9 @@ data(Headrick.dist)
 Selected symmetrical and asymmetrical theoretical densities with their associated values
 of skewness (gamma1), standardized kurtosis (gamma2), and standardized fifth (gamma3) and
 sixth (gamma4) cumulants.  Constants were calculated by Headrick using his fifth-order
-polynomial transformation and given in his Table 1 (p. 691-2).
+polynomial transformation and given in his Table 1 (2002, p. 691-2, \doi{10.1016/S0167-9473(02)00072-5}).  Note that the standardized cumulants for the Gamma(10, 10)
+distribution do not arise from using \eqn{\alpha = 10,\ \beta = 10}.  Therefore, either there is a typo in the table or
+Headrick used a different parameterization.
 }
 \examples{
 z <- rnorm(10000)
@@ -24,7 +26,7 @@ summary(gamma_a10b10)
 }
 \references{
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 }
 \keyword{datasets}

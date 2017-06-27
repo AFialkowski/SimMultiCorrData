@@ -4,12 +4,14 @@
 #'     \code{\link[SimMultiCorrData]{intercorr_poly}} using \code{\link[nleqslv]{nleqslv}}.  It is used in
 #'     \code{\link[SimMultiCorrData]{findintercorr}} and
 #'     \code{\link[SimMultiCorrData]{findintercorr2}} to find the intermediate correlation for standard normal random variables
-#'     which are used in Fleishman's third-order or Headrick's fifth-order polynomial transformation.  It works for two or three
+#'     which are used in Fleishman's Third-Order (\doi{10.1007/BF02293811}) or Headrick's Fifth-Order
+#'     (\doi{10.1016/S0167-9473(02)00072-5}) Polynomial Transformation.  It works for two or three
 #'     variables in the case of \code{method} = "Fleishman", or two, three, or four variables in the case of \code{method} = "Polynomial".
-#'     Otherwise, Headrick & Sawilowsky (1999) recommend using the technique of Vale & Maurelli (1983), in which
+#'     Otherwise, Headrick & Sawilowsky (1999, \doi{10.1007/BF02294317}) recommend using the technique of Vale & Maurelli (1983,
+#'     \doi{10.1007/BF02293687}), in which
 #'     the intermediate correlations are found pairwise and then eigen value decomposition is used on the intermediate
 #'     correlation matrix.  This function would not ordinarily be called by the user.
-#' @param method the method used to generate the continuous variables.  "Fleishman" uses a third-order polynomial transformation
+#' @param method the method used to generate the continuous variables.  "Fleishman" uses Fleishman's third-order polynomial transformation
 #'     and "Polynomial" uses Headrick's fifth-order transformation.
 #' @param constants a matrix with either 2, 3, or 4 rows, each a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or
 #'     c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by
@@ -24,28 +26,30 @@
 #'     \code{\link[SimMultiCorrData]{intercorr_fleish}}, \cr
 #'     \code{\link[SimMultiCorrData]{intercorr_poly}}, \code{\link[nleqslv]{nleqslv}}
 #' @return a list containing the results from \code{\link[nleqslv]{nleqslv}}
-#' @references Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-#' Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-#' (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#' @references
+#' Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
+#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
-#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 #'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#' Method. Psychometrika, 64, 25-35.
+#' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+#'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+#'     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#'
+#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+#'     Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 #'
 #' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 #'
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 #'
-#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
+#' Vale CD & Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471. \doi{10.1007/BF02293687}.
 #'
-#' Vale CD, Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471.
-#'
-#' Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-#'     \url{https://CRAN.R-project.org/package=nleqslv}
 findintercorr_cont <- function(method = c("Fleishman", "Polynomial"),
                                constants, rho_cont) {
   if (method == "Fleishman") {
@@ -60,8 +64,7 @@ findintercorr_cont <- function(method = c("Fleishman", "Polynomial"),
     }
     return(nleqslv(x = xguess, intercorr_fleish, c = constants, a = rho_cont,
                    method = "Broyden",
-                   control = list(xtol = 1e-8, ftol = 1e-8, btol = 1e-6,
-                                  cndtol = 1e-12, sigma = 0.5, maxit = 1e8)))
+                   control = list(ftol = 1e-5)))
   }
   if (method == "Polynomial") {
     if (nrow(rho_cont) == 1) {

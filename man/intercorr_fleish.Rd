@@ -23,26 +23,19 @@ a list of length 1 for pairwise correlations or length 3 for three variables;
 }
 \description{
 This function contains Fleishman's third-order polynomial transformation intermediate correlation
-    equations.  It is used in \code{\link[SimMultiCorrData]{findintercorr}} and \code{\link[SimMultiCorrData]{findintercorr2}}
+    equations (Headrick & Sawilowsky, 1999, \doi{10.1007/BF02294317}).  It is used in \code{\link[SimMultiCorrData]{findintercorr}} and \code{\link[SimMultiCorrData]{findintercorr2}}
     to find the intermediate correlation for standard normal random variables which are used in the Fleishman
     polynomial transformation.  It can be used to verify a set of constants and an intermediate correlation satisfy
     the equations for the desired post-transformation correlation.  It works for two or three variables.  Headrick &
-    Sawilowsky (1999) recommend using the technique of Vale & Maurelli (1983) in the case of more than 3 variables, in which
-    the intermediate correlations are found pairwise and then eigen value decomposition is used on the intermediate
-    correlation matrix.  Note that there exist solutions that yield invalid power
+    Sawilowsky recommended using the technique of Vale & Maurelli (1983,
+    \doi{10.1007/BF02293687}), in the case of more than 3 variables, in which
+    the intermediate correlations are found pairwise and then eigen value decomposition is used on the correlation matrix.
+    Note that there exist solutions that yield invalid power
     method pdfs (see \code{\link[SimMultiCorrData]{power_norm_corr}}, \code{\link[SimMultiCorrData]{pdf_check}}).
     This function would not ordinarily be called by the user.
 }
 \references{
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-Journal of Modern Applied Statistical Methods, 3, 65-71.
-
-Vale CD, Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471.
+Please see references for \code{\link[SimMultiCorrData]{findintercorr_cont}}.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{fleish}}, \code{\link[SimMultiCorrData]{power_norm_corr}},

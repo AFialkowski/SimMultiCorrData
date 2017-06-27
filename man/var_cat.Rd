@@ -17,9 +17,9 @@ A scalar equal to the variance
 }
 \description{
 This function calculates the variance of a binary or ordinal (r > 2 categories) variable.  It uses the
-    formula given by Olsson, Drasgow, & Dorans (1982) in describing polyserial and point-polyserial correlations.  The
+    formula given by Olsson et al. (1982, \doi{10.1007/BF02294164}) in describing polyserial and point-polyserial correlations.  The
     function is used to find intercorrelations involving ordinal variables or variables that are treated as ordinal
-    (i.e. count variables in the Barbiero & Ferrari, 2015 method used in \code{\link[SimMultiCorrData]{rcorrvar2}}).
+    (i.e. count variables in the method used in \code{\link[SimMultiCorrData]{rcorrvar2}}).
     For an ordinal variable with r >= 2 categories, the variance is given by:
     \deqn{\sum_{j=1}^{r} {y_{j}}^{2}*p_{j} - {(\sum_{j=1}^{r} y_{j}*p_{j})}^{2}}.  Here, \eqn{y_{j}} is the j-th support
     value and \eqn{p_{j}} is \eqn{Pr(Y = y_{j})}.  This function would not ordinarily be called by the user.

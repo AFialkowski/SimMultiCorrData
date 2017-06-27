@@ -29,7 +29,7 @@ the \code{k_pois x k_nb} intermediate correlation matrix whose rows represent th
 }
 \description{
 This function calculates a \code{k_pois x k_nb} intermediate matrix of correlations for the
-    Poisson and Negative Binomial variables by extending the method of Yahav & Shmueli (2012). The intermediate correlation
+    Poisson and Negative Binomial variables by extending the method of Yahav & Shmueli (2012, \doi{10.1002/asmb.901}). The intermediate correlation
     between Z1 and Z2 (the standard normal variables used to generate the Poisson and Negative Binomial variables Y1 and Y2
     via the inverse cdf method) is calculated using a logarithmic transformation of the target correlation.
     First, the upper and lower Frechet-Hoeffding bounds (mincor, maxcor) on \eqn{\rho_{y1,y2}} are simulated.
@@ -48,22 +48,7 @@ This function calculates a \code{k_pois x k_nb} intermediate matrix of correlati
     This function would not ordinarily be called by the user.
 }
 \references{
-Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
-    Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
-
-Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
-    Journal of Statistical Computation and Simulation, 85(15): 3129-39.
-
-Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
-    American Statistician, 65(2): 104-109.
-
-Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
-    New York: Springer-Verlag; 1994. p. 57-107.
-
-Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
-
-Amatya A & Demirtas H (2016). PoisNor: Simultaneous Generation of Multivariate Data with Poisson and Normal Marginals.
-    R package version 1.1. \url{https://CRAN.R-project.org/package=PoisNor}.
+Please see references for \code{\link[SimMultiCorrData]{findintercorr_pois}}.
 }
 \seealso{
 \code{\link[PoisNor]{PoisNor}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},

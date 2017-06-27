@@ -7,7 +7,7 @@
 findintercorr_cont_nb2(method, constants, rho_cont_nb, nb_marg, nb_support)
 }
 \arguments{
-\item{method}{the method used to generate the \code{k_cont} continuous variables.  "Fleishman" uses a third-order polynomial transformation
+\item{method}{the method used to generate the \code{k_cont} continuous variables.  "Fleishman" uses Fleishman's third-order polynomial transformation
 and "Polynomial" uses Headrick's fifth-order transformation.}
 
 \item{constants}{a matrix with \code{k_cont} rows, each a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or
@@ -29,7 +29,8 @@ a \code{k_cont x k_nb} matrix whose rows represent the \code{k_cont} continuous 
 }
 \description{
 This function calculates a \code{k_cont x k_nb} intermediate matrix of correlations for the \code{k_cont} continuous and
-    \code{k_nb} Negative Binomial variables. It extends the methods of Demirtas et al. (2012) and Barbiero & Ferrari (2015) by:
+    \code{k_nb} Negative Binomial variables. It extends the methods of Demirtas et al. (2012, \doi{10.1002/sim.5362}) and
+    Barbiero & Ferrari (2015, \doi{10.1002/asmb.2072}) by:
 
     1) including non-normal continuous and count (Poisson and Negative Binomial) variables
 
@@ -42,8 +43,9 @@ This function calculates a \code{k_cont x k_nb} intermediate matrix of correlati
     is the standard normal variable transformed using Headrick's fifth-order or Fleishman's third-order method to produce a
     continuous variable Y1, and Z2 is the standard normal variable used to generate a Negative Binomial variable via the inverse
     cdf method) is calculated by dividing the target correlation by a correction factor.  The correction factor is the product of the
-    point-polyserial correlation between Y2 and Z2 (described in Olsson et al., 1982) and the power method correlation
-    (described in Headrick & Kowalchuk, 2007) between Y1 and Z1.  After the maximum support value has been found using
+    point-polyserial correlation between Y2 and Z2 (described in Olsson et al., 1982, \doi{10.1007/BF02294164})
+    and the power method correlation (described in Headrick & Kowalchuk, 2007, \doi{10.1080/10629360600605065}) between Y1 and Z1.
+    After the maximum support value has been found using
     \code{\link[SimMultiCorrData]{max_count_support}}, the point-polyserial correlation is given by:
     \deqn{\rho_{y2,z2} = (1/\sigma_{y2})\sum_{j = 1}^{r-1} \phi(\tau_{j})(y2_{j+1} - y2_{j})} where
     \deqn{\phi(\tau) = (2\pi)^{-1/2}*exp(-\tau^2/2)}  Here, \eqn{y_{j}} is the j-th support
@@ -53,32 +55,10 @@ This function calculates a \code{k_cont x k_nb} intermediate matrix of correlati
     This function would not ordinarily be called by the user.
 }
 \references{
-Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
-    Statistics in Medicine 31:27, 3337-3346.
+Please see additional references in \code{\link[SimMultiCorrData]{findintercorr_cont_cat}}.
 
 Barbiero A & Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in
     Business and Industry, 31: 669-80. \doi{10.1002/asmb.2072}.
-
-Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
-    \doi{10.1007/BF02294164}.
-
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-    Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{power_norm_corr}},

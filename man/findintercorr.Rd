@@ -76,19 +76,20 @@ This function calculates a \code{k x k} intermediate matrix of correlations, whe
     increases with sample size and the number of repetitions.  In addition, specifying the seed allows for reproducibility.  In
     addition, method 1 differs from method 2 in the following ways:
 
-    1) The intermediate correlation for \bold{count variables} is based on the method of Yahav & Shmueli (2012), which uses a
+    1) The intermediate correlation for \bold{count variables} is based on the method of Yahav & Shmueli (2012, \doi{10.1002/asmb.901}), which uses a
     simulation based, logarithmic transformation of the target correlation.  This method becomes less accurate as the variable mean
     gets closer to zero.
 
-    2) The \bold{ordinal - count variable} correlations are based on an extension of the method of Amatya & Demirtas (2015), in which
+    2) The \bold{ordinal - count variable} correlations are based on an extension of the method of Amatya & Demirtas (2015,
+    \doi{10.1080/00949655.2014.953534}), in which
     the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count
     variable and the normal variable used to generate it and a simulated upper bound on the correlation between an ordinal variable
-    and the normal variable used to generate it (see Demirtas & Hedeker, 2011).
+    and the normal variable used to generate it (see Demirtas & Hedeker, 2011, \doi{10.1198/tast.2011.10090}).
 
     3) The \bold{continuous - count variable} correlations are based on an extension of the methods of Amatya & Demirtas (2015) and
-    Demirtas et al. (2012), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound
+    Demirtas et al. (2012, \doi{10.1002/sim.5362}), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound
     on the correlation between the count variable and the normal variable used to generate it and the power method correlation
-    between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007).  The
+    between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007, \doi{10.1080/10629360600605065}).  The
     intermediate correlations are the ratio of the target correlations to the correction factor.
 
     The processes used to find the intermediate correlations for each variable type are described below.  Please see the
@@ -97,9 +98,9 @@ This function calculates a \code{k x k} intermediate matrix of correlations, whe
 
 \section{Ordinal Variables}{
 
-Correlations are computed pairwise.  If both variables are binary, the method of Demirtas et al. (2012) is used to find the
+Correlations are computed pairwise.  If both variables are binary, the method of Demirtas et al. (2012, \doi{10.1002/sim.5362}) is used to find the
 tetrachoric correlation (code adapted from \code{\link[BinNonNor]{Tetra.Corr.BB}}).  This method is based on Emrich and Piedmonte's
-(1991) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal
+(1991, \doi{10.1080/00031305.1991.10475828}) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal
 distribution: Let \eqn{Y_{1}} and \eqn{Y_{2}} be binary variables with \eqn{E[Y_{1}] = Pr(Y_{1} = 1) = p_{1}},
 \eqn{E[Y_{2}] = Pr(Y_{2} = 1) = p_{2}}, and correlation \eqn{\rho_{y1y2}}.  Let \eqn{\Phi[x_{1}, x_{2}, \rho_{x1x2}]} be the
 standard bivariate normal cumulative distribution function, given by:
@@ -183,9 +184,11 @@ n <- 10000
 Dist <- c("Gaussian", "t", "Chisq", "Beta", "Gamma")
 
 # calculate standardized cumulants
+# those for the normal and t distributions are rounded to ensure the
+# correct values (i.e. skew = 0)
 
-M1 <- calc_theory(Dist = "Gaussian", params = c(0, 1))
-M2 <- calc_theory(Dist = "t", params = 10)
+M1 <- round(calc_theory(Dist = "Gaussian", params = c(0, 1)), 8)
+M2 <- round(calc_theory(Dist = "t", params = 10), 8)
 M3 <- calc_theory(Dist = "Chisq", params = 4)
 M4 <- calc_theory(Dist = "Beta", params = c(4, 2))
 M5 <- calc_theory(Dist = "Gamma", params = c(4, 4))
@@ -255,56 +258,15 @@ Sigma1
 }
 }
 \references{
-Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
+Please see \code{\link[SimMultiCorrData]{rcorrvar}} for additional references.
 
-Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
-Correlation Matrix and Marginal Distributions. R package version 1.4.0. \url{https://CRAN.R-project.org/package=GenOrd}
-
-Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
-
-Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
-    \doi{10.1007/BF02294164}.
-
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-    Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
-
-Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
-    Statistics in Medicine 31:27, 3337-3346.
-
-Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
-    Journal of Statistical Computation and Simulation, 85(15): 3129-39.
-
-Amatya A & Demirtas H (2016). PoisNor: Simultaneous Generation of Multivariate Data with Poisson and Normal Marginals.
-    R package version 1.1. \url{https://CRAN.R-project.org/package=PoisNor}
+Emrich LJ & Piedmonte MR (1991). A Method for Generating High-Dimensional Multivariate Binary Variables. The American Statistician, 45(4): 302-4.
+    \doi{10.1080/00031305.1991.10475828}.
 
 Inan G & Demirtas H (2016). BinNonNor: Data Generation with Binary and Continuous Non-Normal Components.
     R package version 1.3. \url{https://CRAN.R-project.org/package=BinNonNor}
 
-Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
-    Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
-
-Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
-    American Statistician, 65(2): 104-109.
-
-Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
-    New York: Springer-Verlag; 1994. p. 57-107.
-
-Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+Vale CD & Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471. \doi{10.1007/BF02293687}.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{rcorrvar}}

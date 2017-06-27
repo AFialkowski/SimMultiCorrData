@@ -5,7 +5,7 @@
 #'     fifth and sixth cumulants.  It uses \code{\link[BB]{multiStart}} to find solutions to \code{\link[SimMultiCorrData]{fleish}} or
 #'     \code{\link[nleqslv]{nleqslv}} for \code{\link[SimMultiCorrData]{poly}}. Multiple starting values are used to ensure the correct
 #'     solution is found.  If not user-specified and \code{method} = "Polynomial", the cumulant values are checked to see if they fall in
-#'     Headrick's Table 1 (2002, p.691-2) of common distributions (see \code{\link[SimMultiCorrData]{Headrick.dist}}).
+#'     Headrick's Table 1 (2002, p.691-2, \doi{10.1016/S0167-9473(02)00072-5}) of common distributions (see \code{\link[SimMultiCorrData]{Headrick.dist}}).
 #'     If so, his solutions are used as starting values.  Otherwise, a set of \code{n} values randomly generated from uniform distributions is used to
 #'     determine the power method constants.
 #'
@@ -20,12 +20,18 @@
 #'     can be found, an error is given and the result is NULL.
 #'
 #' @section Reasons for Function Errors:
-#'     The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish}} or
-#'     \code{\link[SimMultiCorrData]{poly}} converged.  Possible solutions include: 1) increasing the number of initial starting values (\code{n}),
-#'     2) using a different seed, or 3) specifying a \code{Six} vector of sixth cumulant correction values.  In addition, the kurtosis may be
-#'     outside the region of possible values.  There is an associated lower boundary for kurtosis associated with a given skew (for Fleishman's
-#'     method) or skew and fifth and sixth cumulants (for Headrick's method).  Use \code{\link[SimMultiCorrData]{calc_lower_skurt}} to determine
-#'     the boundary for a given set of cumulants.
+#'     1) The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish}} or
+#'     \code{\link[SimMultiCorrData]{poly}} converged when using \code{\link[SimMultiCorrData]{find_constants}}.  If this happens,
+#'     the simulation will stop.  Possible solutions include: a) increasing the number of initial starting values (\code{n}),
+#'     b) using a different seed, or c) specifying a \code{Six} vector of sixth cumulant correction values (for \code{method} = "Polynomial").
+#'     If the standardized cumulants are obtained from \code{calc_theory}, the user may need to use rounded values as inputs (i.e.
+#'     \code{skews = round(skews, 8)}).  Due to the nature of the integration involved in \code{calc_theory}, the results are
+#'     approximations.  Greater accuracy can be achieved by increasing the number of subdivisions (\code{sub}) used in the integration
+#'     process.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.
+#'
+#'     2) In addition, the kurtosis may be outside the region of possible values.  There is an associated lower boundary for kurtosis associated
+#'     with a given skew (for Fleishman's method) or skew and fifth and sixth cumulants (for Headrick's method).  Use
+#'     \code{\link[SimMultiCorrData]{calc_lower_skurt}} to determine the boundary for a given set of cumulants.
 #'
 #' @param method the method used to find the constants.  "Fleishman" uses a third-order polynomial transformation and
 #'     requires skewness and standardized kurtosis inputs.  "Polynomial" uses Headrick's fifth-order
@@ -59,30 +65,32 @@
 #'     c("c0","c1","c2","c3","c4,"c5") for \code{method} = "Polynomial"
 #' @return \code{valid} "TRUE" if the constants produce a valid power method pdf, else "FALSE"
 #' @return \code{SixCorr1} if \code{Six} is specified, the sixth cumulant correction required to achieve a valid pdf
-#' @references Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-#' Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-#' (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#' @references
+#' Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
+#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
-#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
+#'
+#' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+#'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+#'     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#'
+#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+#'     Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 #'
 #' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 #'
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-#'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#'     Method. Psychometrika, 64, 25-35.
-#'
-#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
 #'
 #' Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
 #'     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32:4,
 #'     \url{http://www.jstatsoft.org/v32/i04/}
 #'
-#' Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #' @examples \dontrun{
 #' # Compute third-order power method constants.
 #'
@@ -126,7 +134,8 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
       zeros <- multiStart(par = cstart, fn = fleish, gr = NULL,
                           action = "solve", method = c(2, 3, 1),
                           lower = -Inf, upper = Inf, project = NULL,
-                          projectArgs = NULL, control = list(trace = FALSE),
+                          projectArgs = NULL,
+                          control = list(trace = FALSE, tol = 1e-05),
                           quiet = TRUE, a = c(skews, skurts))
       converged <- matrix(zeros$par[zeros$converged == "TRUE", ],
                           nrow = sum(zeros$converged == "TRUE"))
@@ -212,7 +221,8 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
       for (i in 1:nrow(cstart)) {
         nl_solution <- nleqslv(x = cstart[i, ], fn = poly,
                                a = c(skews, skurts, fifths, sixths),
-                               method = "Broyden")
+                               method = "Broyden",
+                               control = list(ftol = 1e-05))
         if (nl_solution$termcd == 1) {
           converged <- rbind(converged, nl_solution$x)
         }
@@ -258,7 +268,8 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
               nl_solution <- nleqslv(x = cstart[i, ], fn = poly,
                                      a = c(skews, skurts, fifths,
                                            sixths + Six[v]),
-                                     method = "Broyden")
+                                     method = "Broyden",
+                                     control = list(ftol = 1e-05))
               if (nl_solution$termcd == 1) {
                 converged <- rbind(converged, nl_solution$x)
               }

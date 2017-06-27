@@ -17,8 +17,8 @@ A **step-by-step guideline** for data simulation is as follows:
 
 1. Obtain the **distribution parameters** for the desired variables.
 
-    a) *Continuous variables*: these are mean, variance, skewness, standardized kurtosis (kurtosis - 3), and standardized fifth and sixth cumulants.  If the goal is to simulate a theoretical distribution (i.e. Gamma, Beta, Logistic, etc.), these values can be obtained using `calc_theory`.  If the goal is to mimic an empirical data set, these values can be found using `calc_moments` (using the method of moments) or `calc_fisherk` (using Fisher's k-statistics).  For some sets of cumulants, it is either not possible to find power method constants or the calculated constants do not generate valid power method pdfs.  In these situations, adding a value to the sixth cumulant may provide solutions (see `find_constants`).  If simulation results indicate that a continuous variable does not generate a valid pdf, the user can try `find_constants` with various sixth cumulant correction vectors to determine if a valid pdf can be found.
-    b) *Ordinal variables* (r >= 2 categories): these are the cumulative marginal probabilities and support values (if desired).  The probabilities should be combined into a list of length equal to the number of ordinal variables.  The i-th element is a vector of the cumulative probabilities defining the marginal distribution of the i-th variable.  If the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1).  The support values should be combined into a separate list.  The i-th element is a vector containing the r ordered support values.  If not provided, the default is for the i-th element to be the vector 1, ..., r.
+    a) *Continuous variables*: these are mean, variance, skewness, standardized kurtosis (kurtosis - 3), and standardized fifth and sixth cumulants.  If the goal is to simulate a theoretical distribution (i.e. Gamma, Beta, Logistic, etc.), these values can be obtained using `calc_theory`.  If the goal is to mimic an empirical data set, these values can be found using `calc_moments` (using the method of moments) or `calc_fisherk` (using Fisher's k-statistics).  If the standardized cumulants are obtained from `calc_theory`, the user may need to use rounded values as inputs (i.e. `skews = round(skews, 8)`).  Due to the nature of the integration involved in `calc_theory`, the results are approximations.  Greater accuracy can be achieved by increasing the number of subdivisions (`sub`) used in the integration process.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.  For some sets of cumulants, it is either not possible to find power method constants or the calculated constants do not generate valid power method pdfs.  In these situations, adding a value to the sixth cumulant may provide solutions (see `find_constants`).  If simulation results indicate that a continuous variable does not generate a valid pdf, the user can try `find_constants` with various sixth cumulant correction vectors to determine if a valid pdf can be found.
+    b) *Ordinal variables* (r >= 2 categories): these are the cumulative marginal probabilities and support values (if desired).  The probabilities should be combined into a list of length equal to the number of ordinal variables.  The i-th element is a vector of the cumulative probabilities defining the marginal distribution of the i-th variable.  If the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1).  For binary variables, the probability should be the probability of achieving the $\Large 1^{st}$ support value.  The support values should be combined into a separate list.  The i-th element is a vector containing the r ordered support values.  If not provided, the default is for the i-th element to be the vector 1, ..., r.
     c) *Poisson variables*: the lambda (mean) values should be given as a vector (see `stats::dpois`).
     d) *Negative Binomial variables*: the sizes (target number of successes) and either the success probabilities or the means should be given as vectors (see see `stats::dnbinom`).  The variable represents the number of failures which occur in a sequence of Bernoulli trials before the target number of successes is achieved.
 
@@ -77,7 +77,9 @@ n <- 10000
 Dist <- c("Gaussian", "Chisq", "Beta")
 
 # Calculate standardized cumulants
-M1 <- calc_theory(Dist = "Gaussian", params = c(0, 1))
+# Those for the normal distribution are rounded to ensure the correct values 
+# are obtained.
+M1 <- round(calc_theory(Dist = "Gaussian", params = c(0, 1)), 8)
 M2 <- calc_theory(Dist = "Chisq", params = 4)
 M3 <- calc_theory(Dist = "Beta", params = c(4, 2))
 M <- cbind(M1, M2, M3)
@@ -463,6 +465,8 @@ as.matrix(round(D$summary_continuous[, c("Distribution", "mean", "sd",
                                          "sixth")], 5), nrow = 3, ncol = 7, 
           byrow = TRUE)
 ```
+
+**Method 2** provides continuous distributions that are closer to the target distributions, especially for the *Chi-squared* distribution. 
 
 Valid power method pdf check:
 ```{r}

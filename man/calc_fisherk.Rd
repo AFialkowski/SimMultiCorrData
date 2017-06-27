@@ -22,7 +22,7 @@ x <- rgamma(n = 10000, 10, 10)
 calc_fisherk(x)
 }
 \references{
-Fisher RA (1928). Moments and Product Moments of Sampling Distributions. Proc. London Math. Soc. 30, 199-238.
+Fisher RA (1928). Moments and Product Moments of Sampling Distributions. Proc. London Math. Soc. 30, 199-238. \doi{10.1112/plms/s2-30.1.199}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}

@@ -1,8 +1,8 @@
-#' @title Fleishman Transformation Lagrangean Constraints for Lower Boundary of Standardized Kurtosis in Asymmetric Distributions
+#' @title Fleishman's Third-Order Transformation Lagrangean Constraints for Lower Boundary of Standardized Kurtosis in Asymmetric Distributions
 #'
 #' @description This function gives the first-order conditions of the Fleishman Transformation Lagrangean expression
 #'     \eqn{F(c1, c3, \lambda) = f(c1, c3) + \lambda * [\gamma_{1} - g(c1, c3)]} used to find the lower kurtosis boundary for a given non-zero skewness
-#'     in \code{\link[SimMultiCorrData]{calc_lower_skurt}} (see Headrick & Sawilowsky, 2002).  Here, \eqn{f(c1, c3)} is the equation for
+#'     in \code{\link[SimMultiCorrData]{calc_lower_skurt}} (see Headrick & Sawilowsky, 2002, \doi{10.3102/10769986025004417}).  Here, \eqn{f(c1, c3)} is the equation for
 #'     standardized kurtosis expressed in terms of c1 and c3 only,
 #'     \eqn{\lambda} is the Lagrangean multiplier, \eqn{\gamma_{1}} is skewness, and \eqn{g(c1, c3)} is the equation for skewness expressed
 #'     in terms of c1 and c3 only.  It should be noted that these equations are for \eqn{\gamma_{1} > 0}.  Negative skew values are handled within
@@ -21,16 +21,11 @@
 #' @return \eqn{dF(c1, c3, \lambda)/dc1 = df(c1, c3)/dc1  - \lambda * dg(c1, c3)/dc1}
 #' @return \eqn{dF(c1, c3, \lambda)/dc3 = df(c1, c3)/dc3  - \lambda * dg(c1, c3)/dc3}
 #' @return If the suppled values for c and skew satisfy the Lagrangean expression, it will return 0 for each component.
-#' @references Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+#' @references
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 #'
 #' Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
-#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
-#'
-#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-#'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#'     Method. Psychometrika, 64, 25-35.
+#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436. \doi{10.3102/10769986025004417}.
 #'
 fleish_skurt_check <- function(c, a) {
   F <- numeric(3)

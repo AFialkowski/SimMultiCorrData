@@ -9,7 +9,7 @@ nonnormvar1(method = c("Fleishman", "Polynomial"), means = 0, vars = 1,
   cstart = NULL, n = 10000, seed = 1234)
 }
 \arguments{
-\item{method}{the method used to generate the continuous variable.  "Fleishman" uses a third-order polynomial transformation
+\item{method}{the method used to generate the continuous variable.  "Fleishman" uses Fleishman's third-order polynomial transformation
 and "Polynomial" uses Headrick's fifth-order transformation.}
 
 \item{means}{mean for the continuous variable (default = 0)}
@@ -58,12 +58,50 @@ A list with the following components:
 \code{Simulation_Time} the total simulation time in minutes
 }
 \description{
-This function simulates one non-normal continuous variable using either Fleishman's third-order or Headrick's
-    fifth-order polynomial transformation.  If only one variable is desired and that variable is continuous, this function should
-    be used.  Headrick & Kowalchuk (2007) outlined a general method for comparing a simulated distribution \eqn{Y} to a given
-    theoretical distribution \eqn{Y^*}.  These steps can be found in the \bold{Comparison of Simulated Distribution to Theoretical
-    Distribution or Empirical Data} vignette.
+This function simulates one non-normal continuous variable using either Fleishman's Third-Order (\code{method} = "Fleishman",
+    \doi{10.1007/BF02293811}) or Headrick's Fifth-Order (\code{method} = "Polynomial", \doi{10.1016/S0167-9473(02)00072-5}) Polynomial
+    Transformation.  If only one variable is desired and that variable is continuous, this function should be used.  The power method
+    transformation is a computationally efficient algorithm that simulates continuous distributions through the method of moments.
+    It works by matching standardized cumulants -- the first four (mean, variance, skew, and standardized kurtosis) for Fleishman's
+    method, or the first six (mean, variance, skew, standardized kurtosis, and standardized fifth and sixth cumulants) for Headrick's
+    method.  The transformation is expressed as follows:
+
+    \eqn{Y = c_{0} + c_{1} * Z + c_{2} * Z^2 + c_{3} * Z^3 + c_{4} * Z^4 + c_{5} * Z^5},
+
+    where \eqn{Z ~ N(0,1)}, and \eqn{c_{4}} and \eqn{c_{5}} both equal \eqn{0} for Fleishman's method.  The real constants are calculated by
+    \code{\link[SimMultiCorrData]{find_constants}}.  All variables are simulated with mean \eqn{0} and variance \eqn{1}, and then
+    transformed to the specified mean and variance at the end.
+
+    The required parameters for simulating continuous variables include: mean, variance, skewness, standardized kurtosis (kurtosis - 3), and
+    standardized fifth and sixth cumulants (for \code{method} = "Polynomial").  If the goal is to simulate a theoretical distribution
+    (i.e. Gamma, Beta, Logistic, etc.), these values can be obtained using \code{\link[SimMultiCorrData]{calc_theory}}.  If the goal is to
+    mimic an empirical data set, these values can be found using \code{\link[SimMultiCorrData]{calc_moments}} (using the method of moments) or
+    \code{\link[SimMultiCorrData]{calc_fisherk}} (using Fisher's k-statistics).  If the standardized cumulants
+    are obtained from \code{calc_theory}, the user may need to use rounded values as inputs (i.e. \code{skews = round(skews, 8)}).  Due to the nature
+    of the integration involved in \code{calc_theory}, the results are approximations.  Greater accuracy can be achieved by increasing the number of
+    subdivisions (\code{sub}) used in the integration process.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.
+
+    For some sets of cumulants, it is either not possible to find power method constants or the
+    calculated constants do not generate valid power method pdfs.  In these situations, adding a value to the sixth cumulant may
+    provide solutions (see \code{\link[SimMultiCorrData]{find_constants}}).  If simulation results indicate that a continuous variable
+    does not generate a valid pdf, the user can try \code{\link[SimMultiCorrData]{find_constants}} with various sixth cumulant correction
+    vectors to determine if a valid pdf can be found.
+
+    Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}) outlined a general
+    method for comparing a simulated distribution \eqn{Y} to a given theoretical distribution \eqn{Y^*}.  These steps can be found in
+    the example and the \bold{Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data} vignette.
 }
+\section{Choice of Fleishman's third-order or Headrick's fifth-order method}{
+
+    Using the fifth-order approximation allows additional control over the fifth and sixth moments of the generated distribution, improving
+    accuracy.  In addition, the range of feasible standardized kurtosis values, given skew and standardized fifth (\eqn{\gamma_{3}}) and sixth
+    (\eqn{\gamma_{4}}) cumulants, is larger than with Fleishman's method (see \code{\link[SimMultiCorrData]{calc_lower_skurt}}).
+    For example, the Fleishman method can not be used to generate a
+    non-normal distribution with a ratio of \eqn{\gamma_{3}^2/\gamma_{4} > 9/14} (see Headrick & Kowalchuk, 2007).  This eliminates the
+    Chi-squared family of distributions, which has a constant ratio of \eqn{\gamma_{3}^2/\gamma_{4} = 2/3}.  However, if the fifth and
+    sixth cumulants do not exist, the Fleishman approximation should be used.
+}
+
 \section{Overview of Simulation Process}{
 
     1) The constants are calculated for the continuous variable using \code{\link[SimMultiCorrData]{find_constants}}.  If no
@@ -75,6 +113,20 @@ This function simulates one non-normal continuous variable using either Fleishma
     2) An intermediate standard normal variate X of length n is generated.
 
     3) Summary statistics are calculated.
+}
+
+\section{Reasons for Function Errors}{
+
+    1) The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish}} or
+    \code{\link[SimMultiCorrData]{poly}} converged when using \code{\link[SimMultiCorrData]{find_constants}}.  If this happens,
+    the simulation will stop.  It may help to first use \code{\link[SimMultiCorrData]{find_constants}} for each continuous variable to
+    determine if a vector of sixth cumulant correction values is needed.  The solutions can be used as starting values (see \code{cstart} below).
+    If the standardized cumulants are obtained from \code{calc_theory}, the user may need to use rounded values as inputs (i.e.
+    \code{skews = round(skews, 8)}).
+
+    2) In addition, the kurtosis may be outside the region of possible values.  There is an associated lower boundary for kurtosis associated
+    with a given skew (for Fleishman's method) or skew and fifth and sixth cumulants (for Headrick's method).  Use
+    \code{\link[SimMultiCorrData]{calc_lower_skurt}} to determine the boundary for a given set of cumulants.
 }
 
 \examples{
@@ -145,23 +197,23 @@ plot_sim_cdf(sim_y = as.numeric(H_exp$continuous_variable[, 1]),
 }
 }
 \references{
+Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
+
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-    Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
+Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+    Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}

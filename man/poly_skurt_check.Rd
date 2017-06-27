@@ -2,7 +2,7 @@
 % Please edit documentation in R/poly_skurt_check.R
 \name{poly_skurt_check}
 \alias{poly_skurt_check}
-\title{Headrick Transformation Lagrangean Constraints for Lower Boundary of Standardized Kurtosis}
+\title{Headrick's Fifth-Order Transformation Lagrangean Constraints for Lower Boundary of Standardized Kurtosis}
 \usage{
 poly_skurt_check(c, a)
 }
@@ -35,12 +35,13 @@ A list with components:
 If the suppled values for \code{c} and \code{a} satisfy the Lagrangean expression, it will return 0 for each component.
 }
 \description{
-This function gives the first-order conditions of the multi-constraint Headrick Transformation Lagrangean expression
+This function gives the first-order conditions of the multi-constraint Lagrangean expression
     \deqn{F(c1, ..., c5, \lambda_{1}, ..., \lambda_{4}) = f(c1, ..., c5) + \lambda_{1} * [1 - g(c1, ..., c5)]}
     \deqn{+ \lambda_{2} * [\gamma_{1} - h(c1, ..., c5)] + \lambda_{3} * [\gamma_{3} - i(c1, ..., c5)]}
     \deqn{+ \lambda_{4} * [\gamma_{4} - j(c1, ..., c5)]}
     used to find the lower kurtosis boundary for a given skewness and standardized fifth and sixth cumulants
-    in \code{\link[SimMultiCorrData]{calc_lower_skurt}}.  The partial derivatives are described in Headrick (2002), but he does not provide
+    in \code{\link[SimMultiCorrData]{calc_lower_skurt}}.  The partial derivatives are described in Headrick (2002,
+    \doi{10.1016/S0167-9473(02)00072-5}), but he does not provide
     the actual equations. The equations used here were found with \code{\link[stats]{D}}.
     Here, \eqn{\lambda_{1}, ..., \lambda_{4}} are the Lagrangean multipliers, \eqn{\gamma_{1}, \gamma_{3}, \gamma_{4}} are the user-specified
     values of skewness, fifth cumulant, and sixth cumulant, and \eqn{f, g, h, i, j} are the equations for standardized kurtosis, variance,
@@ -48,14 +49,17 @@ This function gives the first-order conditions of the multi-constraint Headrick 
 }
 \references{
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
 Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
+
+Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
+    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{calc_lower_skurt}}

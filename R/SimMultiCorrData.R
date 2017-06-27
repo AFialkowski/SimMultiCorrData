@@ -2,14 +2,15 @@
 #'
 #' @description This package generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables
 #'     with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic
-#'     real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009).  All variables are generated from standard normal variables
+#'     real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009, \doi{10.1016/j.csda.2008.02.032}).  All variables are generated from standard normal variables
 #'     with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis,
-#'     and fifth and sixth standardized cumulants using either Fleishman's Third-Order or Headrick's Fifth-Order Polynomial Transformation.  Binary and
+#'     and fifth and sixth standardized cumulants using either Fleishman's Third-Order (\doi{10.1007/BF02293811}) or Headrick's Fifth-Order
+#'     (\doi{10.1016/S0167-9473(02)00072-5}) Polynomial Transformation.  Binary and
 #'     ordinal variables are simulated using a modification of \code{\link[GenOrd]{GenOrd-package}}'s \code{\link[GenOrd]{ordsample}} function.
 #'     Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation
 #'     of the intermediate correlation matrix.  In \bold{Method 1}, the intercorrelations involving count variables are determined using a simulation based,
-#'     logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method <DOI:10.1002/asmb.901>).  In \bold{Method 2}, the count variables are treated as ordinal
-#'     (adapting Barbiero and Ferrari's 2015 modification of \code{\link[GenOrd]{GenOrd-package}} <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the
+#'     logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, \doi{10.1002/asmb.901}).  In \bold{Method 2}, the count variables are treated as ordinal
+#'     (adapting Barbiero and Ferrari's 2015 modification of \code{\link[GenOrd]{GenOrd-package}}, \doi{10.1002/asmb.2072}).  There is an optional error loop that corrects the
 #'     final correlation matrix to be within a user-specified precision value. The package also
 #'     includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation
 #'     matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results,
@@ -86,76 +87,86 @@
 #'
 #' @docType package
 #' @name SimMultiCorrData
-#' @references Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
+#' @references
+#' Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
+#'     Journal of Statistical Computation and Simulation, 85(15): 3129-39. \doi{10.1080/00949655.2014.953534}.
+#'
+#' Amatya A & Demirtas H (2016). MultiOrd: Generation of Multivariate Ordinal Variates. R package version 2.2.
+#'     \url{https://CRAN.R-project.org/package=MultiOrd}
 #'
 #' Barbiero A & Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in
 #'     Business and Industry, 31: 669-80. \doi{10.1002/asmb.2072}.
 #'
-#' Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
+#' Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
+#'     Correlation Matrix and Marginal Distributions. R package version 1.4.0. \url{https://CRAN.R-project.org/package=GenOrd}
 #'
-#' Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
-#'     \doi{10.1007/BF02294164}.
+#' Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
+#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
-#' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-#'     Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-#'     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#' Demirtas H (2006). A method for multivariate ordinal data generation given marginal distributions and correlations. Journal of Statistical
+#'     Computation and Simulation, 76(11): 1017-1025. \doi{10.1080/10629360600569246}.
 #'
-#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-#'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#'     Method. Psychometrika, 64, 25-35.
-#'
-#' Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
-#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
-#'
-#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-#'
-#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}
-#'
-#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
-#'
-#' Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
-#'     Statistics in Medicine 31:27, 3337-3346.
-#'
-#' Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
-#'     Journal of Statistical Computation and Simulation, 85(15): 3129-39.
-#'
-#' Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
-#'     Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
+#' Demirtas H (2014). Joint Generation of Binary and Nonnormal Continuous Data. Biometrics & Biostatistics, S12. \doi{10.472/2155-6180.S12-001}.
 #'
 #' Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
-#'     American Statistician, 65(2): 104-109.
+#'     American Statistician, 65(2): 104-109. \doi{10.1198/tast.2011.10090}.
+#'
+#' Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
+#'     Statistics in Medicine, 31(27): 3337-3346. \doi{10.1002/sim.5362}.
+#'
+#' Demirtas H, Nordgren R, & Allozi R (2017). PoisBinOrdNonNor: Generation of Up to Four Different Types of Variables. R package version 1.3.
+#'     \url{https://CRAN.R-project.org/package=PoisBinOrdNonNor}
+#'
+#' Ferrari PA, Barbiero A (2012). Simulating ordinal data. Multivariate Behavioral Research, 47(4): 566-589.
+#'     \doi{10.1080/00273171.2012.692630}.
+#'
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
+#'
+#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+#'
+#' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+#'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+#'     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#'
+#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+#'     Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
+#'
+#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
+#'
+#' Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
+#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436. \doi{10.3102/10769986025004417}.
+#'
+#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
+#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
+#'
+#' Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
 #'
 #' Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
 #'     New York: Springer-Verlag; 1994. p. 57-107.
 #'
-#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+#' Kaiser S, Traeger D, & Leisch F (2011). Generating Correlated Ordinal Random Values.  Technical Report Number 94, Department of Statistics,
+#'     University of Munich. \url{https://epub.ub.uni-muenchen.de/12157/1/kaiser-tr-94-ordinal.pdf}
+#'
+#' Leisch F, Kaiser AWS, & Hornik K (2010). orddata: Generation of Artificial Ordinal and Binary Data. R package version 0.1/r4.
+#'
+#' Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
+#'     \doi{10.1007/BF02294164}.
+#'
+#' Vale CD & Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471. \doi{10.1007/BF02293687}.
 #'
 #' Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
-#'     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32:4,
+#'     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32(4). \doi{10.18637/jss.v032.i04}.
 #'     \url{http://www.jstatsoft.org/v32/i04/}
-#'
-#' Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
 #' Vaughan LK, Divers J, Padilla M, Redden DT, Tiwari HK, Pomp D, Allison DB (2009). The use of plasmodes as a supplement to simulations:
 #'     A simple example evaluating individual admixture estimation methodologies. Comput Stat Data Anal, 53(5):1755-66.
 #'     \doi{10.1016/j.csda.2008.02.032}.
 #'
-#' Kaiser S, Traeger D, & Leisch F (2011). Generating Correlated Ordinal Random Values.  Technical Report Number 94, Department of Statistics,
-#'     University of Munich. \url{https://epub.ub.uni-muenchen.de/12157/1/kaiser-tr-94-ordinal.pdf}
+#' Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic
+#'     Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
 #'
-#' Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
-#'     Correlation Matrix and Marginal Distributions. R package version 1.4.0. \url{https://CRAN.R-project.org/package=GenOrd}
-#'
-#' Amatya A & Demirtas H (2016). MultiOrd: Generation of Multivariate Ordinal Variates. R package version 2.2.
-#'     \url{https://CRAN.R-project.org/package=MultiOrd}
-#'
-#' Leisch F, Kaiser AWS, & Hornik K (2010). orddata: Generation of Artificial Ordinal and Binary Data. R package version 0.1/r4.
-#'
-#' Demirtas H, Nordgren R, & Allozi R (2017). PoisBinOrdNonNor: Generation of Up to Four Different Types of Variables. R package version 1.3.
-#'     \url{https://CRAN.R-project.org/package=PoisBinOrdNonNor}
 NULL

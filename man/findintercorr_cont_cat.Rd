@@ -30,8 +30,8 @@ a \code{k_cont x k_cat} matrix whose rows represent the \code{k_cont} continuous
 }
 \description{
 This function calculates a \code{k_cont x k_cat} intermediate matrix of correlations for the \code{k_cont} continuous and
-    \code{k_cat} ordinal (r >= 2 categories) variables. It extends the method of Demirtas et al. (2012) in simulating binary and
-    non-normal data using the Fleishman transformation by:
+    \code{k_cat} ordinal (r >= 2 categories) variables. It extends the method of Demirtas et al. (2012, \doi{10.1198/tast.2011.10090})
+    in simulating binary and non-normal data using the Fleishman transformation by:
 
     1) allowing the continuous variables to be generated via Fleishman's third-order or Headrick's fifth-order transformation, and
 
@@ -40,9 +40,10 @@ This function calculates a \code{k_cont x k_cat} intermediate matrix of correlat
     Here, the intermediate correlation between Z1 and Z2 (where Z1 is the standard normal variable transformed using Headrick's
     fifth-order or Fleishman's third-order method to produce a continuous variable Y1, and Z2 is the standard normal variable
     discretized to produce an ordinal variable Y2) is calculated by dividing the target correlation by a correction factor.  The
-    correction factor is the product of the point-polyserial correlation between Y2 and Z2 (described in Olsson et al., 1982)
-    and the power method correlation (described in Headrick & Kowalchuk, 2007) between Y1 and Z1.  The point-polyserial
-    correlation is given by:
+    correction factor is the product of the point-polyserial correlation between Y2 and Z2 (described in Olsson et al., 1982,
+    \doi{10.1007/BF02294164})
+    and the power method correlation (described in Headrick & Kowalchuk, 2007, \doi{10.1080/10629360600605065}) between Y1 and Z1.
+    The point-polyserial correlation is given by:
     \deqn{\rho_{y2,z2} = (1/\sigma_{y2})*\sum_{j = 1}^{r-1} \phi(\tau_{j})(y2_{j+1} - y2_{j})} where
     \deqn{\phi(\tau) = (2\pi)^{-1/2}*exp(-\tau^2/2)}  Here, \eqn{y_{j}} is the j-th support
     value and \eqn{\tau_{j}} is \eqn{\Phi^{-1}(\sum_{i=1}^{j} Pr(Y = y_{i}))}.  The power method correlation is given by:
@@ -51,29 +52,29 @@ This function calculates a \code{k_cont x k_cat} intermediate matrix of correlat
     \code{\link[SimMultiCorrData]{findintercorr2}}.  This function would not ordinarily be called by the user.
 }
 \references{
-Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
-    \doi{10.1007/BF02294164}.
+Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
+    Statistics in Medicine, 31(27): 3337-3346. \doi{10.1002/sim.5362}.
+
+Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-Method. Psychometrika, 64, 25-35.
+Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+    Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
-
-Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
-    Statistics in Medicine 31:27, 3337-3346.
+Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47.
+    \doi{10.1007/BF02294164}.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{power_norm_corr}}, \code{\link[SimMultiCorrData]{find_constants}},

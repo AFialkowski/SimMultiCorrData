@@ -17,7 +17,9 @@ n <- 10000
 Dist <- c("Gaussian", "Chisq", "Beta")
 
 # Calculate standardized cumulants
-M1 <- calc_theory(Dist = "Gaussian", params = c(0, 1))
+# Those for the normal distribution are rounded to ensure the correct values 
+# are obtained.
+M1 <- round(calc_theory(Dist = "Gaussian", params = c(0, 1)), 8)
 M2 <- calc_theory(Dist = "Chisq", params = 4)
 M3 <- calc_theory(Dist = "Beta", params = c(4, 2))
 M <- cbind(M1, M2, M3)

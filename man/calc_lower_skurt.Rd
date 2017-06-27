@@ -62,23 +62,23 @@ A list with components:
     attempted if no valid pdf solutions could be found)
 }
 \description{
-This function calculates the lower boundary of standardized kurtosis for Fleishman's third-order or
-    Headrick's fifth-order polynomial transformation, given values of skewness and standardized fifth and sixth
+This function calculates the lower boundary of standardized kurtosis for Fleishman's Third-Order (\code{method} = "Fleishman",
+    \doi{10.1007/BF02293811}) or Headrick's Fifth-Order (\code{method} = "Polynomial", \doi{10.1016/S0167-9473(02)00072-5}), given values of skewness and standardized fifth and sixth
     cumulants.  It uses \code{\link[nleqslv]{nleqslv}} to search for solutions to the multi-constraint Lagrangean expression in either
     \code{\link[SimMultiCorrData]{fleish_skurt_check}} or \code{\link[SimMultiCorrData]{poly_skurt_check}}.  When Headrick's method
-    is used (method = "Polynomial"), if no solutions converge and a vector of sixth cumulant correction values is provided, the smallest value
-    is found that yields solutions.  Otherwise, the function stops with an error.
+    is used (\code{method} = "Polynomial"), if no solutions converge and a vector of sixth cumulant correction values (\code{Six}) is
+    provided, the smallest value is found that yields solutions.  Otherwise, the function stops with an error.
 
     Each set of constants is checked for a positive correlation with the underlying normal variable
     (using \code{\link[SimMultiCorrData]{power_norm_corr}}) and a valid power method pdf (using \code{\link[SimMultiCorrData]{pdf_check}}).
-    If the correlation is <= 0, the signs of c1 and c3 are reversed (for method = "Fleishman"),
+    If the correlation is <= 0, the signs of c1 and c3 are reversed (for \code{method} = "Fleishman"),
     or c1, c3, and c5 (for \code{method} = "Polynomial").  It will return a kurtosis value with constants that yield in invalid pdf
     if no other solutions can be found (\code{valid.pdf} = "FALSE").  If a vector of kurtosis correction values (\code{Skurt}) is provided, the function
     finds the smallest value that produces a kurtosis with constants that yield a valid pdf.  If valid pdf constants
     still can not be found, the original invalid pdf constants (calculated without a correction) will be provided.  If no solutions
     can be found, an error is given and the function stops.  Please note that this function can take
     considerable computation time, depending on the number of starting values (n) and lengths of kurtosis (\code{Skurt}) and sixth cumulant
-    (\code{Six}) correction vectors.
+    (\code{Six}) correction vectors.  Different seeds should be tested to see if a lower boundary can be found.
 }
 \section{Notes on Fleishman Method}{
 
@@ -86,22 +86,20 @@ This function calculates the lower boundary of standardized kurtosis for Fleishm
     This prevents the method from being used for any of the \emph{Chi-squared distributions}, which have a constant ratio of
     \eqn{skew^2/skurtosis = 2/3}.
 
-
     \bold{Symmetric Distributions:} All symmetric distributions (which have skew = 0) possess the same lower kurtosis boundary.  This is solved for
-    using \code{\link[stats]{optimize}} and the equations in Headrick & Sawilowsky (2002).  The result will always be: c0 = 0, c1 = 1.341159,
+    using \code{\link[stats]{optimize}} and the equations in Headrick & Sawilowsky (2002, \doi{10.3102/10769986025004417}).
+    The result will always be: c0 = 0, c1 = 1.341159,
     c2 = 0, c3 = -0.1314796, and minimum standardized kurtosis = -1.151323.  Note that this set of constants does NOT generate a valid
     power method pdf.  If a \code{Skurt} vector of kurtosis correction values is provided, the function will find the smallest addition that yields a
     valid pdf.  This value is 1.16, giving a lower kurtosis boundary of 0.008676821.
-
 
     \bold{Asymmetric Distributions:} Due to the square roots involved in the calculation of the lower kurtosis boundary (see Headrick & Sawilowsky, 2002),
     this function uses the absolute value of the skewness.  If the true skewness is less than zero, the signs on the constants c0 and c2 are
     switched after calculations (which changes skewness from positive to negative without affecting kurtosis).
 
-
     \bold{Verification of Minimum Kurtosis:} Since differentiability is a local property, it is possible to obtain a local, instead of a global, minimum.
     For the Fleishman method, Headrick & Sawilowsky (2002) explain that since the equation for kurtosis is not "quasiconvex on the domain
-    consisting only of the nonnegative orthant (Arrow & Enthoven, 1961)," second-order conditions must be verified.  The solutions for
+    consisting only of the nonnegative orthant," second-order conditions must be verified.  The solutions for
     lambda, c1, and c3 generate a global kurtosis minimum if and only if the determinant of a bordered Hessian is less than zero.  Therefore,
     this function first obtains the solutions to the Lagrangean expression in \code{\link[SimMultiCorrData]{fleish_skurt_check}} for a given
     skewness value.  These are used to calculate the standardized kurtosis, the constants c1 and c3, and the Hessian determinant
@@ -118,9 +116,8 @@ This function calculates the lower boundary of standardized kurtosis for Fleishm
     The \emph{sixth cumulant correction vector} (\code{Six}) may be used in order to aid in obtaining solutions which converge.  The calculation methods
     are the same for symmetric or asymmetric distributions, and for positive or negative skew.
 
-
-    \bold{Verification of Minimum Kurtosis:} For the fifth-order approximation, Headrick (2002) states "it is assumed that the hypersurface of the
-    objective function [for the kurtosis
+    \bold{Verification of Minimum Kurtosis:} For the fifth-order approximation, Headrick (2002, \doi{10.1016/S0167-9473(02)00072-5}) states
+    "it is assumed that the hypersurface of the objective function [for the kurtosis
     equation] has the appropriate (quasiconvex) configuration."  This assumption alleviates the need to check second-order conditions.
     Headrick discusses steps he took to verify the kurtosis solution was in fact a minimum, including: 1) substituting the constant solutions
     back into the 1st four Lagrangean constraints to ensure the results are zero, 2) substituting the skewness, kurtosis solution, and
@@ -132,10 +129,14 @@ This function calculates the lower boundary of standardized kurtosis for Fleishm
 
 \section{Reasons for Function Errors}{
 
-    The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish_skurt_check}} or \cr
-    \code{\link[SimMultiCorrData]{poly_skurt_check}} converged.  Possible solutions include:
-    1) increasing the number of initial starting values (\code{n}), 2) using a different \code{seed}, or 3) specifying a \code{Six} vector of sixth cumulant
-    correction values.  In addition, different seeds should be tested to see if a lower boundary can be found.
+    The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish_skurt_check}} or
+    \code{\link[SimMultiCorrData]{poly_skurt_check}} converged.  If this happens,
+    the simulation will stop.  Possible solutions include: a) increasing the number of initial starting values (\code{n}),
+    b) using a different seed, or c) specifying a \code{Six} vector of sixth cumulant correction values (for \code{method} = "Polynomial").
+    If the standardized cumulants are obtained from \code{calc_theory}, the user may need to use rounded values as inputs (i.e.
+    \code{skews = round(skews, 8)}).  Due to the nature of the integration involved in \code{calc_theory}, the results are
+    approximations.  Greater accuracy can be achieved by increasing the number of subdivisions (\code{sub}) used in the integration
+    process.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.
 }
 
 \examples{
@@ -262,30 +263,29 @@ Lower[, 9:12]
 }
 }
 \references{
+Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
+    \url{https://CRAN.R-project.org/package=nleqslv}
+
+Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
+
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software,
-    19(3), 1 - 17. \doi{10.18637/jss.v019.i03}
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
 Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
+
+Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+    Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 
 Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
-    Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
+    Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436. \doi{10.3102/10769986025004417}.
 
-Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-    \url{https://CRAN.R-project.org/package=nleqslv}
+Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
+    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 }
 \seealso{
 \code{\link[nleqslv]{nleqslv}}, \code{\link[SimMultiCorrData]{fleish_skurt_check}},

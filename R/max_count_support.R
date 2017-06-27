@@ -1,7 +1,7 @@
 #' @title Calculate Maximum Support Value for Count Variables: Method 2
 #'
 #' @description This function calculates the maximum support value for count variables by extending the method of Barbiero &
-#'     Ferrari (2015) to include Negative Binomial variables.  In order for count variables to be treated as ordinal in the
+#'     Ferrari (2015, \doi{10.1002/asmb.2072}) to include Negative Binomial variables.  In order for count variables to be treated as ordinal in the
 #'     calculation of the intermediate MVN correlation matrix, their infinite support must be truncated (made finite).  This is
 #'     done by setting the total cumulative probability equal to 1 - a small user-specified value (\code{pois_eps} or \code{nb_eps}.  The
 #'     maximum support value equals the inverse cdf applied to this result.  The values pois_eps and nb_eps may differ for each variable.
@@ -26,14 +26,11 @@
 #' @return \code{Distribution} Poisson or Negative Binomial
 #' @return \code{Number} the variable index
 #' @return \code{Max} the maximum support value
-#' @references Barbiero A & Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in
+#' @references
+#' Barbiero A & Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in
 #'     Business and Industry, 31: 669-80. \doi{10.1002/asmb.2072}.
 #'
-#' Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
-#'
-#' Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
-#'     Correlation Matrix and Marginal Distributions. R package version 1.4.0.
-#'     \url{https://CRAN.R-project.org/package=GenOrd}
+#' Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589. \doi{10.1080/00273171.2012.692630}.
 #'
 max_count_support <- function(k_pois, k_nb, lam, pois_eps = NULL,
                               size, prob, mu = NULL, nb_eps = NULL) {

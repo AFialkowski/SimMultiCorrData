@@ -16,7 +16,8 @@ c0, c1, c2, c3, c4, c5}
 a list of length 5; if the constants satisfy the equations, returns 0 for all list elements
 }
 \description{
-This function contains Headrick's third-order polynomial transformation equations.  It is used in
+This function contains Headrick's fifth-order polynomial transformation equations
+    (2002, \doi{10.1016/S0167-9473(02)00072-5}).  It is used in
     \code{\link[SimMultiCorrData]{find_constants}} to find the constants c1, c2, c3, c4, and c5 (\eqn{c0 = -c2 - 3 * c4})
     that satisfy the equations given skewness, standardized kurtosis, and standardized fifth and sixth cumulant values.
     It can be used to verify a set of constants satisfy the equations.  Note that there exist solutions that yield
@@ -29,17 +30,17 @@ poly(c = c(0.727709, 0, 0.096303, 0, -0.002232), a = c(0, 3, 0, 30))
 }
 \references{
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+
+Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{fleish}}, \code{\link[SimMultiCorrData]{power_norm_corr}},

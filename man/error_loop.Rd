@@ -100,7 +100,7 @@ This function corrects the final correlation of simulated variables to be within
     target correlation.  It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error
     is less than epsilon or the number of iterations exceeds the maximum number set by the user (\code{maxit}).  It uses
     \code{\link[SimMultiCorrData]{error_vars}} to simulate the pair of variables in each iteration.  This function would not
-    ordinarily be called directly by the user.The function is a
+    ordinarily be called directly by the user.  The function is a
     modification of  Barbiero & Ferrari's \code{\link[GenOrd]{ordcont}} function in \code{\link[GenOrd]{GenOrd-package}}.
     The \code{\link[GenOrd]{ordcont}} has been modified in the following ways:
 
@@ -119,34 +119,34 @@ This function corrects the final correlation of simulated variables to be within
     error between the final and target pairwise correlation is still > 0.1, the intermediate correlation is set
     equal to the target correlation (if \code{extra_correct} = "TRUE"), and
 
-    6) allowing specifications for the sample size and the seed for reproducability.
+    6) allowing specifications for the sample size and the seed for reproducibility.
 }
 \references{
-Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
-
 Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
-Correlation Matrix and Marginal Distributions. R package version 1.4.0. \cr
-\url{https://CRAN.R-project.org/package=GenOrd}
+    Correlation Matrix and Marginal Distributions. R package version 1.4.0. \url{https://CRAN.R-project.org/package=GenOrd}
 
-Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
+Ferrari PA, Barbiero A (2012). Simulating ordinal data. Multivariate Behavioral Research, 47(4): 566-589.
+    \doi{10.1080/00273171.2012.692630}.
+
+Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+    Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
 }
 \seealso{
 \code{\link[GenOrd]{ordcont}}, \code{\link[SimMultiCorrData]{rcorrvar}}, \code{\link[SimMultiCorrData]{rcorrvar2}},

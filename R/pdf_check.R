@@ -1,9 +1,11 @@
 #' @title Check Polynomial Transformation Constants for Valid Power Method PDF
 #'
-#' @description This function determines if a given set of constants, calculated using Fleishman's third-order or
-#'     Headrick's fifth-order transformation, yields a valid pdf.  This requires 1) the correlation between the
+#' @description This function determines if a given set of constants, calculated using Fleishman's Third-Order (\code{method} = "Fleishman",
+#'     \doi{10.1007/BF02293811}) or Headrick's Fifth-Order (\code{method} = "Polynomial", \doi{10.1016/S0167-9473(02)00072-5}) Polynomial
+#'     Transformation, yields a valid pdf.  This requires 1) the correlation between the
 #'     resulting continuous variable and the underlying standard normal variable (see
-#'     \code{\link[SimMultiCorrData]{power_norm_corr}}) is > 0, and 2) the constants satisfy certain constraints.
+#'     \code{\link[SimMultiCorrData]{power_norm_corr}}) is > 0, and 2) the constants satisfy certain constraints (see Headrick & Kowalchuk, 2007,
+#'     \doi{10.1080/10629360600605065}).
 #' @param c a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
 #'     "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}
 #' @param method the method used to find the constants.  "Fleishman" uses a third-order polynomial transformation and
@@ -15,23 +17,25 @@
 #' @return A list with components:
 #' @return \code{rho_pZ} the correlation between the continuous variable and the underlying standard normal variable
 #' @return \code{valid.pdf} "TRUE" if the constants produce a valid power method pdf, else "FALSE"
-#' @references Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-#' Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-#' (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#' @references
+#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 #'
-#' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-#'
-#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-#'
-#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}
-#'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#'     Method. Psychometrika, 64, 25-35.
+#' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+#'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+#'     (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 #'
 #' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
+#'     Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
+#'
+#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
+#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+#'
+#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+#'     Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
+#'
+#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
+#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
+#'
 #' @examples \dontrun{
 #' # Chi-squared (df = 1) Distribution (invalid power method pdf)
 #' con <- find_constants(method = "Polynomial", skews = sqrt(8), skurts = 12,

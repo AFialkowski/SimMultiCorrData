@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-26" />
+<meta name="date" content="2017-06-27" />
 
 <title>Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</title>
 
@@ -70,11 +70,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-26</em></h4>
+<h4 class="date"><em>2017-06-27</em></h4>
 
 
 
-<p>Sometimes a target (continuous) distribution’s standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf. This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing. In the case of Headrick’s fifth-order approximation, Headrick &amp; Kowalchuk (2007) propose that a correction can be used to increase the sixth cumulant’s value in order to produce a valid pdf. This is discussed in the help pages for <code>find_constants</code> and the simulation functions (<code>nonnormvar1</code>, <code>rcorrvar</code>, and <code>rcorrvar2</code>). These functions allow the user to input a <code>Six</code> vector of correction values, and the smallest value that generates a valid pdf is chosen. When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs. His 2007 paper with Kowalchuk explains how to verify if a given set of constants generates a valid pdf (for both Fleishman’s third-order and Headrick’s fifth-order method). These checks are implemented in <code>pdf_check</code>, which is called by <code>find_constants</code>.</p>
+<p>Sometimes a target (continuous) distribution’s standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf. This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing. In the case of Headrick’s fifth-order approximation (2002, <a href="DOI:10.1016/S0167-9473(02)00072-5" class="uri">DOI:10.1016/S0167-9473(02)00072-5</a>), Headrick &amp; Kowalchuk (2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>) proposed that a correction can be used to increase the sixth cumulant’s value in order to produce a valid pdf. This is discussed in the help pages for <code>find_constants</code> and the simulation functions (<code>nonnormvar1</code>, <code>rcorrvar</code>, and <code>rcorrvar2</code>). These functions allow the user to input a <code>Six</code> vector of correction values, and the smallest value that generates a valid pdf is chosen. When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs. His 2007 paper with Kowalchuk explains how to verify if a given set of constants generates a valid pdf (for both Fleishman’s third-order (<a href="DOI:10.1007/BF02293811" class="uri">DOI:10.1007/BF02293811</a>) and Headrick’s fifth-order method). These checks are implemented in <code>pdf_check</code>, which is called by <code>find_constants</code>.</p>
 <div id="example" class="section level2">
 <h2>Example</h2>
 <p>The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick’s Table 1 distributions (given in <code>Headrick.dist</code>), and compares distributions generated with the corrections to those generated without the corrections. (Note that the <code>printr</code> package is invoked to display the tables.)</p>
@@ -365,8 +365,8 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.887926</td>
 <td align="right">1.347438</td>
 <td align="right">0.782367</td>
-<td align="right">1.103079</td>
-<td align="right">0.907402</td>
+<td align="right">1.103080</td>
+<td align="right">0.907394</td>
 </tr>
 <tr class="odd">
 <td>c2</td>
@@ -383,8 +383,8 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.036052</td>
 <td align="right">-0.140177</td>
 <td align="right">0.067899</td>
-<td align="right">-0.038529</td>
-<td align="right">0.014977</td>
+<td align="right">-0.038530</td>
+<td align="right">0.014980</td>
 </tr>
 <tr class="odd">
 <td>c4</td>
@@ -411,7 +411,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">2.000000</td>
 <td align="right">25.140000</td>
 <td align="right">0.240000</td>
-<td align="right">0.010000</td>
+<td align="right">NA</td>
 </tr>
 </tbody>
 </table>
@@ -515,7 +515,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.000000</td>
 <td align="right">0.108304</td>
 <td align="right">0.162966</td>
-<td align="right">0.200437</td>
+<td align="right">0.200396</td>
 </tr>
 <tr class="even">
 <td>c1</td>
@@ -524,7 +524,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">1.093437</td>
 <td align="right">1.104253</td>
 <td align="right">1.089984</td>
-<td align="right">1.075229</td>
+<td align="right">1.075051</td>
 </tr>
 <tr class="odd">
 <td>c2</td>
@@ -533,7 +533,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.000000</td>
 <td align="right">-0.123347</td>
 <td align="right">-0.187329</td>
-<td align="right">-0.231577</td>
+<td align="right">-0.231504</td>
 </tr>
 <tr class="even">
 <td>c3</td>
@@ -542,7 +542,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">-0.035711</td>
 <td align="right">-0.045284</td>
 <td align="right">-0.044950</td>
-<td align="right">-0.044345</td>
+<td align="right">-0.044208</td>
 </tr>
 <tr class="odd">
 <td>c4</td>
@@ -551,7 +551,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.000000</td>
 <td align="right">0.005014</td>
 <td align="right">0.008121</td>
-<td align="right">0.010380</td>
+<td align="right">0.010369</td>
 </tr>
 <tr class="even">
 <td>c5</td>
@@ -560,7 +560,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.000752</td>
 <td align="right">0.001285</td>
 <td align="right">0.001445</td>
-<td align="right">0.001655</td>
+<td align="right">0.001640</td>
 </tr>
 <tr class="odd">
 <td>sixcorr</td>
@@ -569,7 +569,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">0.030000</td>
-<td align="right">0.190000</td>
+<td align="right">0.180000</td>
 </tr>
 </tbody>
 </table>
@@ -590,42 +590,42 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.065524</td>
 <td align="right">-0.104760</td>
 <td align="right">-0.107593</td>
-<td align="right">-0.345963</td>
+<td align="right">-0.345859</td>
 </tr>
 <tr class="even">
 <td>c1</td>
 <td align="right">0.969217</td>
 <td align="right">0.980451</td>
 <td align="right">1.022480</td>
-<td align="right">0.712424</td>
+<td align="right">0.712411</td>
 </tr>
 <tr class="odd">
 <td>c2</td>
 <td align="right">-0.065172</td>
 <td align="right">0.105115</td>
 <td align="right">0.091123</td>
-<td align="right">0.347093</td>
+<td align="right">0.346926</td>
 </tr>
 <tr class="even">
 <td>c3</td>
 <td align="right">0.027783</td>
 <td align="right">0.002843</td>
 <td align="right">-0.003307</td>
-<td align="right">0.028033</td>
+<td align="right">0.028078</td>
 </tr>
 <tr class="odd">
 <td>c4</td>
 <td align="right">-0.000117</td>
 <td align="right">-0.000118</td>
 <td align="right">0.005490</td>
-<td align="right">-0.000376</td>
+<td align="right">-0.000356</td>
 </tr>
 <tr class="even">
 <td>c5</td>
 <td align="right">-0.003879</td>
 <td align="right">0.000002</td>
 <td align="right">-0.002025</td>
-<td align="right">0.003967</td>
+<td align="right">0.003962</td>
 </tr>
 <tr class="odd">
 <td>sixcorr</td>

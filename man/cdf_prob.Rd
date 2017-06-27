@@ -2,7 +2,7 @@
 % Please edit documentation in R/cdf_prob.R
 \name{cdf_prob}
 \alias{cdf_prob}
-\title{Calculate Theoretical Cumulative Probability}
+\title{Calculate Theoretical Cumulative Probability for Continuous Variables}
 \usage{
 cdf_prob(c, method = c("Fleishman", "Polynomial"), delta = 0.5, mu = 0,
   sigma = 1, lower = -1e+06, upper = 1e+06)
@@ -35,6 +35,7 @@ A list with components:
 This function calculates a cumulative probability using the theoretical power method cdf
     \eqn{F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))} up to \eqn{sigma * y + mu = delta}, where \eqn{y = p(z)}, after using
     \code{\link[SimMultiCorrData]{pdf_check}}.  If the given constants do not produce a valid power method pdf, a warning is given.
+    The formulas were obtained from Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}).
 }
 \examples{
 \dontrun{
@@ -45,23 +46,23 @@ cdf_prob(c = con, method = "Polynomial", delta = 0.5)
 }
 }
 \references{
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
+Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+
+Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
+    Journal of Modern Applied Statistical Methods, 3(1), 65-71. \doi{10.22237/jmasm/1083370080}.
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
+
+Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
+    Method. Psychometrika, 64, 25-35. \doi{10.1007/BF02294317}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{pdf_check}}

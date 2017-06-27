@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-26" />
+<meta name="date" content="2017-06-27" />
 
 <title>Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data</title>
 
@@ -70,11 +70,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-26</em></h4>
+<h4 class="date"><em>2017-06-27</em></h4>
 
 
 
-<p>Headrick &amp; Kowalchuk (2007) outlined a general method for comparing a simulated distribution <span class="math inline">\(\Large Y\)</span> to a given theoretical distribution <span class="math inline">\(\Large Y^*\)</span>. Note that these could easily be modified for comparison to an empirical vector of data:</p>
+<p>Headrick &amp; Kowalchuk (2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>) outlined a general method for comparing a simulated distribution <span class="math inline">\(\Large Y\)</span> to a given theoretical distribution <span class="math inline">\(\Large Y^*\)</span>. Note that these could easily be modified for comparison to an empirical vector of data:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Obtain the standardized cumulants</strong> (skewness, kurtosis, fifth, and sixth) for <span class="math inline">\(\Large Y^*\)</span>. This can be done using <code>calc_theory</code> along with either the distribution name (plus up to 3 parameters) or the pdf fx (plus support bounds). In the case of an empirical vector of data, use <code>calc_moments</code> or <code>calc_fisherk</code>.</p></li>
 <li><p><strong>Obtain the constants</strong> for <span class="math inline">\(\Large Y\)</span>. This can be done using <code>find_constants</code> or by simulating the distribution with <code>nonnormvar1</code>.</p></li>

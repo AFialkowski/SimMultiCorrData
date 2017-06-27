@@ -1,8 +1,8 @@
-#' @title Fleishman Transformation Hessian Calculation for Lower Boundary of Standardized Kurtosis in Asymmetric Distributions
+#' @title Fleishman's Third-Order Transformation Hessian Calculation for Lower Boundary of Standardized Kurtosis in Asymmetric Distributions
 #'
 #' @description This function gives the second-order conditions necessary to verify that a kurtosis is a global minimum.  A kurtosis solution from
 #'     \code{\link[SimMultiCorrData]{fleish_skurt_check}} is a global minimum if and only if the determinant of the bordered Hessian, \eqn{H}, is
-#'     less than zero (see Headrick & Sawilowsky, 2002), where
+#'     less than zero (see Headrick & Sawilowsky, 2002, \doi{10.3102/10769986025004417}), where
 #'     \deqn{|\bar{H}| = matrix(c(0, dg(c1, c3)/dc1, dg(c1, c3)/dc3,}
 #'     \deqn{dg(c1, c3)/dc1, d^2 F(c1, c3, \lambda)/dc1^2, d^2 F(c1, c3, \lambda)/(dc3 dc1),}
 #'     \deqn{dg(c1, c3)/dc3, d^2 F(c1, c3, \lambda)/(dc1 dc3), d^2 F(c1, c3, \lambda)/dc3^2), 3, 3, byrow = TRUE)}
@@ -18,16 +18,7 @@
 #' @return A list with components:
 #' @return \code{Hessian} the Hessian matrix H
 #' @return \code{H_det} the determinant of H
-#' @references Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-#'
-#' Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the
-#'     Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
-#'
-#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-#'
-#' Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-#'     Method. Psychometrika, 64, 25-35.
+#' @references Please see references for \code{\link[SimMultiCorrData]{fleish_skurt_check}}.
 #'
 fleish_Hessian <- function(c) {
   F_bb <- -(12 * (4 * (3 * c[1]^2) + 34 * (3 * (2 * c[1])) * c[2] +

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sim_pdf_theory.R
 \name{plot_sim_pdf_theory}
 \alias{plot_sim_pdf_theory}
-\title{Plot Simulated Probability Density Function and Target PDF by Distribution Name or Function}
+\title{Plot Simulated Probability Density Function and Target PDF by Distribution Name or Function for Continuous or Count Variables}
 \usage{
 plot_sim_pdf_theory(sim_y, title = "Simulated Probability Density Function",
   ylower = NULL, yupper = NULL, power_color = "dark blue",
@@ -55,8 +55,8 @@ A \code{\link[ggplot2]{ggplot2}} object.
 \description{
 This plots the pdf of simulated continuous or count data and overlays the target pdf (if \code{overlay} = TRUE),
     which is specified by distribution name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
-    If a continuous target distribution is provided (\code{cont_var = TRUE}), the simulated data is
-    scaled and then transformed (i.e. \eqn{sim_y <- sigma * scale(sim_y) + mu}) so that it has the same mean and variance as the
+    If a continuous target distribution is provided (\code{cont_var = TRUE}), the simulated data \eqn{y} is
+    scaled and then transformed (i.e. \eqn{y = sigma * scale(y) + mu}) so that it has the same mean (\eqn{mu}) and variance (\eqn{sigma^2}) as the
     target distribution.  If the variable is Negative Binomial, the parameters must be size and success probability (not mu).
     The function returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
     \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
@@ -107,23 +107,7 @@ plot_sim_pdf_theory(sim_y = NBvars$Neg_Bin_variable[, 1], overlay = TRUE,
 
 }
 \references{
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 
 Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 }

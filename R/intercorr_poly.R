@@ -1,13 +1,15 @@
 #' @title Headrick's Fifth-Order Polynomial Transformation Intermediate Correlation Equations
 #'
 #' @description This function contains Headrick's fifth-order polynomial transformation intermediate correlation
-#'     equations.  It is used in \code{\link[SimMultiCorrData]{findintercorr}} and \code{\link[SimMultiCorrData]{findintercorr2}}
+#'     equations (2002, \doi{10.1016/S0167-9473(02)00072-5}).  It is used in \code{\link[SimMultiCorrData]{findintercorr}} and
+#'     \code{\link[SimMultiCorrData]{findintercorr2}}
 #'     to find the intermediate correlation for standard normal random variables which are used in the Headrick
 #'     polynomial transformation.  It can be used to verify a set of constants and an intermediate correlation satisfy
-#'     the equations for the desired post-transformation correlation.  It works for two, three, or four variables.  Headrick &
-#'     Sawilowsky (1999) recommend using the technique of Vale & Maurelli (1983) in the case of more than 4 variables, in which
-#'     the intermediate correlations are found pairwise and then eigen value decomposition is used on the intermediate
-#'     correlation matrix.  Note that there exist solutions that yield invalid power
+#'     the equations for the desired post-transformation correlation.  It works for two, three, or four variables.  Headrick recommended
+#'     using the technique of Vale & Maurelli (1983,
+#'     \doi{10.1007/BF02293687}), in the case of more than 4 variables, in which
+#'     the intermediate correlations are found pairwise and then eigen value decomposition is used on the correlation matrix.
+#'     Note that there exist solutions that yield invalid power
 #'     method pdfs (see \code{\link[SimMultiCorrData]{power_norm_corr}}, \code{\link[SimMultiCorrData]{pdf_check}}).
 #'     This function would not ordinarily be called by the user.
 #' @param r either a scalar, in which case it represents pairwise intermediate correlation between standard normal variables,
@@ -15,7 +17,8 @@
 #'     \deqn{r[1]*r[2] = \rho_{z1,z2},\ r[1]*r[3] = \rho_{z1,z3},\ r[2]*r[3] = \rho_{z2,z3}}
 #'     or a vector of 4 values, in which case:
 #'     \deqn{r0 = r[5]*r[6],\ r0*r[1]*r[2] = \rho_{z1,z2},\ r0*r[1]*r[3] = \rho_{z1,z3}}
-#'     \deqn{r0*r[2]*r[3] = \rho_{z2,z3},\ r0*r[1]*r[4] = \rho_{z1,z4},\ r0*r[2]*r[4] = \rho_{z2,z4},\ r0*r[3]*r[4] = \rho_{z3,z4}}
+#'     \deqn{r0*r[2]*r[3] = \rho_{z2,z3},\ r0*r[1]*r[4] = \rho_{z1,z4},\ r0*r[2]*r[4] = \rho_{z2,z4},}
+#'     \deqn{r0*r[3]*r[4] = \rho_{z3,z4}}
 #' @param c a matrix with either 2, 3, or 4 rows, each a vector of constants c0, c1, c2, c3, like that returned by
 #'     \code{\link[SimMultiCorrData]{find_constants}}
 #' @param a a matrix of target correlations among continuous variables; if \code{nrow(a) = 1}, it represents a pairwise
@@ -26,20 +29,8 @@
 #'     \code{\link[SimMultiCorrData]{pdf_check}}, \code{\link[SimMultiCorrData]{find_constants}}
 #' @return a list of length 1 for pairwise correlations, length 3 for three variables, or length 6 for four variables;
 #'      if the inputs satisfy the equations, returns 0 for all list elements
-#' @references Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-#' Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-#' (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+#' @references Please see references for \code{\link[SimMultiCorrData]{findintercorr_cont}}.
 #'
-#' Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-#'     Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-#'
-#' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-#'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-#'
-#' Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-#'     Journal of Modern Applied Statistical Methods, 3, 65-71.
-#'
-#' Vale CD, Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471.
 intercorr_poly <- function(r, c, a) {
   if (nrow(a) == 1 | nrow(a) == 2) {
     f <- numeric(1)

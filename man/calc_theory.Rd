@@ -38,6 +38,12 @@ This function calculates the theoretical mean, standard deviation, skewness,
     standardized kurtosis, and standardized fifth and sixth cumulants given either a Distribution name (plus up to 3
     parameters) or a pdf (with specified lower and upper support bounds).  The result can be used as input to
     \code{\link[SimMultiCorrData]{find_constants}} or for data simulation.
+
+    \bold{Note:} Due to the nature of the integration involved in calculating the standardized cumulants, the results are
+    approximations.  Greater accuracy can be achieved by increasing the number of subdivisions (\code{sub}) used in the integration
+    process.  However, the user may need to round the cumulants (i.e. using \code{round(x, 8)}) before using them in other functions
+    (i.e. \code{find_constants}, \code{calc_lower_skurt}, \code{nonnormvar1}, \code{rcorrvar}, \code{rcorrvar2}) in order to achieve
+    the desired results.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.
 }
 \examples{
 options(scipen = 999)
@@ -56,17 +62,14 @@ calc_theory(Dist = "Triangular", params = c(0, 1))
 }
 \references{
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
+    Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.
+    (\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
 
 Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
+    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249. \doi{10.1080/10629360600605065}.
 
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
 
 Thomas W. Yee (2017). VGAM: Vector Generalized Linear and Additive Models. R package version 1.0-3.
     \url{https://CRAN.R-project.org/package=VGAM}

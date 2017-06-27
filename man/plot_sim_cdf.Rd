@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sim_cdf.R
 \name{plot_sim_cdf}
 \alias{plot_sim_cdf}
-\title{Plot Simulated (Empirical) Power Method Cumulative Distribution Function}
+\title{Plot Simulated (Empirical) Cumulative Distribution Function for Continuous, Ordinal, or Count Variables}
 \usage{
 plot_sim_cdf(sim_y, title = "Empirical Cumulative Distribution Function",
   ylower = NULL, yupper = NULL, calc_cprob = FALSE, delta = 5,
@@ -88,23 +88,7 @@ plot_sim_cdf(Ordvars$ordinal_variables[, 2])
 
 }
 \references{
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 
 Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 }

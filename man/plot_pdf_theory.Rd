@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_pdf_theory.R
 \name{plot_pdf_theory}
 \alias{plot_pdf_theory}
-\title{Plot Theoretical Power Method Probability Density Function and Target PDF by Distribution Name or Function}
+\title{Plot Theoretical Power Method Probability Density Function and Target PDF by Distribution Name or Function for Continuous Variables}
 \usage{
 plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   sigma = 1, title = "Probability Density Function", ylower = NULL,
@@ -17,7 +17,7 @@ plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
 "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}}
 
-\item{method}{the method used to generate the continuous variable \eqn{y = p(z)}.  "Fleishman" uses a third-order polynomial
+\item{method}{the method used to generate the continuous variable \eqn{y = p(z)}.  "Fleishman" uses Fleishman's third-order polynomial
 transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 
 \item{mu}{the desired mean for the continuous variable (used if \code{overlay = FALSE}, otherwise variable centered to have the
@@ -66,7 +66,8 @@ comes from the \code{\link[triangle]{triangle}} package.}
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
-This plots the theoretical probability density function: \eqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z))} and target
+This plots the theoretical power method probability density function: \deqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z)),} as given
+    in Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}), and target
     pdf (if overlay = TRUE).  It is a parametric plot with \eqn{sigma * y + mu}, where \eqn{y = p(z)}, on the x-axis and
     \eqn{f_Z(z)/p'(z)} on the y-axis, where \eqn{z} is vector of \eqn{n} random standard normal numbers (generated with a seed set by
     user).  Given a vector of polynomial
@@ -110,23 +111,7 @@ plot_pdf_theory(c = con2$constants, method = "Polynomial",
 
 }
 \references{
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 
 Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 }

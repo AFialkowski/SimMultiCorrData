@@ -13,7 +13,7 @@ vignette: >
 #knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-`SimMultiCorrData` generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009).  All variables are generated from standard normal variables with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman's Third-Order or Headrick's Fifth-Order Polynomial Transformation.  Binary and ordinal variables are simulated using a modification of `GenOrd::ordsample`.  Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix `Sigma`.  In **Method 1**, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method <DOI:10.1002/asmb.901>).  In **Method 2**, the count variables are treated as ordinal (adapting Barbiero and Ferrari's 2015 modification of `GenOrd` <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.
+`SimMultiCorrData` generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009, <DOI:10.1016/j.csda.2008.02.032>).  All variables are generated from standard normal variables with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman's Third-Order (<DOI:10.1007/BF02293811>) or Headrick's Fifth-Order (<DOI:10.1016/S0167-9473(02)00072-5>) Polynomial Transformation.  Binary and ordinal variables are simulated using a modification of `GenOrd::ordsample`.  Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix `Sigma`.  In **Method 1**, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, <DOI:10.1002/asmb.901>).  In **Method 2**, the count variables are treated as ordinal (adapting Barbiero and Ferrari's 2015 modification of `GenOrd`, <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.
 
 ## Benefits of this package:
 
@@ -65,13 +65,13 @@ There are several other simulation packages.  For example, Barbiero & Ferrari's 
 1. `GenOrd::ordsample` stops if the intermediate correlation matrix `Sigma` is not positive-definite.  As described above, `SimMultiCorrData` attempts to correct the problem and a warning is given that it may not be possible to produce the desired correlation matrix.
 
 ### Amatya & Demirtas' (2016) `MultiOrd`
-`MultiOrd` generates multivariate ordinal data with given correlation matrix and marginal distributions via the *binary conversion method* of Demirtas (2006).  This method computes the binary marginals by collapsing the marginal distributions of the ordinal variables.  The intermediate correlation matrix is also computed through an iterative process based on matching the target matrix.  Binary data are then converted to ordinal data through a randomization step.  This procedure requires the simulation of large samples of binary data in order to maximize accuracy, which requires greater computational time and resources than the methods used in `SimMultiCorrData`.
+`MultiOrd` generates multivariate ordinal data with given correlation matrix and marginal distributions via the *binary conversion method* of Demirtas (2006, <DOI:10.1080/10629360600569246>).  This method computes the binary marginals by collapsing the marginal distributions of the ordinal variables.  The intermediate correlation matrix is also computed through an iterative process based on matching the target matrix.  Binary data are then converted to ordinal data through a randomization step.  This procedure requires the simulation of large samples of binary data in order to maximize accuracy, which requires greater computational time and resources than the methods used in `SimMultiCorrData`.
 
 ### Leisch, Kaiser, & Hornik's (2010) `orddata`
 `orddata` generates binary and ordinal data through 4 available methods:
 
 1. *Mean mapping:* this method involves an analytical algorithm for determining the intermediate MVN correlation.  It creates the ordinal variables by thresholding the normal variates.  The mean mapping method provides a wider correlation range than the binary conversion method, but the run time can be greater, depending on the number of categories and variables.
-1. *Binary conversion:* Kaiser et al.'s binary conversion is similar to the method of Demirtas.  However, while Demirtas' method uses simulations to determine the binary correlation required to create the desired ordinal variables, Kaiser et al. developed an algorithm to analytically determine the binary correlation (see Kaiser, Traeger, & Leisch, 2011).  The authors note that although the feasible correlation range is smaller than that of Demirtas, the analytical solution decreases computational time.
+1. *Binary conversion:* Kaiser et al.'s binary conversion is similar to the method of Demirtas.  However, while Demirtas' method uses simulations to determine the binary correlation required to create the desired ordinal variables, Kaiser et al. developed an algorithm to analytically determine the binary correlation (see Kaiser et al., 2011).  The authors note that although the feasible correlation range is smaller than that of Demirtas, the analytical solution decreases computational time.
 1. *Monte Carlo simulation:* this method generates ordinal values by shifting the variables until the desired correlation structure is achieved.
 1. *A "native" method:* this method involves a simpler analytical algorithm than the mean mapping method and also thresholds normal variates to generate the ordinal values.
 
@@ -79,61 +79,13 @@ There are several other simulation packages.  For example, Barbiero & Ferrari's 
 `PoisBinOrdNonNor` is one in an extensive series of simulation packages created by Demirtas with additional authors.  Other packages include `OrdNor` (Amatya & Demirtas, 2015), `BinNonNor` (Inan & Demirtas, 2016), `BinOrdNonNor` (Demirtas, Wang, & Allozi, 2017), `PoisBinOrd` (Inan & Demirtas, 2016), `PoisNor` (Amatya & Demirtas, 2016), and `PoisBinOrdNor` (Demirtas, Hu, & Allozi, 2017).  `PoisBinOrdNonNor` generates Poisson, binary, ordinal, and non-normal variables.  It differs from `SimMultiCorrData` in the following ways:
 
 1. The intermediate correlation matrix must be found using a function separate from the simulation function, while `SimMultiCorrData`'s simulation functions `rcorrvar` and `rcorrvar2` allow the user to either provide an intermediate matrix or the matrix is calculated during the simulation.  
-1. The intermediate correlations for the Poisson variables are found using the method of Yahav & Shmueli (2012), as in method 1 of `SimMultiCorrData`.  However, `PoisBinOrdNonNor` does not produce Negative Binomial variables.  
-1. Binary intermediate correlations are calculated from tetrachoric correlations based on the method of Demirtas et al. (2012; originally from Piedmonte and Emriche, 1991), as in `SimMultiCorrData`.  However, those for ordinal variables are found using `ordcont`, which, as previously mentioned, will stop if the intermediate matrix is not positive-definite.  
+1. The intermediate correlations for the Poisson variables are found using the method of Yahav & Shmueli (2012, <DOI:10.1002/asmb.901>), as in method 1 of `SimMultiCorrData`.  However, `PoisBinOrdNonNor` does not produce Negative Binomial variables.  
+1. Binary intermediate correlations are calculated from tetrachoric correlations based on the method of Demirtas et al. (2012, <DOI:10.1002/sim.5362>), as in `SimMultiCorrData`.  However, those for ordinal variables are found using `ordcont`, which, as previously mentioned, will stop if the intermediate matrix is not positive-definite.  
 1. Non-normal variables are generated using Fleishman's third-order polynomial transformation, which generally yields simulation accuracy inferior to Headrick's fifth-order transformation and has a smaller range of possible kurtosis values.  
 1. The authors do not provide any checks for positive correlation of the continuous variable with the generating standard normal variable or for a valid power method pdf, while `SimMultiCorrData` contains the functions `power_norm_corr` and `pdf_check`.  The function that solves for the constants (`SimMultiCorrData::find_constants`) executes these checks when finding the constants and attempts to produce valid pdf constants.  In the case of Headrick's fifth-order method, the user may specify a sixth cumulant correction value to help find these constants.  
-1. The lower kurtosis boundary check in `PoisBinOrdNonNor` is a simple approximation: $\Large standardized\ kurtosis \ge skew^2 - 2$.  `SimMultiCorrData::calc_lower_skurt` solves the Lagrangean expressions (as described in Headrick, 2002 and Headrick & Sawilowsky, 2002) that determine the precise lower kurtosis boundary.  Examination of the boundaries computed in `PoisBinOrdNonNor` demonstrates that the approximate boundaries are much lower than the actual Fleishman boundaries, indicating that the guideline is not accurate (see `calc_lower_skurt` for examples).
+1. The lower kurtosis boundary check in `PoisBinOrdNonNor` is a simple approximation: $\Large standardized\ kurtosis \ge skew^2 - 2$.  `SimMultiCorrData::calc_lower_skurt` solves the Lagrangean expressions (as described in Headrick, 2002, <DOI:10.1016/S0167-9473(02)00072-5> and Headrick & Sawilowsky, 2002, <DOI:10.3102/10769986025004417>) that determine the precise lower kurtosis boundary.  Examination of the boundaries computed in `PoisBinOrdNonNor` demonstrates that the approximate boundaries are much lower than the actual Fleishman boundaries, indicating that the guideline is not accurate (see `calc_lower_skurt` for examples).
 1. `PoisBinOrdNonNor` does not allow the user to specify a seed for random number generation, or an epsilon value and maximum number of iterations to use when determining the intermediate ordinal correlations.  These specifications, as found in `SimMultiCorr`'s simulation functions `rcorrvar` and `rcorrvar2`, are essential for reproducibility and controlling accuracy.  
 1. The results include only the generated variables, while `SimMultiCorr`'s simulation functions produce detailed summaries of the variables, the final correlation matrix, the maximum error between the final and target correlation matrices, and the simulation time.
 
 ## References
-Ferrari PA, Barbiero A (2012). Simulating ordinal data, Multivariate Behavioral Research, 47(4): 566-589.
-
-Barbiero A & Ferrari PA (2015). Simulation of correlated Poisson variables. Applied Stochastic Models in Business and Industry, 31: 669-80. \doi{http://dx.doi.org/10.1002/asmb.2072}.
-
-Higham N (2002). Computing the nearest correlation matrix - a problem from finance; IMA Journal of Numerical Analysis 22: 329-343.
-
-Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient. Psychometrika, 47(3): 337-47. \doi{http://dx.doi.org/10.1007/BF02294164}.
-
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711 (http://www.sciencedirect.com/science/article/pii/S0167947302000725)
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power Method. Psychometrika, 64, 25-35.
-
-Headrick TC, Sawilowsky SS (2002). Weighted Simplex Procedures for Determining Boundary Points and Constants for the Univariate and Multivariate Power Methods. Journal of Educational and Behavioral Statistics, 25, 417-436.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{http://dx.doi.org/10.18637/jss.v019.i03}.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions. Journal of Modern Applied Statistical Methods, 3, 65-71.
-
-Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials. Statistics in Medicine 31:27, 3337-3346.
-
-Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals. Journal of Statistical Computation and Simulation, 85(15): 3129-39.
-
-Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Management Science Applications. Applied Stochastic Models in Business and Industry, 28(1): 91-102. \doi{http://dx.doi.org/10.1002/asmb.901}.
-
-Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds. American Statistician, 65(2): 104-109.
-
-Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding. New York: Springer-Verlag; 1994. p. 57-107.
-
-Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
-
-Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32:4, (http://www.jstatsoft.org/v32/i04/)
-
-Berend Hasselman (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2. (https://CRAN.R-project.org/package=nleqslv)
-
-Vaughan LK, Divers J, Padilla M, Redden DT, Tiwari HK, Pomp D, Allison DB (2009). The use of plasmodes as a supplement to simulations: A simple example evaluating individual admixture estimation methodologies. Comput Stat Data Anal, 53(5):1755-66. \doi{http://dx.doi.org/10.1016/j.csda.2008.02.032}.
-
-Kaiser S, Traeger D, & Leisch F (2011). Generating Correlated Ordinal Random Values.  Technical Report Number 94, Department of Statistics, University of Munich. (https://epub.ub.uni-muenchen.de/12157/1/kaiser-tr-94-ordinal.pdf)
-
-Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given Correlation Matrix and Marginal Distributions. R package version 1.4.0. (https://CRAN.R-project.org/package=GenOrd)
-
-Amatya A & Demirtas H (2016). MultiOrd: Generation of Multivariate Ordinal Variates. R package version 2.2. (https://CRAN.R-project.org/package=MultiOrd)
-
-Leisch F, Kaiser AWS, & Hornik K (2010). orddata: Generation of Artificial Ordinal and Binary Data. R package version 0.1/r4.
-
-Demirtas H, Nordgren R, & Allozi R (2017). PoisBinOrdNonNor: Generation of Up to Four Different Types of Variables. R package version 1.3. (https://CRAN.R-project.org/package=PoisBinOrdNonNor)
+For references, please see those in `SimMultiCorrData` package help page.

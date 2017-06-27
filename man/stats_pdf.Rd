@@ -11,7 +11,7 @@ stats_pdf(c, method = c("Fleishman", "Polynomial"), alpha = 0.025, mu = 0,
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
 "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}}
 
-\item{method}{the method used to find the constants.  "Fleishman" uses a third-order polynomial transformation and
+\item{method}{the method used to find the constants.  "Fleishman" uses Fleishman's third-order polynomial transformation and
 "Polynomial" uses Headrick's fifth-order transformation.}
 
 \item{alpha}{proportion to be trimmed from the lower and upper ends of the power method pdf (default = 0.025)}
@@ -41,7 +41,7 @@ A vector with components:
 \description{
 This function calculates the 100*\code{alpha} percent symmetric trimmed mean (0 < \code{alpha} < 0.50), median,
     mode, and maximum height of a valid power method pdf, after using \code{\link[SimMultiCorrData]{pdf_check}}.  It will stop with
-    an error if the pdf is invalid.
+    an error if the pdf is invalid.  The equations are those from Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}).
 }
 \examples{
 \dontrun{
@@ -53,23 +53,7 @@ stats_pdf(c = con, method = "Polynomial", alpha = 0.025)
 }
 }
 \references{
-Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
-Non-normal Distributions. Computational Statistics & Data Analysis 40(4):685-711
-(\href{http://www.sciencedirect.com/science/article/pii/S0167947302000725}{ScienceDirect})
-
-Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532.
-
-Headrick TC, Kowalchuk RK (2007). The Power Method Transformation: Its Probability Density Function, Distribution
-    Function, and Its Further Use for Fitting Data. Journal of Statistical Computation and Simulation, 77, 229-249.
-
-Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
-    Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
-
-Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distributions: Extending the Fleishman Power
-    Method. Psychometrika, 64, 25-35.
-
-Headrick TC (2004). On Polynomial Transformations for Simulating Multivariate Nonnormal Distributions.
-    Journal of Modern Applied Statistical Methods, 3, 65-71.
+Please see references for \code{\link[SimMultiCorrData]{pdf_check}}.
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{pdf_check}}

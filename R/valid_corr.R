@@ -16,7 +16,21 @@
 #'
 #'    Please see the \bold{Comparison of Method 1 and Method 2} vignette for more information regarding method 1.
 #'
-#' @section The Generate, Sort, and Correlate (GSC, Demirtas & Hedeker, 2011) Algorithm:
+#' @section Reasons for Function Errors:
+#'     1) The most likely cause for function errors is that no solutions to \code{\link[SimMultiCorrData]{fleish}} or
+#'     \code{\link[SimMultiCorrData]{poly}} converged when using \code{\link[SimMultiCorrData]{find_constants}}.  If this happens,
+#'     the simulation will stop.  It may help to first use \code{\link[SimMultiCorrData]{find_constants}} for each continuous variable to
+#'     determine if a vector of sixth cumulant correction values is needed.  If the standardized cumulants are obtained from \code{calc_theory},
+#'     the user may need to use rounded values as inputs (i.e.
+#'     \code{skews = round(skews, 8)}).  Due to the nature of the integration involved in \code{calc_theory}, the results are
+#'     approximations.  Greater accuracy can be achieved by increasing the number of subdivisions (\code{sub}) used in the integration
+#'     process.  For example, in order to ensure that skew is exactly 0 for symmetric distributions.
+#'
+#'     2) In addition, the kurtosis may be outside the region of possible values.  There is an associated lower boundary for kurtosis associated
+#'     with a given skew (for Fleishman's method) or skew and fifth and sixth cumulants (for Headrick's method).  Use
+#'     \code{\link[SimMultiCorrData]{calc_lower_skurt}} to determine the boundary for a given set of cumulants.
+#'
+#' @section The Generate, Sort, and Correlate (GSC, Demirtas & Hedeker, 2011, \doi{10.1198/tast.2011.10090}) Algorithm:
 #' The GSC algorithm is a flexible method for determining empirical correlation bounds when the theoretical bounds are unknown.
 #' The steps are as follows:
 #'
@@ -37,15 +51,14 @@
 #' The processes used to find the correlation bounds for each variable type are described below:
 #'
 #' @section Ordinal Variables:
-#' Binary pairs: The correlation bounds are determined as in Demirtas, Hedeker, & Mermelstein (2012), who used the method of Emrich &
-#' Piedmonte (1991).  The joint distribution is determined by "borrowing" the moments of a multivariate normal
+#' Binary pairs: The correlation bounds are determined as in Demirtas et al. (2012, \doi{10.1002/sim.5362}), who used the method of Emrich &
+#' Piedmonte (1991, \doi{10.1080/00031305.1991.10475828}).  The joint distribution is determined by "borrowing" the moments of a multivariate normal
 #' distribution.  For two binary variables \eqn{Y_{i}} and \eqn{Y_{j}}, with success probabilities \eqn{p_{i}} and \eqn{p_{j}}, the lower
 #' correlation bound is given by
 #' \deqn{max(-\sqrt{(p_{i}p_{j})/(q_{i}q_{j})},\ -\sqrt{(q_{i}q_{j})/(p_{i}p_{j})})}
 #' and the upper bound by
 #' \deqn{min(\sqrt{(p_{i}q_{j})/(q_{i}p_{j})},\ \sqrt{(q_{i}p_{j})/(p_{i}q_{j})})}
 #' Here, \eqn{q_{i} = 1 - p_{i}} and \eqn{q_{j} = 1 - p_{j}}.
-#'
 #'
 #' Binary-Ordinal or Ordinal-Ordinal pairs: Randomly generated variables with the given marginal distributions are used in the
 #' GSC algorithm to find the correlation bounds.
@@ -129,18 +142,21 @@
 #' @return \code{valid.pdf} a vector with i-th component equal to "TRUE" if variable Y_i has a valid power method pdf, else "FALSE"
 #' @return If a target correlation matrix rho is provided, each pairwise correlation is checked to see if it is within the lower and upper
 #' bounds.  If the correlation is outside the bounds, the indices of the variable pair are given.
-#' @references Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
-#'     American Statistician, 65(2): 104-109.
+#' @references Please see \code{\link[SimMultiCorrData]{rcorrvar}} for additional references.
+#'
+#' Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
+#'     American Statistician, 65(2): 104-109. \doi{10.1198/tast.2011.10090}.
 #'
 #' Demirtas H, Hedeker D, & Mermelstein RJ (2012). Simulation of massive public health data by power polynomials.
-#'     Statistics in Medicine 31:27, 3337-3346.
+#'     Statistics in Medicine, 31(27): 3337-3346. \doi{10.1002/sim.5362}.
 #'
-#' Emrich LJ & Piedmonte MR (1991). A method for generating high-dimensional multivariate binary variates. The American Statistician, 45(4):302-4.
+#' Emrich LJ & Piedmonte MR (1991). A Method for Generating High-Dimensional Multivariate Binary Variables. The American Statistician, 45(4): 302-4.
+#'     \doi{10.1080/00031305.1991.10475828}.
+#'
+#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
 #'
 #' Hoeffding W. Scale-invariant correlation theory. In: Fisher NI, Sen PK, editors. The collected works of Wassily Hoeffding.
 #'     New York: Springer-Verlag; 1994. p. 57-107.
-#'
-#' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
 #'
 #' Hakan Demirtas, Yiran Hu and Rawan Allozi (2017). PoisBinOrdNor: Data Generation with Poisson, Binary, Ordinal and Normal Components.
 #'     R package version 1.4. \url{https://CRAN.R-project.org/package=PoisBinOrdNor}
@@ -158,9 +174,11 @@
 #' Dist <- c("Gaussian", "t", "Chisq", "Beta", "Gamma")
 #'
 #' # calculate standardized cumulants
+#' # those for the normal and t distributions are rounded to ensure the
+#' # correct values (i.e. skew = 0)
 #'
-#' M1 <- calc_theory(Dist = "Gaussian", params = c(0, 1))
-#' M2 <- calc_theory(Dist = "t", params = 10)
+#' M1 <- round(calc_theory(Dist = "Gaussian", params = c(0, 1)), 8)
+#' M2 <- round(calc_theory(Dist = "t", params = 10), 8)
 #' M3 <- calc_theory(Dist = "Chisq", params = 4)
 #' M4 <- calc_theory(Dist = "Beta", params = c(4, 2))
 #' M5 <- calc_theory(Dist = "Gamma", params = c(4, 4))
@@ -262,7 +280,7 @@ valid_corr <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
                                           cstart = NULL, n = 25,
                                           seed = seed))
       }
-      if (length(cons) == 1) {
+      if (length(cons) == 1 | is.null(cons)) {
         stop(paste("Constants can not be found for continuous variable ", i,
                    ".", sep = ""))
       }

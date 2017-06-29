@@ -42,7 +42,7 @@
 <p>First, the intermediate correlation calculations which are equivalent in the two pathways will be discussed by variable type.</p>
 <div id="ordinal-variables" class="section level3">
 <h3>Ordinal Variables:</h3>
-<p>Correlations are computed pairwise. If both variables are <strong>binary</strong>, the method of Demirtas et al. (2012, <a href="DOI:10.1002/sim.5362" class="uri">DOI:10.1002/sim.5362</a>) is used to find the <em>tetrachoric correlation</em> (code adapted from <code>BinNonNor::Tetra.Corr.BB</code>). The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale. The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete. This method is based on Emrich and Piedmonte’s (1991, <a href="DOI:10.1080/00031305.1991.10475828" class="uri">DOI:10.1080/00031305.1991.10475828</a>) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution:</p>
+<p>Correlations are computed pairwise. If both variables are <strong>binary</strong>, the method of Demirtas <em>et al.</em> <span class="citation">(2012)</span> is used to find the <em>tetrachoric correlation</em> (code adapted from <code>BinNonNor::Tetra.Corr.BB</code>). The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale. The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete. This method is based on <span class="citation">Emrich and Piedmonte (1991)</span>’s work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution:</p>
 <p>Let <span class="math inline">\(\Large Y_{1}\)</span> and <span class="math inline">\(\Large Y_{2}\)</span> be binary variables with <span class="math inline">\(\Large E[Y_{1}] = Pr(Y_{1} = 1) = p_{1}\)</span>, <span class="math inline">\(\Large E[Y_{2}] = Pr(Y_{2} = 1) = p_{2}\)</span>, and correlation <span class="math inline">\(\Large \rho_{y1y2}\)</span>.</p>
 <p>Let <span class="math inline">\(\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}]\)</span> be the standard bivariate normal cumulative distribution function, given by: <span class="math display">\[\Large \Phi[x_{1}, x_{2}, \rho_{x1x2}] = \int_{-\infty}^{x_{1}} \int_{-\infty}^{x_{2}} f(z_{1}, z_{2}, \rho_{x1x2})\ dz_{1} dz_{2},\]</span> where <span class="math display">\[\Large f(z_{1}, z_{2}, \rho_{x1x2}) = [2\pi\sqrt{1 - \rho_{x1x2}^2}]^{-1} * exp[-0.5(z_{1}^2 - 2\rho_{x1x2}z_{1}z_{2} + z_{2}^2)/(1 - \rho_{x1x2}^2)].\]</span> Then solving the equation <span class="math display">\[\Large \Phi[z(p_{1}), z(p_{2}), \rho_{x1x2}] = \rho_{y1y2}\sqrt{p_{1}(1 - p_{1})p_{2}(1 - p_{2})} + p_{1}p_{2}\]</span> for <span class="math inline">\(\Large \rho_{x1x2}\)</span> gives the intermediate correlation of the standard normal variables needed to generate binary variables with correlation <span class="math inline">\(\Large \rho_{y1y2}\)</span>. Here <span class="math inline">\(\Large z(p)\)</span> indicates the <span class="math inline">\(\Large p^{th}\)</span> quantile of the standard normal distribution.</p>
 <p>To generate the binary variables from the standard normal variables, set <span class="math inline">\(\Large Y_{1} = 1\)</span> if <span class="math inline">\(\Large Z_{1} \le z(p_{1})\)</span> and <span class="math inline">\(\Large Y_{1} = 0\)</span> otherwise. Similarly, set <span class="math inline">\(\Large Y_{2} = 1\)</span> if <span class="math inline">\(\Large Z_{2} \le z(p_{2})\)</span> and <span class="math inline">\(\Large Y_{2} = 0\)</span> otherwise.</p>
@@ -63,17 +63,17 @@
 <h2>Overview of Method 1:</h2>
 <p>The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy increases with sample size and the number of repetitions (see <code>findintercorr</code>). Specifying the seed allows for reproducibility. In addition, method 1 differs from method 2 in the following ways:</p>
 <ol style="list-style-type: decimal">
-<li><p>The intermediate correlation for <strong>count variables</strong> is based on the method of <em>Yahav &amp; Shmueli</em> (2012, <a href="DOI:10.1002/asmb.901" class="uri">DOI:10.1002/asmb.901</a>), which uses a simulation based, logarithmic transformation of the target correlation. This method becomes less accurate as the variable mean gets closer to zero.</p>
+<li><p>The intermediate correlation for <strong>count variables</strong> is based on the method of <em>Yahav &amp; Shmueli</em> <span class="citation">(2012)</span>, which uses a simulation based, logarithmic transformation of the target correlation. This method becomes less accurate as the variable mean gets closer to zero.</p>
 <ol style="list-style-type: lower-alpha">
 <li><em>Poisson variables:</em> <code>findintercorr_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 <li><em>Negative Binomial variables:</em> <code>findintercorr_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 </ol></li>
-<li><p>The <strong>ordinal - count variable</strong> correlations are based on an extension of the method of <em>Amatya &amp; Demirtas</em> (2015, <a href="DOI:10.1080/00949655.2014.953534" class="uri">DOI:10.1080/00949655.2014.953534</a>), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and a simulated upper bound on the correlation between an ordinal variable and the normal variable used to generate it (see <em>Demirtas &amp; Hedeker</em>, 2011, <a href="DOI:10.1198/tast.2011.10090" class="uri">DOI:10.1198/tast.2011.10090</a>).</p>
+<li><p>The <strong>ordinal - count variable</strong> correlations are based on an extension of the method of <em>Amatya &amp; Demirtas</em> <span class="citation">(2015)</span>, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and a simulated upper bound on the correlation between an ordinal variable and the normal variable used to generate it (see <span class="citation">Demirtas and Hedeker (2011)</span>).</p>
 <ol style="list-style-type: lower-alpha">
 <li><em>Poisson variables:</em> <code>findintercorr_cat_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 <li><em>Negative Binomial variables:</em> <code>findintercorr_cat_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 </ol></li>
-<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the methods of <em>Amatya &amp; Demirtas</em> (2015) and <em>Demirtas et al.</em> (2012, <a href="DOI:10.1002/sim.5362" class="uri">DOI:10.1002/sim.5362</a>), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick &amp; Kowalchuk, 2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
+<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the methods of <em>Amatya &amp; Demirtas</em> <span class="citation">(2015)</span> and <em>Demirtas et al.</em> <span class="citation">(2012)</span>, in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see <span class="citation">Headrick and Kowalchuk (2007)</span>). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
 <ol style="list-style-type: lower-alpha">
 <li><em>Poisson variables:</em> <code>findintercorr_cont_pois</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 <li><em>Negative Binomial variables:</em> <code>findintercorr_cont_nb</code> is called to calculate the intermediate MVN correlation for all variables.</li>
@@ -90,7 +90,7 @@
 <li>using a list Six of sixth cumulant correction values (if <code>method</code> = “Polynomial”).</li>
 </ol></li>
 <li><p>The support is created for the ordinal variables (if no support provided).</p></li>
-<li><p>The intermediate correlation matrix <code>Sigma</code> is calculated using <code>findintercorr</code>. Note that this will return a matrix that is not positive-definite. If so, there will be a message that it may not be possible to produce variables with the desired distributions. Also, the algorithm of Higham (2002) is used (see <code>Matrix::nearPD</code>) to produce the nearest positive-definite matrix and a message is given.</p></li>
+<li><p>The intermediate correlation matrix <code>Sigma</code> is calculated using <code>findintercorr</code>. Note that this will return a matrix that is not positive-definite. If so, there will be a message that it may not be possible to produce variables with the desired distributions. Also, the algorithm of <span class="citation">Higham (2002)</span> is used (see <code>Matrix::nearPD</code>) to produce the nearest positive-definite matrix and a message is given.</p></li>
 <li><p><code>k &lt;- k_cat + k_cont + k_pois + k_nb</code> multivariate normal variables (<span class="math inline">\(\Large X_{nxk}\)</span>) with correlation matrix <code>Sigma</code> are generated using eigen-value and spectral value decompositions on a <span class="math inline">\(\Large MVN_{nxk}(0,1)\)</span> matrix.</p></li>
 <li><p>The variables are generated from <span class="math inline">\(\Large X_{nxk}\)</span> using the appropriate transformations (see <strong>Variable Types</strong> vignette)</p></li>
 <li><p>The final correlation matrix is calculated, and the maximum error (<code>maxerr</code>) from the target correlation matrix is found.</p></li>
@@ -103,8 +103,8 @@
 <h2>Overview of Method 2:</h2>
 <p>The intermediate correlations used in method 2 are less simulation based than those in method 1 (see <code>findintercorr2</code>). Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible). In addition, method 2 differs from method 1 in the following ways:</p>
 <ol style="list-style-type: decimal">
-<li><p>The intermediate correlations involving <strong>count variables</strong> are based on the methods of <em>Barbiero &amp; Ferrari</em> (2012, <a href="DOI:10.1080/00273171.2012.692630" class="uri">DOI:10.1080/00273171.2012.692630</a>, 2015, <a href="DOI:10.1002/asmb.2072" class="uri">DOI:10.1002/asmb.2072</a>). The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability. This truncation factor may differ for each count variable (see <code>max_count_support</code>). The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of <code>ordnorm</code>.</p></li>
-<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the method of <em>Demirtas et al.</em> (2012), and the count variables are treated as ordinal. The correction factor is the product of the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick &amp; Kowalchuk, 2007) and the point-polyserial correlation between the ordinalized count variable and the normal variable used to generate it (see Olsson et al., 1982, <a href="DOI:10.1007/BF02294164" class="uri">DOI:10.1007/BF02294164</a>). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
+<li><p>The intermediate correlations involving <strong>count variables</strong> are based on the methods of <em>Barbiero &amp; Ferrari</em> <span class="citation">(2012; 2015)</span>. The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability. This truncation factor may differ for each count variable (see <code>max_count_support</code>). The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of <code>ordnorm</code>.</p></li>
+<li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the method of <em>Demirtas et al.</em> <span class="citation">(2012)</span>, and the count variables are treated as ordinal. The correction factor is the product of the power method correlation between the continuous variable and the normal variable used to generate it (see <span class="citation">Headrick and Kowalchuk (2007)</span>) and the point-polyserial correlation between the ordinalized count variable and the normal variable used to generate it (see <span class="citation">Olsson, Drasgow, and Dorans (1982)</span>). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
 <ol style="list-style-type: lower-alpha">
 <li><em>Poisson variables:</em> <code>findintercorr_cont_pois2</code> is called to calculate the intermediate MVN correlation for all variables.</li>
 <li><em>Negative Binomial variables:</em> <code>findintercorr_cont_nb2</code> is called to calculate the intermediate MVN correlation for all variables.</li>
@@ -118,6 +118,41 @@
 <li><p>After the support is created for the ordinal variables (if no support is provided), the maximum support for the count variables is determined using <code>max_count_support</code>, given truncation value vector <code>pois_eps</code> for Poisson variables and/or <code>nb_eps</code> for Negative Binomial variables. The cumulative probability truncation value may differ by variable, but a good value is <span class="math inline">\(0.0001\)</span>. The resulting supports and distribution parameters are used to create marginal lists, consisting of the cumulative probabilities for each count variable.</p></li>
 <li><p>The intermediate correlation matrix <code>Sigma</code> is calculated using <code>findintercorr2</code>.</p></li>
 </ol>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
+<div id="refs" class="references">
+<div id="ref-AmaDem">
+<p>Amatya, A, and H Demirtas. 2015. “Simultaneous Generation of Multivariate Mixed Data with Poisson and Normal Marginals.” <em>Journal of Statistical Computation and Simulation</em> 85 (15): 3129–39. doi:<a href="https://doi.org/10.1080/00949655.2014.953534">10.1080/00949655.2014.953534</a>.</p>
+</div>
+<div id="ref-FerrBarb_Pois">
+<p>Barbiero, A, and PA Ferrari. 2015. “Simulation of Correlated Poisson Variables.” <em>Applied Stochastic Models in Business and Industry</em> 31: 669–80. doi:<a href="https://doi.org/10.1002/asmb.2072">10.1002/asmb.2072</a>.</p>
+</div>
+<div id="ref-DemHed">
+<p>Demirtas, H, and D Hedeker. 2011. “A Practical Way for Computing Approximate Lower and Upper Correlation Bounds.” <em>American Statistician</em> 65 (2): 104–9. doi:<a href="https://doi.org/10.1198/tast.2011.10090">10.1198/tast.2011.10090</a>.</p>
+</div>
+<div id="ref-Dem_Power">
+<p>Demirtas, H, D Hedeker, and RJ Mermelstein. 2012. “Simulation of Massive Public Health Data by Power Polynomials.” <em>Statistics in Medicine</em> 31 (27): 3337–46. doi:<a href="https://doi.org/10.1002/sim.5362">10.1002/sim.5362</a>.</p>
+</div>
+<div id="ref-EmPied">
+<p>Emrich, LJ, and MR Piedmonte. 1991. “A Method for Generating High-Dimensional Multivariate Binary Variates.” <em>American Statistician</em> 45: 302–4. doi:<a href="https://doi.org/10.1080/00031305.1991.10475828">10.1080/00031305.1991.10475828</a>.</p>
+</div>
+<div id="ref-FerrBarb_Ord">
+<p>Ferrari, PA, and A Barbiero. 2012. “Simulating Ordinal Data.” <em>Multivariate Behavioral Research</em> 47 (4): 566–89. doi:<a href="https://doi.org/10.1080/00273171.2012.692630">10.1080/00273171.2012.692630</a>.</p>
+</div>
+<div id="ref-HeadKow">
+<p>Headrick, TC, and RK Kowalchuk. 2007. “The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data.” <em>Journal of Statistical Computation and Simulation</em> 77: 229–49. doi:<a href="https://doi.org/10.1080/10629360600605065">10.1080/10629360600605065</a>.</p>
+</div>
+<div id="ref-Higham">
+<p>Higham, N. 2002. “Computing the Nearest Correlation Matrix - a Problem from Finance.” <em>IMA Journal of Numerical Analysis</em> 22: 329–43.</p>
+</div>
+<div id="ref-PolyCorr">
+<p>Olsson, U, F Drasgow, and NJ Dorans. 1982. “The Polyserial Correlation Coefficient.” <em>Psychometrika</em> 47 (3): 337–47. doi:<a href="https://doi.org/10.1007/BF02294164">10.1007/BF02294164</a>.</p>
+</div>
+<div id="ref-YahShm">
+<p>Yahav, I, and G Shmueli. 2012. “On Generating Multivariate Poisson Data in Management Science Applications.” <em>Applied Stochastic Models in Business and Industry</em> 28 (1): 91–102. doi:<a href="https://doi.org/10.1002/asmb.901">10.1002/asmb.901</a>.</p>
+</div>
 </div>
 </div>
 

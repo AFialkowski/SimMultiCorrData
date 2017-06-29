@@ -113,7 +113,7 @@ Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package versio
 Demirtas H (2006). A method for multivariate ordinal data generation given marginal distributions and correlations. Journal of Statistical
     Computation and Simulation, 76(11): 1017-1025. \doi{10.1080/10629360600569246}.
 
-Demirtas H (2014). Joint Generation of Binary and Nonnormal Continuous Data. Biometrics & Biostatistics, S12. \doi{10.472/2155-6180.S12-001}.
+Demirtas H (2014). Joint Generation of Binary and Nonnormal Continuous Data. Biometrics & Biostatistics, S12.
 
 Demirtas H & Hedeker D (2011). A practical way for computing approximate lower and upper correlation bounds.
     American Statistician, 65(2): 104-109. \doi{10.1198/tast.2011.10090}.

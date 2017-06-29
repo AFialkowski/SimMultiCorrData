@@ -3,6 +3,7 @@ title: "Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs"
 author: "Allison C Fialkowski"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: Bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs}
   %\VignetteEngine{knitr::rmarkdown}
@@ -13,7 +14,7 @@ vignette: >
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
 ```
 
-Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation (2002, <DOI:10.1016/S0167-9473(02)00072-5>), Headrick & Kowalchuk (2007, <DOI:10.1080/10629360600605065>) proposed that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and then choose the smallest value that generates a valid pdf.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explained how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order (<DOI:10.1007/BF02293811>) and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
+Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation [-@Head2002], @HeadKow proposed that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and then choose the smallest value that generates a valid pdf.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explained how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order [-@Fleish] and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
 
 ## Example
 The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.  (Note that the `printr` package is invoked to display the tables.)
@@ -220,3 +221,6 @@ plot_sim_pdf_theory(sim_y = A$continuous_variables[, 2],
 plot_sim_pdf_theory(sim_y = B$continuous_variables[, 2], 
                     title = "Corrected Laplace Pdf", Dist = "Laplace", 
                     params = H_params$Laplace)
+```
+
+## References

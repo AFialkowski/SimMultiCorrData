@@ -3,6 +3,7 @@ title: "Overview of Error Loop"
 author: "Allison C Fialkowski"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: Bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Overview of Error Loop}
   %\VignetteEngine{knitr::rmarkdown}
@@ -13,9 +14,9 @@ vignette: >
 #knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-The **error loop** may be used to correct the final correlation of simulated variables to be within a user-specified precision value (`epsilon`) of the target correlation.  It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error is less than `epsilon` or the number of iterations exceeds the maximum number set by the user (`maxit`).  It uses `SimMultiCorrData::error_vars` to simulate the pair of variables in each iteration.  The function modifies Barbiero & Ferrari's `ordcont` function in the `GenOrd` package in the following ways: 
+The **error loop** may be used to correct the final correlation of simulated variables to be within a user-specified precision value (`epsilon`) of the target correlation.  It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error is less than `epsilon` or the number of iterations exceeds the maximum number set by the user (`maxit`).  It uses `SimMultiCorrData::error_vars` to simulate the pair of variables in each iteration.  The function modifies @GenOrd `ordcont` function in the `GenOrd` package in the following ways: 
 
-1. It works for continuous, ordinal (r >= 2 categories), and count variables.
+1. It works for continuous, ordinal ($\Large r \ge 2$ categories), and count variables.
 1. The initial positive-definite correlation check has been removed because the intermediate correlation `Sigma` from `rcorrvar` or `rcorrvar2` has already been used to generate variables (and therefore is positive-definite).
 
     a) the pairwise correlation matrix is checked in each iteration 
@@ -31,3 +32,5 @@ The error loop does increase simulation time, but it can improve accuracy in mos
 Below is a schematic of the algorithm.  In the figure, `rho_calc` is the calculated final correlation matrix updated in each iteration, `rho_calcold` is the final correlation matrix before the error loop, `rho0` is the target final correlation matrix, `Sigmaold` is the intermediate correlation matrix from the previous iteration, `it` is the iteration number, `q` is the row number, and `r` is the column number.  In addition, `extra_correct` refers to the setting in the simulation functions (see `rcorrvar` and `rcorrvar2`).
 
 ![Overview of Error Loop.](Error_Loop.png)
+
+## References

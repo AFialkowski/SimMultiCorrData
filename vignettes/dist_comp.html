@@ -74,7 +74,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<p>Headrick &amp; Kowalchuk (2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>) outlined a general method for comparing a simulated distribution <span class="math inline">\(\Large Y\)</span> to a given theoretical distribution <span class="math inline">\(\Large Y^*\)</span>. Note that these could easily be modified for comparison to an empirical vector of data:</p>
+<p><span class="citation">Headrick and Kowalchuk (2007)</span> outlined a general method for comparing a simulated distribution <span class="math inline">\(\Large Y\)</span> to a given theoretical distribution <span class="math inline">\(\Large Y^*\)</span>. Note that these could easily be modified for comparison to an empirical vector of data:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Obtain the standardized cumulants</strong> (skewness, kurtosis, fifth, and sixth) for <span class="math inline">\(\Large Y^*\)</span>. This can be done using <code>calc_theory</code> along with either the distribution name (plus up to 3 parameters) or the pdf fx (plus support bounds). In the case of an empirical vector of data, use <code>calc_moments</code> or <code>calc_fisherk</code>.</p></li>
 <li><p><strong>Obtain the constants</strong> for <span class="math inline">\(\Large Y\)</span>. This can be done using <code>find_constants</code> or by simulating the distribution with <code>nonnormvar1</code>.</p></li>
@@ -103,7 +103,7 @@ stcums &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span c
                      <span class="dt">seed =</span> <span class="dv">1234</span>)</code></pre></div>
 <pre><code>## Constants: Distribution  1  
 ## 
-## Constants calculation time: 0.008 minutes 
+## Constants calculation time: 0.009 minutes 
 ## Total Simulation time: 0.009 minutes</code></pre>
 <p>Look at the power method constants.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.matrix</span>(H_exp$constants, <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">6</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -255,6 +255,14 @@ z_prime</code></pre></div>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
+<div id="refs" class="references">
+<div id="ref-HeadKow">
+<p>Headrick, TC, and RK Kowalchuk. 2007. “The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data.” <em>Journal of Statistical Computation and Simulation</em> 77: 229–49. doi:<a href="https://doi.org/10.1080/10629360600605065">10.1080/10629360600605065</a>.</p>
+</div>
 </div>
 </div>
 

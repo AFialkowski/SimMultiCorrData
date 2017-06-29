@@ -13,7 +13,7 @@ vignette: >
 #knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-`SimMultiCorrData` generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009, <DOI:10.1016/j.csda.2008.02.032>).  All variables are generated from standard normal variables with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman's Third-Order (<DOI:10.1007/BF02293811>) or Headrick's Fifth-Order (<DOI:10.1016/S0167-9473(02)00072-5>) Polynomial Transformation.  Binary and ordinal variables are simulated using a modification of `GenOrd::ordsample`.  Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix `Sigma`.  In **Method 1**, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, <DOI:10.1002/asmb.901>).  In **Method 2**, the count variables are treated as ordinal (adapting Barbiero and Ferrari's 2015 modification of `GenOrd`, <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), to verify valid power method pdfs, and to calculate lower standardized kurtosis bounds.
+`SimMultiCorrData` generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009, <DOI:10.1016/j.csda.2008.02.032>).  All variables are generated from standard normal variables with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized cumulants using either Fleishman's Third-Order (<DOI:10.1007/BF02293811>) or Headrick's Fifth-Order (<DOI:10.1016/S0167-9473(02)00072-5>) Polynomial Transformation.  Binary and ordinal variables are simulated using a modification of `GenOrd::ordsample`.  Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation of the intermediate correlation matrix `Sigma`.  In **Method 1**, the intercorrelations involving count variables are determined using a simulation based, logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, <DOI:10.1002/asmb.901>).  In **Method 2**, the count variables are treated as ordinal (adapting Barbiero and Ferrari's 2015 modification of `GenOrd`, <DOI:10.1002/asmb.2072>).  There is an optional error loop that corrects the final correlation matrix to be within a user-specified precision value. The package also includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation matrix is within the possible correlation bounds (given the distributions of the simulated variables), summarize results (numerically or graphically), verify valid power method pdfs, and calculate lower standardized kurtosis bounds.
 
 ## Benefits of this package:
 
@@ -25,7 +25,7 @@ The main strengths of `SimMultiCorrData` are:
 
     * Simulate distributions whose higher moments are unknown or do not exist using Fleishman's third-order method.
     * Accurately reproduce non-normal data up to the sixth moment using Headrick's fifth-order method.
-    * Generate data with a wide range of standardized kurtosis values, given skewness and standardized fifth and sixth cumulants, using Headrick's   fifth-order method.
+    * Generate data with a wider range of standardized kurtosis values, given skewness and standardized fifth and sixth cumulants, using Headrick's   fifth-order method.
 
 1. Two distinct methods for generating count variables (see **Comparison of Method 1 and Method 2** vignette).  The user may test each to see which yields greater simulation accuracy.
 
@@ -35,11 +35,11 @@ The main strengths of `SimMultiCorrData` are:
 
 1. **Computation of feasible correlation bounds** based on data simulation method (see `valid_corr` for method 1 or `valid_corr2` for method 2).
 
-1. **Numerous attempts to reproduce the desired correlation matrix**, including correcting for non-positive-definite intermediate correlation matrices and an optional final error loop (see `error_loop`).  This error loop enables reproduction of many correlation structures that can not be achieved through other methods.
+1. **Numerous attempts to reproduce the desired correlation matrix**, including correcting for non-positive-definite intermediate correlation matrices and an optional final error loop (see **Overview of Error Loop** vignette).  This error loop enables reproduction of many correlation structures that can not be achieved through other methods.
 
 1. Function arguments (i.e. `seed`, `n`, `maxit`, `epsilon`) that allow the user to have **greater control** over simulation accuracy, speed, and reproducibility.
 
-1. **Detailed simulation results** include the simulation time (in minutes) and descriptions of the generated variables and the correlation structure.
+1. **Detailed simulation results**, including the simulation time (in minutes) and descriptions of the generated variables and the correlation structure.
 
 1. Additional functions to supplement the simulation process:
 

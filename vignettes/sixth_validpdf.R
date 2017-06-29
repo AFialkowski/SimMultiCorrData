@@ -12,8 +12,8 @@ for (i in 1:ncol(H_params)) {
   } else {
     params <- as.numeric(H_params[, i])
   }
-  H_stcum[, i] <- calc_theory(Dist = colnames(H_params)[i], 
-                              params = params)[3:6]
+  H_stcum[, i] <- round(calc_theory(Dist = colnames(H_params)[i], 
+                                    params = params)[3:6], 10)
 }
 colnames(H_stcum) <- colnames(Headrick.dist)
 rownames(H_stcum) <- c("skew", "skurtosis", "fifth", "sixth")
@@ -24,7 +24,7 @@ round(H_stcum[, 19:22], 5)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(0.5, 2, 0.5), seq(25.1, 25.2, 0.01),
-            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(0.5, 2, 0.5), 
+            seq(0.1, 0.3, 0.01), NULL, NULL, seq(0.5, 2, 0.5), 
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
             seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(0.5, 2, 0.5), 
             NULL, seq(0.5, 2, 0.5), seq(0.5, 2, 0.5))
@@ -32,9 +32,11 @@ H_consol <- list()
 
 start.time <- Sys.time()
 for (i in 1:ncol(H_stcum)) {
+  skurtsH <- ifelse(colnames(H_stcum)[i] == "Triangular", -0.5856216, 
+                    H_stcum[2, i])
   H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
-                                 skurts = H_stcum[2, i], fifths = H_stcum[3, i],
-                                 sixths = H_stcum[4, i], Six = Six[[i]])
+                                  skurts = skurtsH, fifths = H_stcum[3, i],
+                                  sixths = H_stcum[4, i], Six = Six[[i]])
 }
 stop.time <- Sys.time()
 Time <- round(difftime(stop.time, start.time, units = "min"), 3)

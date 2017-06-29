@@ -5,7 +5,6 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 library(SimMultiCorrData)
 library(printr)
 stcums <- calc_theory(Dist = "Exponential", params = 0.5)
-as.matrix(t(stcums))
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 H_exp <- nonnormvar1("Polynomial", means = stcums[1], vars = stcums[2]^2, 
@@ -15,6 +14,12 @@ H_exp <- nonnormvar1("Polynomial", means = stcums[1], vars = stcums[2]^2,
 
 ## ------------------------------------------------------------------------
 as.matrix(H_exp$constants, nrow = 1, ncol = 6, byrow = TRUE)
+
+## ------------------------------------------------------------------------
+as.matrix(round(H_exp$summary_targetcont[, c("Distribution", "mean", "sd", 
+                                             "skew", "skurtosis", "fifth", 
+                                             "sixth")], 5), nrow = 1, ncol = 7,
+          byrow = TRUE)
 
 ## ------------------------------------------------------------------------
 as.matrix(round(H_exp$summary_continuous[, c("Distribution", "mean", "sd", 

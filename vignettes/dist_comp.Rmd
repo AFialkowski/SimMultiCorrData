@@ -21,11 +21,11 @@ Headrick & Kowalchuk (2007, <DOI:10.1080/10629360600605065>) outlined a general 
 
 1. Determine whether these constants produce a **valid power method pdf**.  The results of `find_constants` or `nonnormvar1` indicate whether the constants yield an invalid or valid pdf.  The constants may also be checked using `pdf_check`.  If the constants generate an invalid pdf, the user should check if the kurtosis falls above the lower bound (using `calc_lower_skurt`).  If yes, a vector of sixth cumulant correction values should be used in `find_constants` or `nonnormvar1` to find the smallest correction that produces valid pdf constants.
 
-1. **Select a critical value** from $\Large Y^*$, i.e. $\Large y^*$ such that $\Large Pr(Y^* \ge y^*) = 0.05$.  This can be done using the appropriate quantile function and 1 - alpha value (i.e. `qexp(1 - 0.05)`).
+1. **Select a critical value** from $\Large Y^*$, i.e. $\Large y^*$ such that $\Large Pr(Y^* \ge y^*) = \alpha$.  This can be done using the appropriate quantile function and $\Large 1 - \alpha$ value (i.e. `qexp(1 - 0.05)`).
 
 1. **Solve** $\Large m_{2}^{1/2} * p(z') + m_{1} - y^* = 0$ for $\Large z'$, where $\Large m_{1}$ and $\Large m_{2}$ are the 1st and 2nd moments of $\Large Y^*$.
 
-1. **Calculate** $\Large 1 - \Phi(z')$, the corresponding probability for the approximation $\Large Y$ to $\Large Y^*$ (i.e. $\Large 1 - \Phi(z') = 0.05$) and compare to target value alpha.
+1. **Calculate** $\Large 1 - \Phi(z')$, the corresponding probability for the approximation $\Large Y$ to $\Large Y^*$ (i.e. $\Large 1 - \Phi(z') = 0.05$) and compare to the target value $\Large \alpha$.
 
 1. **Plot a parametric graph** of $\Large Y^*$ and $\Large Y$.  This can be done with a set of constants using `plot_pdf_theory` (`overlay` = TRUE) or with a simulated vector of data using `plot_sim_pdf_theory` (`overlay` = TRUE).  If comparing to an empirical vector of data, use `plot_pdf_ext` or `plot_sim_pdf_ext`.
 
@@ -33,12 +33,11 @@ Headrick & Kowalchuk (2007, <DOI:10.1080/10629360600605065>) outlined a general 
 Use these steps to compare a simulated **exponential(mean = 2) variable** to the theoretical exponential(mean = 2) density.  (Note that the `printr` package is invoked to display the tables.)
 
 ### Step 1: Obtain the standardized cumulants
-In R, the exponential parameter is rate <- 1/mean.
+In R, the exponential parameter is `rate <- 1/mean`.
 ```{r, warning = FALSE, message = FALSE}
 library(SimMultiCorrData)
 library(printr)
 stcums <- calc_theory(Dist = "Exponential", params = 0.5)
-as.matrix(t(stcums))
 ```
 
 ### Step 2: Simulate the variable
@@ -55,7 +54,15 @@ Look at the power method constants.
 as.matrix(H_exp$constants, nrow = 1, ncol = 6, byrow = TRUE)
 ```
 
-Look at a summary of the distribution.
+Look at a summary of the target distribution.
+```{r}
+as.matrix(round(H_exp$summary_targetcont[, c("Distribution", "mean", "sd", 
+                                             "skew", "skurtosis", "fifth", 
+                                             "sixth")], 5), nrow = 1, ncol = 7,
+          byrow = TRUE)
+```
+
+Compare to a summary of the simulated distribution.
 ```{r}
 as.matrix(round(H_exp$summary_continuous[, c("Distribution", "mean", "sd", 
                                              "skew", "skurtosis", "fifth", 
@@ -69,7 +76,7 @@ H_exp$valid.pdf
 ```
 
 ### Step 4: Select a critical value
-Let alpha = 0.05.
+Let $\Large \alpha = 0.05$.
 ```{r}
 y_star <- qexp(1 - 0.05, rate = 0.5) # note that rate = 1/mean
 y_star
@@ -92,7 +99,7 @@ z_prime
 ```{r}
 1 - pnorm(z_prime)
 ```
-This is approximately equal to the alpha value of 0.05, indicating the method provides a **good approximation to the actual distribution.**
+This is approximately equal to the $\Large \alpha$ value of 0.05, indicating the method provides a **good approximation to the actual distribution.**
 
 ### Step 7: Plot graphs
 ```{r, warning = FALSE, message = FALSE}

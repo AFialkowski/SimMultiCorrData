@@ -19,7 +19,7 @@ There are two simulation pathways which differ primarily according to the calcul
 First, the intermediate correlation calculations which are equivalent in the two pathways will be discussed by variable type.
 
 ### Ordinal Variables:
-Correlations are computed pairwise.  If both variables are **binary**, the method of Demirtas et al. (2012, <DOI:10.1002/sim.5362>) is used to find the *tetrachoric correlation* (code adapted from \code{\link[BinNonNor]{Tetra.Corr.BB}}).  The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale.  The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete.  This method is based on Emrich and Piedmonte's (1991, <DOI:10.1080/00031305.1991.10475828>) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution: 
+Correlations are computed pairwise.  If both variables are **binary**, the method of Demirtas et al. (2012, <DOI:10.1002/sim.5362>) is used to find the *tetrachoric correlation* (code adapted from `BinNonNor::Tetra.Corr.BB`).  The tetrachoric correlation is an estimate of the binary correlation measured on a continuous scale.  The assumptions are that the binary variables arise from latent normal variables, and the actual trait is continuous and not discrete.  This method is based on Emrich and Piedmonte's (1991, <DOI:10.1080/00031305.1991.10475828>) work, in which the joint binary distribution is determined from the third and higher moments of a multivariate normal distribution: 
 
 Let $\Large Y_{1}$ and $\Large Y_{2}$ be binary variables with $\Large E[Y_{1}] = Pr(Y_{1} = 1) = p_{1}$, $\Large E[Y_{2}] = Pr(Y_{2} = 1) = p_{2}$, and correlation $\Large \rho_{y1y2}$.  
 
@@ -65,7 +65,7 @@ The intermediate correlations used in method 1 are more simulation based than th
     a) *Poisson variables:* `findintercorr_cat_pois` is called to calculate the intermediate MVN correlation for all variables.
     b) *Negative Binomial variables:* `findintercorr_cat_nb` is called to calculate the intermediate MVN correlation for all variables.
 
-1. The **continuous - count variable** correlations are based on an extension of the methods of *Amatya & Demirtas* (2015) and *Demirtas et al.* (2012), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007, <DOI:10.1080/10629360600605065>).  The intermediate correlations are the ratio of the target correlations to the correction factor.
+1. The **continuous - count variable** correlations are based on an extension of the methods of *Amatya & Demirtas* (2015) and *Demirtas et al.* (2012, <DOI:10.1002/sim.5362>), in which the correlation correction factor is the product of the upper Frechet-Hoeffding bound on the correlation between the count variable and the normal variable used to generate it and the power method correlation between the continuous variable and the normal variable used to generate it (see Headrick & Kowalchuk, 2007, <DOI:10.1080/10629360600605065>).  The intermediate correlations are the ratio of the target correlations to the correction factor.
 
     a) *Poisson variables:* `findintercorr_cont_pois` is called to calculate the intermediate MVN correlation for all variables.
     b) *Negative Binomial variables:* `findintercorr_cont_nb` is called to calculate the intermediate MVN correlation for all variables.
@@ -84,9 +84,9 @@ The algorithm used in the simulation function `rcorrvar` that employs method 1 i
 
 1. The intermediate correlation matrix `Sigma` is calculated using `findintercorr`.  Note that this will return a matrix that is not positive-definite.  If so, there will be a message that it may not be possible to produce variables with the desired distributions.  Also, the algorithm of Higham (2002) is used (see `Matrix::nearPD`) to produce the nearest positive-definite matrix and a message is given.
 
-1. `k <- k_cat + k_cont + k_pois + k_nb` multivariate normal variables with correlation matrix `Sigma` are generated using eigen-value and spectral value decompositions on a X <- n x k MVN(0,1) matrix.
+1. `k <- k_cat + k_cont + k_pois + k_nb` multivariate normal variables ($\Large X_{nxk}$) with correlation matrix `Sigma` are generated using eigen-value and spectral value decompositions on a $\Large MVN_{nxk}(0,1)$ matrix.
 
-1. The variables are generated from X using the appropriate transformations (see **Variable Types** vignette)
+1. The variables are generated from $\Large X_{nxk}$ using the appropriate transformations (see **Variable Types** vignette)
 
 1. The final correlation matrix is calculated, and the maximum error (`maxerr`) from the target correlation matrix is found.
 

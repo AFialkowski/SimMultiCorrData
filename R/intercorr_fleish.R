@@ -28,7 +28,7 @@
 #'
 intercorr_fleish <- function(r, c, a) {
   if (nrow(a) == 1 | nrow(a) == 2) {
-    f < -  numeric(1)
+    f <-  numeric(1)
     a1 <- c[1, 1]
     b1 <- c[1, 2]
     d1 <- c[1, 4]
@@ -42,7 +42,7 @@ intercorr_fleish <- function(r, c, a) {
     return(f)
   }
   if (nrow(a) == 3) {
-    f < -  numeric(3)
+    f <-  numeric(3)
     a1 <- c[1, 1]
     b1 <- c[1, 2]
     d1 <- c[1, 4]

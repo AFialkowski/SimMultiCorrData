@@ -227,7 +227,6 @@ findintercorr <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
                           rho = NULL, seed = 1234, epsilon = 0.001,
                           maxit = 1000) {
   k <- k_cat + k_cont + k_pois + k_nb
-  Spearman <- FALSE
   if (ncol(rho) != k) {
     stop("Dimension of correlation matrix does not match the number of
          variables!")

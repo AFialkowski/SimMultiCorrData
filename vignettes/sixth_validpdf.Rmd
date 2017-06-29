@@ -13,13 +13,13 @@ vignette: >
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
 ```
 
-Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation (2002, <DOI:10.1016/S0167-9473(02)00072-5>), Headrick & Kowalchuk (2007, <DOI:10.1080/10629360600605065>) proposed that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and the smallest value that generates a valid pdf is chosen.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explains how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order (<DOI:10.1007/BF02293811>) and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
+Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation (2002, <DOI:10.1016/S0167-9473(02)00072-5>), Headrick & Kowalchuk (2007, <DOI:10.1080/10629360600605065>) proposed that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and then choose the smallest value that generates a valid pdf.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explained how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order (<DOI:10.1007/BF02293811>) and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
 
 ## Example
 The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.  (Note that the `printr` package is invoked to display the tables.)
 
 ### Step 1) Find the theoretical standardized cumulants for each distribution.
-The parameters are stored in `H_params`.  The order of the columns corresponds to the order of the columns in `Headrick.dist`.  The columns of `H_params` are named as inputs for `calc_theory`.  Please see the appropriate R help page concerning the parameterization of each distribution.
+The parameters are stored in `H_params`.  The order of the columns corresponds to the order of the columns in `Headrick.dist`.  The columns of `H_params` are named as inputs for `calc_theory`.  Please see the appropriate R help page concerning the parameterization of each distribution.  We are rounding the calculated standardized cumulants to *10* decimal places to ensure that the symmetric distributions have $\Large \gamma_{1} = 0$ and $\Large \gamma_{3} = 0$.
 ```{r, warning = FALSE, message = FALSE}
 library(SimMultiCorrData)
 library(printr)
@@ -30,8 +30,8 @@ for (i in 1:ncol(H_params)) {
   } else {
     params <- as.numeric(H_params[, i])
   }
-  H_stcum[, i] <- calc_theory(Dist = colnames(H_params)[i], 
-                              params = params)[3:6]
+  H_stcum[, i] <- round(calc_theory(Dist = colnames(H_params)[i], 
+                                    params = params)[3:6], 10)
 }
 colnames(H_stcum) <- colnames(Headrick.dist)
 rownames(H_stcum) <- c("skew", "skurtosis", "fifth", "sixth")
@@ -44,10 +44,10 @@ round(H_stcum[, 19:22], 5)
 Note that the standardized cumulants match those found by Headrick, except for the Gamma($\Large \alpha = 10,\ \beta = 10$) distribution.  Either there is a mistake in Headrick's table, or he is using a different parameterization.
 
 ### Step 2) Use the cumulants to find the constants for each distribution.
-The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time.  If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. `Six = seq(0.1, 10, 0.1)`.  In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen.
+The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time.  If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. `Six = seq(0.1, 10, 0.1)`.  In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen.  In the case of the *Triangular* distribution, the standardized kurtosis has been changed to the lower kurtosis boundary (found using `calc_lower_skurt`).
 ```{r, warning = FALSE, message = FALSE}
 Six <- list(NULL, seq(1.7, 1.8, 0.01), seq(0.5, 2, 0.5), seq(25.1, 25.2, 0.01),
-            seq(0.2, 0.3, 0.01), seq(0.01, 0.05, 0.01), NULL, seq(0.5, 2, 0.5), 
+            seq(0.1, 0.3, 0.01), NULL, NULL, seq(0.5, 2, 0.5), 
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
             seq(0.01, 0.05, 0.01), seq(0.15, 0.2, 0.01), seq(0.5, 2, 0.5), 
             NULL, seq(0.5, 2, 0.5), seq(0.5, 2, 0.5))
@@ -55,9 +55,11 @@ H_consol <- list()
 
 start.time <- Sys.time()
 for (i in 1:ncol(H_stcum)) {
+  skurtsH <- ifelse(colnames(H_stcum)[i] == "Triangular", -0.5856216, 
+                    H_stcum[2, i])
   H_consol[[i]] <- find_constants(method = "Polynomial", skews = H_stcum[1, i],
-                                 skurts = H_stcum[2, i], fifths = H_stcum[3, i],
-                                 sixths = H_stcum[4, i], Six = Six[[i]])
+                                  skurts = skurtsH, fifths = H_stcum[3, i],
+                                  sixths = H_stcum[4, i], Six = Six[[i]])
 }
 stop.time <- Sys.time()
 Time <- round(difftime(stop.time, start.time, units = "min"), 3)
@@ -195,6 +197,8 @@ as.matrix(round(B$summary_continuous[, c("Distribution", "mean", "sd", "skew",
           ncol = 7, byrow = TRUE)
 B$valid.pdf
 ```
+
+The distributions simulated with the sixth cumulant corrections are closer to the target distributions.
 
 *Compare the results graphically*.   
 

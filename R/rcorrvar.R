@@ -670,7 +670,7 @@ rcorrvar <- function(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     for (i in 1:k_cat) {
       summary_cat[[i]] <- as.data.frame(cbind(append(marginal[[i]], 1),
                                               cumsum(table(Y_cat[, i]))/n))
-      colnames(summary_cat[[i]]) = c("Target", "Simulated")
+      colnames(summary_cat[[i]]) <- c("Target", "Simulated")
     }
     result <- append(result, list(ordinal_variables = as.data.frame(Y_cat),
                                   summary_ordinal = summary_cat))

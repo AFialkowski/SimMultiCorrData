@@ -1,6 +1,6 @@
 #' @title Simulation of Correlated Data with Multiple Variable Types
 #'
-#' @description This package generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables
+#' @description \pkg{SimMultiCorrData} generates continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative Binomial) variables
 #'     with a specified correlation matrix.  It can also produce a single continuous variable.  This package can be used to simulate data sets that mimic
 #'     real-world situations (i.e. clinical data sets, plasmodes, as in Vaughan et al., 2009, \doi{10.1016/j.csda.2008.02.032}).  All variables are generated from standard normal variables
 #'     with an imposed intermediate correlation matrix.  Continuous variables are simulated by specifying mean, variance, skewness, standardized kurtosis,

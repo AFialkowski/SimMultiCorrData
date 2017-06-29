@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-27" />
+<meta name="date" content="2017-06-29" />
 
 <title>Overview of Error Loop</title>
 
@@ -32,14 +32,14 @@
 
 <h1 class="title toc-ignore">Overview of Error Loop</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-27</em></h4>
+<h4 class="date"><em>2017-06-29</em></h4>
 
 
 
-<p>The <strong>error loop</strong> may be used to correct the final correlation of simulated variables to be within a user-specified precision value (<code>epsilon</code>) of the target correlation. It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error is less than <code>epsilon</code> or the number of iterations exceeds the maximum number set by the user (<code>maxit</code>). It uses <code>SimMultiCorrData::error_vars</code> to simulate the pair of variables in each iteration. The function is a modification of Barbiero &amp; Ferrari’s <code>ordcont</code> function in the <code>GenOrd</code> package in the following ways:</p>
+<p>The <strong>error loop</strong> may be used to correct the final correlation of simulated variables to be within a user-specified precision value (<code>epsilon</code>) of the target correlation. It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error is less than <code>epsilon</code> or the number of iterations exceeds the maximum number set by the user (<code>maxit</code>). It uses <code>SimMultiCorrData::error_vars</code> to simulate the pair of variables in each iteration. The function modifies Barbiero &amp; Ferrari’s <code>ordcont</code> function in the <code>GenOrd</code> package in the following ways:</p>
 <ol style="list-style-type: decimal">
 <li>It works for continuous, ordinal (r &gt;= 2 categories), and count variables.</li>
-<li><p>The initial positive-definite correlation check has been removed because the intermediate correlation <code>Sigma</code> from <code>rcorrvar</code> or <code>rcorrvar2</code> has already been used to generate variables.</p>
+<li><p>The initial positive-definite correlation check has been removed because the intermediate correlation <code>Sigma</code> from <code>rcorrvar</code> or <code>rcorrvar2</code> has already been used to generate variables (and therefore is positive-definite).</p>
 <ol style="list-style-type: lower-alpha">
 <li>the pairwise correlation matrix is checked in each iteration</li>
 <li>if necessary, this matrix is converted to the nearest positive-definite matrix using the method of Higham (2002) and the <code>Matrix::nearPD</code> function</li>

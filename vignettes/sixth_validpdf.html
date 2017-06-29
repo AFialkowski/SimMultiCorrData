@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-27" />
+<meta name="date" content="2017-06-29" />
 
 <title>Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</title>
 
@@ -70,17 +70,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-27</em></h4>
+<h4 class="date"><em>2017-06-29</em></h4>
 
 
 
-<p>Sometimes a target (continuous) distribution’s standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf. This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing. In the case of Headrick’s fifth-order approximation (2002, <a href="DOI:10.1016/S0167-9473(02)00072-5" class="uri">DOI:10.1016/S0167-9473(02)00072-5</a>), Headrick &amp; Kowalchuk (2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>) proposed that a correction can be used to increase the sixth cumulant’s value in order to produce a valid pdf. This is discussed in the help pages for <code>find_constants</code> and the simulation functions (<code>nonnormvar1</code>, <code>rcorrvar</code>, and <code>rcorrvar2</code>). These functions allow the user to input a <code>Six</code> vector of correction values, and the smallest value that generates a valid pdf is chosen. When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs. His 2007 paper with Kowalchuk explains how to verify if a given set of constants generates a valid pdf (for both Fleishman’s third-order (<a href="DOI:10.1007/BF02293811" class="uri">DOI:10.1007/BF02293811</a>) and Headrick’s fifth-order method). These checks are implemented in <code>pdf_check</code>, which is called by <code>find_constants</code>.</p>
+<p>Sometimes a target (continuous) distribution’s standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf. This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing. In the case of Headrick’s fifth-order approximation (2002, <a href="DOI:10.1016/S0167-9473(02)00072-5" class="uri">DOI:10.1016/S0167-9473(02)00072-5</a>), Headrick &amp; Kowalchuk (2007, <a href="DOI:10.1080/10629360600605065" class="uri">DOI:10.1080/10629360600605065</a>) proposed that a correction can be used to increase the sixth cumulant’s value in order to produce a valid pdf. This is discussed in the help pages for <code>find_constants</code> and the simulation functions (<code>nonnormvar1</code>, <code>rcorrvar</code>, and <code>rcorrvar2</code>). These functions allow the user to input a <code>Six</code> vector of correction values, and then choose the smallest value that generates a valid pdf. When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs. His 2007 paper with Kowalchuk explained how to verify if a given set of constants generates a valid pdf (for both Fleishman’s third-order (<a href="DOI:10.1007/BF02293811" class="uri">DOI:10.1007/BF02293811</a>) and Headrick’s fifth-order method). These checks are implemented in <code>pdf_check</code>, which is called by <code>find_constants</code>.</p>
 <div id="example" class="section level2">
 <h2>Example</h2>
 <p>The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick’s Table 1 distributions (given in <code>Headrick.dist</code>), and compares distributions generated with the corrections to those generated without the corrections. (Note that the <code>printr</code> package is invoked to display the tables.)</p>
 <div id="step-1-find-the-theoretical-standardized-cumulants-for-each-distribution." class="section level3">
 <h3>Step 1) Find the theoretical standardized cumulants for each distribution.</h3>
-<p>The parameters are stored in <code>H_params</code>. The order of the columns corresponds to the order of the columns in <code>Headrick.dist</code>. The columns of <code>H_params</code> are named as inputs for <code>calc_theory</code>. Please see the appropriate R help page concerning the parameterization of each distribution.</p>
+<p>The parameters are stored in <code>H_params</code>. The order of the columns corresponds to the order of the columns in <code>Headrick.dist</code>. The columns of <code>H_params</code> are named as inputs for <code>calc_theory</code>. Please see the appropriate R help page concerning the parameterization of each distribution. We are rounding the calculated standardized cumulants to <em>10</em> decimal places to ensure that the symmetric distributions have <span class="math inline">\(\Large \gamma_{1} = 0\)</span> and <span class="math inline">\(\Large \gamma_{3} = 0\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SimMultiCorrData)
 <span class="kw">library</span>(printr)
 H_stcum &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">nrow =</span> <span class="dv">4</span>, <span class="dt">ncol =</span> <span class="kw">ncol</span>(Headrick.dist))
@@ -90,8 +90,8 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_params)) {
   } else {
     params &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(H_params[, i])
   }
-  H_stcum[, i] &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span class="dt">Dist =</span> <span class="kw">colnames</span>(H_params)[i], 
-                              <span class="dt">params =</span> params)[<span class="dv">3</span>:<span class="dv">6</span>]
+  H_stcum[, i] &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">calc_theory</span>(<span class="dt">Dist =</span> <span class="kw">colnames</span>(H_params)[i], 
+                                    <span class="dt">params =</span> params)[<span class="dv">3</span>:<span class="dv">6</span>], <span class="dv">10</span>)
 }
 <span class="kw">colnames</span>(H_stcum) &lt;-<span class="st"> </span><span class="kw">colnames</span>(Headrick.dist)
 <span class="kw">rownames</span>(H_stcum) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;skew&quot;</span>, <span class="st">&quot;skurtosis&quot;</span>, <span class="st">&quot;fifth&quot;</span>, <span class="st">&quot;sixth&quot;</span>)
@@ -297,9 +297,9 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_params)) {
 </div>
 <div id="step-2-use-the-cumulants-to-find-the-constants-for-each-distribution." class="section level3">
 <h3>Step 2) Use the cumulants to find the constants for each distribution.</h3>
-<p>The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time. If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. <code>Six = seq(0.1, 10, 0.1)</code>. In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen.</p>
+<p>The sixth cumulant corrections will be chosen based on previous analysis in order to decrease computation time. If the user does not know what a sixth cumulant correction needs to be, a wide range with a small increment in values may be specified, i.e. <code>Six = seq(0.1, 10, 0.1)</code>. In situations where the user has a better idea of the necessary correction, a smaller vector should be chosen. In the case of the <em>Triangular</em> distribution, the standardized kurtosis has been changed to the lower kurtosis boundary (found using <code>calc_lower_skurt</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Six &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">seq</span>(<span class="fl">1.7</span>, <span class="fl">1.8</span>, <span class="fl">0.01</span>), <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), <span class="kw">seq</span>(<span class="fl">25.1</span>, <span class="fl">25.2</span>, <span class="fl">0.01</span>),
-            <span class="kw">seq</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.01</span>), <span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.01</span>), <span class="ot">NULL</span>, <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), 
+            <span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.01</span>), <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), 
             <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, <span class="ot">NULL</span>, 
             <span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.01</span>), <span class="kw">seq</span>(<span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.01</span>), <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), 
             <span class="ot">NULL</span>, <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))
@@ -307,14 +307,16 @@ H_consol &lt;-<span class="st"> </span><span class="kw">list</span>()
 
 start.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
+  skurtsH &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">colnames</span>(H_stcum)[i] ==<span class="st"> &quot;Triangular&quot;</span>, -<span class="fl">0.5856216</span>, 
+                    H_stcum[<span class="dv">2</span>, i])
   H_consol[[i]] &lt;-<span class="st"> </span><span class="kw">find_constants</span>(<span class="dt">method =</span> <span class="st">&quot;Polynomial&quot;</span>, <span class="dt">skews =</span> H_stcum[<span class="dv">1</span>, i],
-                                 <span class="dt">skurts =</span> H_stcum[<span class="dv">2</span>, i], <span class="dt">fifths =</span> H_stcum[<span class="dv">3</span>, i],
-                                 <span class="dt">sixths =</span> H_stcum[<span class="dv">4</span>, i], <span class="dt">Six =</span> Six[[i]])
+                                  <span class="dt">skurts =</span> skurtsH, <span class="dt">fifths =</span> H_stcum[<span class="dv">3</span>, i],
+                                  <span class="dt">sixths =</span> H_stcum[<span class="dv">4</span>, i], <span class="dt">Six =</span> Six[[i]])
 }
 stop.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 Time &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">difftime</span>(stop.time, start.time, <span class="dt">units =</span> <span class="st">&quot;min&quot;</span>), <span class="dv">3</span>)
 <span class="kw">cat</span>(<span class="st">&quot;Total computation time:&quot;</span>, Time, <span class="st">&quot;minutes </span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
-<pre><code>## Total computation time: 0.132 minutes</code></pre>
+<pre><code>## Total computation time: 0.025 minutes</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H_cons &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">nrow =</span> <span class="dv">7</span>, <span class="dt">ncol =</span> <span class="kw">ncol</span>(Headrick.dist))
 valid &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">ncol</span>(Headrick.dist))
 for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
@@ -365,7 +367,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.887926</td>
 <td align="right">1.347438</td>
 <td align="right">0.782367</td>
-<td align="right">1.103080</td>
+<td align="right">1.100185</td>
 <td align="right">0.907394</td>
 </tr>
 <tr class="odd">
@@ -383,7 +385,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.036052</td>
 <td align="right">-0.140177</td>
 <td align="right">0.067899</td>
-<td align="right">-0.038530</td>
+<td align="right">-0.037538</td>
 <td align="right">0.014980</td>
 </tr>
 <tr class="odd">
@@ -401,7 +403,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">0.000001</td>
 <td align="right">0.001808</td>
 <td align="right">0.000000</td>
-<td align="right">0.000623</td>
+<td align="right">0.000632</td>
 <td align="right">0.002780</td>
 </tr>
 <tr class="odd">
@@ -410,7 +412,7 @@ for (i in <span class="dv">1</span>:<span class="kw">ncol</span>(H_stcum)) {
 <td align="right">1.750000</td>
 <td align="right">2.000000</td>
 <td align="right">25.140000</td>
-<td align="right">0.240000</td>
+<td align="right">0.160000</td>
 <td align="right">NA</td>
 </tr>
 </tbody>
@@ -677,7 +679,7 @@ valid &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cla
 ## Constants calculation time: 0 minutes 
 ## Intercorrelation calculation time: 0.016 minutes 
 ## Error loop calculation time: 0 minutes 
-## Total Simulation time: 0.016 minutes</code></pre>
+## Total Simulation time: 0.017 minutes</code></pre>
 <p>Look at the maximum correlation error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">paste</span>(<span class="st">&quot;The maximum correlation error is &quot;</span>, <span class="kw">round</span>(A$maxerr, <span class="dv">5</span>), <span class="st">&quot;.&quot;</span>, 
           <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</code></pre></div>
@@ -717,7 +719,7 @@ valid2 &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cl
 ##  Constants: Distribution  2  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.005 minutes 
+## Intercorrelation calculation time: 0.004 minutes 
 ## Error loop calculation time: 0 minutes 
 ## Total Simulation time: 0.006 minutes</code></pre>
 <p>Look at the maximum correlation error:</p>
@@ -806,7 +808,7 @@ valid2 &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cl
 <td align="right">0.06174</td>
 <td align="right">2.86625</td>
 <td align="right">1.36530</td>
-<td align="right">22.26330</td>
+<td align="right">22.26331</td>
 </tr>
 </tbody>
 </table>
@@ -848,12 +850,13 @@ valid2 &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cl
 <td align="right">0.06998</td>
 <td align="right">2.68915</td>
 <td align="right">1.91011</td>
-<td align="right">27.97100</td>
+<td align="right">27.97101</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">B$valid.pdf</code></pre></div>
 <pre><code>## [1] &quot;TRUE&quot; &quot;TRUE&quot;</code></pre>
+<p>The distributions simulated with the sixth cumulant corrections are closer to the target distributions.</p>
 <p><em>Compare the results graphically</em>.</p>
 <p>Logistic Distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_sim_pdf_theory</span>(<span class="dt">sim_y =</span> A$continuous_variables[, <span class="dv">1</span>], 

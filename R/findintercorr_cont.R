@@ -82,7 +82,6 @@ findintercorr_cont <- function(method = c("Fleishman", "Polynomial"),
     }
     return(nleqslv(x = xguess, intercorr_poly, c = constants, a = rho_cont,
                    method = "Broyden",
-                   control = list(xtol = 1e-8, ftol = 1e-8, btol = 1e-6,
-                                  cndtol = 1e-12, sigma = 0.5, maxit = 1e8)))
+                   control = list(ftol = 1e-5)))
   }
 }

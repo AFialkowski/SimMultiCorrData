@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-27" />
+<meta name="date" content="2017-06-29" />
 
 <title>Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Comparison of Simulated Distribution to Theoretical Distribution or Empirical Data</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-27</em></h4>
+<h4 class="date"><em>2017-06-29</em></h4>
 
 
 
@@ -79,9 +79,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><strong>Obtain the standardized cumulants</strong> (skewness, kurtosis, fifth, and sixth) for <span class="math inline">\(\Large Y^*\)</span>. This can be done using <code>calc_theory</code> along with either the distribution name (plus up to 3 parameters) or the pdf fx (plus support bounds). In the case of an empirical vector of data, use <code>calc_moments</code> or <code>calc_fisherk</code>.</p></li>
 <li><p><strong>Obtain the constants</strong> for <span class="math inline">\(\Large Y\)</span>. This can be done using <code>find_constants</code> or by simulating the distribution with <code>nonnormvar1</code>.</p></li>
 <li><p>Determine whether these constants produce a <strong>valid power method pdf</strong>. The results of <code>find_constants</code> or <code>nonnormvar1</code> indicate whether the constants yield an invalid or valid pdf. The constants may also be checked using <code>pdf_check</code>. If the constants generate an invalid pdf, the user should check if the kurtosis falls above the lower bound (using <code>calc_lower_skurt</code>). If yes, a vector of sixth cumulant correction values should be used in <code>find_constants</code> or <code>nonnormvar1</code> to find the smallest correction that produces valid pdf constants.</p></li>
-<li><p><strong>Select a critical value</strong> from <span class="math inline">\(\Large Y^*\)</span>, i.e. <span class="math inline">\(\Large y^*\)</span> such that <span class="math inline">\(\Large Pr(Y^* \ge y^*) = 0.05\)</span>. This can be done using the appropriate quantile function and 1 - alpha value (i.e. <code>qexp(1 - 0.05)</code>).</p></li>
+<li><p><strong>Select a critical value</strong> from <span class="math inline">\(\Large Y^*\)</span>, i.e. <span class="math inline">\(\Large y^*\)</span> such that <span class="math inline">\(\Large Pr(Y^* \ge y^*) = \alpha\)</span>. This can be done using the appropriate quantile function and <span class="math inline">\(\Large 1 - \alpha\)</span> value (i.e. <code>qexp(1 - 0.05)</code>).</p></li>
 <li><p><strong>Solve</strong> <span class="math inline">\(\Large m_{2}^{1/2} * p(z') + m_{1} - y^* = 0\)</span> for <span class="math inline">\(\Large z'\)</span>, where <span class="math inline">\(\Large m_{1}\)</span> and <span class="math inline">\(\Large m_{2}\)</span> are the 1st and 2nd moments of <span class="math inline">\(\Large Y^*\)</span>.</p></li>
-<li><p><strong>Calculate</strong> <span class="math inline">\(\Large 1 - \Phi(z')\)</span>, the corresponding probability for the approximation <span class="math inline">\(\Large Y\)</span> to <span class="math inline">\(\Large Y^*\)</span> (i.e. <span class="math inline">\(\Large 1 - \Phi(z') = 0.05\)</span>) and compare to target value alpha.</p></li>
+<li><p><strong>Calculate</strong> <span class="math inline">\(\Large 1 - \Phi(z')\)</span>, the corresponding probability for the approximation <span class="math inline">\(\Large Y\)</span> to <span class="math inline">\(\Large Y^*\)</span> (i.e. <span class="math inline">\(\Large 1 - \Phi(z') = 0.05\)</span>) and compare to the target value <span class="math inline">\(\Large \alpha\)</span>.</p></li>
 <li><p><strong>Plot a parametric graph</strong> of <span class="math inline">\(\Large Y^*\)</span> and <span class="math inline">\(\Large Y\)</span>. This can be done with a set of constants using <code>plot_pdf_theory</code> (<code>overlay</code> = TRUE) or with a simulated vector of data using <code>plot_sim_pdf_theory</code> (<code>overlay</code> = TRUE). If comparing to an empirical vector of data, use <code>plot_pdf_ext</code> or <code>plot_sim_pdf_ext</code>.</p></li>
 </ol>
 <div id="example" class="section level2">
@@ -89,33 +89,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Use these steps to compare a simulated <strong>exponential(mean = 2) variable</strong> to the theoretical exponential(mean = 2) density. (Note that the <code>printr</code> package is invoked to display the tables.)</p>
 <div id="step-1-obtain-the-standardized-cumulants" class="section level3">
 <h3>Step 1: Obtain the standardized cumulants</h3>
-<p>In R, the exponential parameter is rate &lt;- 1/mean.</p>
+<p>In R, the exponential parameter is <code>rate &lt;- 1/mean</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SimMultiCorrData)
 <span class="kw">library</span>(printr)
-stcums &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span class="dt">Dist =</span> <span class="st">&quot;Exponential&quot;</span>, <span class="dt">params =</span> <span class="fl">0.5</span>)
-<span class="kw">as.matrix</span>(<span class="kw">t</span>(stcums))</code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="right">mean</th>
-<th align="right">sd</th>
-<th align="right">skew</th>
-<th align="right">kurtosis</th>
-<th align="right">fifth</th>
-<th align="right">sixth</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">6</td>
-<td align="right">24</td>
-<td align="right">120</td>
-</tr>
-</tbody>
-</table>
+stcums &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span class="dt">Dist =</span> <span class="st">&quot;Exponential&quot;</span>, <span class="dt">params =</span> <span class="fl">0.5</span>)</code></pre></div>
 </div>
 <div id="step-2-simulate-the-variable" class="section level3">
 <h3>Step 2: Simulate the variable</h3>
@@ -152,7 +129,38 @@ stcums &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span c
 </tr>
 </tbody>
 </table>
-<p>Look at a summary of the distribution.</p>
+<p>Look at a summary of the target distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.matrix</span>(<span class="kw">round</span>(H_exp$summary_targetcont[, <span class="kw">c</span>(<span class="st">&quot;Distribution&quot;</span>, <span class="st">&quot;mean&quot;</span>, <span class="st">&quot;sd&quot;</span>, 
+                                             <span class="st">&quot;skew&quot;</span>, <span class="st">&quot;skurtosis&quot;</span>, <span class="st">&quot;fifth&quot;</span>, 
+                                             <span class="st">&quot;sixth&quot;</span>)], <span class="dv">5</span>), <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">7</span>,
+          <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Distribution</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">skew</th>
+<th align="right">skurtosis</th>
+<th align="right">fifth</th>
+<th align="right">sixth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mean</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">24</td>
+<td align="right">120</td>
+</tr>
+</tbody>
+</table>
+<p>Compare to a summary of the simulated distribution.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.matrix</span>(<span class="kw">round</span>(H_exp$summary_continuous[, <span class="kw">c</span>(<span class="st">&quot;Distribution&quot;</span>, <span class="st">&quot;mean&quot;</span>, <span class="st">&quot;sd&quot;</span>, 
                                              <span class="st">&quot;skew&quot;</span>, <span class="st">&quot;skurtosis&quot;</span>, <span class="st">&quot;fifth&quot;</span>, 
                                              <span class="st">&quot;sixth&quot;</span>)], <span class="dv">5</span>), <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">7</span>,
@@ -191,7 +199,7 @@ stcums &lt;-<span class="st"> </span><span class="kw">calc_theory</span>(<span c
 </div>
 <div id="step-4-select-a-critical-value" class="section level3">
 <h3>Step 4: Select a critical value</h3>
-<p>Let alpha = 0.05.</p>
+<p>Let <span class="math inline">\(\Large \alpha = 0.05\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y_star &lt;-<span class="st"> </span><span class="kw">qexp</span>(<span class="dv">1</span> -<span class="st"> </span><span class="fl">0.05</span>, <span class="dt">rate =</span> <span class="fl">0.5</span>) <span class="co"># note that rate = 1/mean</span>
 y_star</code></pre></div>
 <pre><code>## [1] 5.991465</code></pre>
@@ -213,7 +221,7 @@ z_prime</code></pre></div>
 <h3>Step 6: Calculate <span class="math inline">\(\Large \Phi(z')\)</span></h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> -<span class="st"> </span><span class="kw">pnorm</span>(z_prime)</code></pre></div>
 <pre><code>## [1] 0.04999249</code></pre>
-<p>This is approximately equal to the alpha value of 0.05, indicating the method provides a <strong>good approximation to the actual distribution.</strong></p>
+<p>This is approximately equal to the <span class="math inline">\(\Large \alpha\)</span> value of 0.05, indicating the method provides a <strong>good approximation to the actual distribution.</strong></p>
 </div>
 <div id="step-7-plot-graphs" class="section level3">
 <h3>Step 7: Plot graphs</h3>

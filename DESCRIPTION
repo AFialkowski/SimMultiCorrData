@@ -28,7 +28,7 @@ Description: Generate continuous (normal or non-normal), binary, ordinal, and co
 Depends: R (>= 3.3.1)
 License: GPL-2
 Imports:
-    BB, nleqslv, MASS, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, stats, utils
+    BB, nleqslv, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, stats, utils
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(wrap = FALSE)

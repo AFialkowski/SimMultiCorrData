@@ -2,8 +2,8 @@
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 stcums <- calc_theory(Dist = "Exponential", params = 0.5)
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------

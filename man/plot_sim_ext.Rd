@@ -6,7 +6,9 @@
 \usage{
 plot_sim_ext(sim_y, title = "Simulated Data Values", ylower = NULL,
   yupper = NULL, power_color = "dark blue", ext_y = NULL,
-  target_color = "dark green", nbins = 100)
+  target_color = "dark green", nbins = 100, legend.position = c(0.975,
+  0.9), legend.justification = c(1, 1), legend.text.size = 10,
+  title.text.size = 15, axis.text.size = 10, axis.title.size = 13)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -24,6 +26,18 @@ plot_sim_ext(sim_y, title = "Simulated Data Values", ylower = NULL,
 \item{target_color}{the histogram fill color for the target data (default = "dark green")}
 
 \item{nbins}{the number of bins to use in generating the histograms (default = 100)}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

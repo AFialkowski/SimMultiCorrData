@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k x k} intermediate matrix of correlations, where \code{k = k_cat + k_cont + k_pois + k_nb},
 #'     to be used in simulating variables with \code{\link[SimMultiCorrData]{rcorrvar}}.  The ordering of the variables must be
@@ -10,8 +10,8 @@
 #'     \code{\link[SimMultiCorrData]{rcorrvar}}, and would only be used separately if the user wants to find the intermediate correlation matrix
 #'     only.  The simulation functions also return the intermediate correlation matrix.
 #'
-#' @section Overview of Method 1:
-#'     The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy
+#' @section Overview of Correlation Method 1:
+#'     The intermediate correlations used in correlation method 1 are more simulation based than those in correlation method 2, which means that accuracy
 #'     increases with sample size and the number of repetitions.  In addition, specifying the seed allows for reproducibility.  In
 #'     addition, method 1 differs from method 2 in the following ways:
 #'
@@ -291,7 +291,7 @@ findintercorr <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
               sapply(z2, function(z2) {
                 integrate(function(z1) ((2 * pi * sqrt((1 - rho^2)))^-1) *
                     exp(-(z1^2 - 2 * rho * z1 * z2 + z2^2)/(2 * (1 - rho^2))),
-                    -Inf, qnorm(1 - marginal[[i]][1]))$value
+                          -Inf, qnorm(1 - marginal[[i]][1]))$value
               })
             }, -Inf, qnorm(1 - marginal[[j]][1]))$value -
               rho_cat[i, j] * sqrt(marginal[[i]][1] * (1 - marginal[[j]][1]) *
@@ -300,8 +300,8 @@ findintercorr <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
             phix1x2
           }
           Sigma_cat[i, j] <- suppressWarnings(dfsane(par = 0, fn = corr_bin,
-                                           control = list(trace = FALSE)))$par
-         } else {
+                                          control = list(trace = FALSE)))$par
+        } else {
           Sigma_cat[i, j] <-
             suppressWarnings(ordnorm(list(marginal[[i]], marginal[[j]]),
                                      matrix(c(1, rho_cat[i, j],

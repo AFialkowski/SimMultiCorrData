@@ -8,8 +8,8 @@
 #'     (\doi{10.1016/S0167-9473(02)00072-5}) Polynomial Transformation.  Binary and
 #'     ordinal variables are simulated using a modification of \code{\link[GenOrd]{GenOrd-package}}'s \code{\link[GenOrd]{ordsample}} function.
 #'     Count variables are simulated using the inverse cdf method.  There are two simulation pathways which differ primarily according to the calculation
-#'     of the intermediate correlation matrix.  In \bold{Method 1}, the intercorrelations involving count variables are determined using a simulation based,
-#'     logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, \doi{10.1002/asmb.901}).  In \bold{Method 2}, the count variables are treated as ordinal
+#'     of the intermediate correlation matrix.  In \bold{Correlation Method 1}, the intercorrelations involving count variables are determined using a simulation based,
+#'     logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, \doi{10.1002/asmb.901}).  In \bold{Correlation Method 2}, the count variables are treated as ordinal
 #'     (adapting Barbiero and Ferrari's 2015 modification of \code{\link[GenOrd]{GenOrd-package}}, \doi{10.1002/asmb.2072}).  There is an optional error loop that corrects the
 #'     final correlation matrix to be within a user-specified precision value. The package also
 #'     includes functions to calculate standardized cumulants for theoretical distributions or from real data sets, check if a target correlation
@@ -27,7 +27,7 @@
 #'
 #' 3) \bold{Function by Topic} describes each function, separated by topic.
 #'
-#' 4) \bold{Comparison of Method 1 and Method 2} describes the two simulation pathways that can be followed.
+#' 4) \bold{Comparison of Correlation Method 1 and Correlation Method 2} describes the two simulation pathways that can be followed.
 #'
 #' 5) \bold{Overview of Error Loop} details the algorithm involved in the optional error loop that improves the accuracy of the
 #' simulated variables' correlation matrix.

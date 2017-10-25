@@ -3,14 +3,14 @@
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 
 # Turn off scientific notation
 options(scipen = 999)
 
 # Set seed and sample size
-seed <- 1234
+seed <- 11
 n <- 10000
 
 # Continuous Distributions
@@ -25,7 +25,7 @@ M3 <- calc_theory(Dist = "Beta", params = c(4, 2))
 M <- cbind(M1, M2, M3)
 
 # Binary and Ordinal Distributions
-marginal <- list(0.3, c(0.2, 0.5, 0.9))
+marginal <- list(c(0.3, 0.75), c(0.2, 0.5, 0.9))
 support <- list() # default support will be generated inside simulation
 
 # Poisson Distributions
@@ -40,21 +40,18 @@ ncont <- ncol(M)
 npois <- length(lam)
 nnb <- length(size)
 
-# Create correlation matrix from a uniform distribution (-0.7, 0.7)
+# Create correlation matrix from a uniform distribution (0.2, 0.7)
 set.seed(seed)
 Rey <- diag(1, nrow = (ncat + ncont + npois + nnb))
 for (i in 1:nrow(Rey)) {
   for (j in 1:ncol(Rey)) {
-    if (i > j) Rey[i, j] <- runif(1, -0.7, 0.7)
+    if (i > j) Rey[i, j] <- runif(1, 0.2, 0.7)
     Rey[j, i] <- Rey[i, j]
   }
 }
 
-# Test for positive-definiteness
-library(Matrix)
-if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
-  Rey <- as.matrix(nearPD(Rey, corr = T, keepDiag = T)$mat)
-}
+# Check to see if Rey is positive-definite
+min(eigen(Rey, symmetric = TRUE)$values) < 0
 
 ## ---- warning = FALSE----------------------------------------------------
 Lower <- list()
@@ -109,14 +106,8 @@ A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               lam = lam, size = size, prob = prob, rho = Rey, seed = seed)
 
 ## ------------------------------------------------------------------------
-cat(paste("The maximum correlation error without the error loop is ", 
-          round(A$maxerr, 5), ".", sep = ""))
-
-## ------------------------------------------------------------------------
 Acorr_error = round(A$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors without the error loop is [", 
-          round(quantile(as.numeric(Acorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Acorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Acorr_error))
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
@@ -127,14 +118,8 @@ B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               errorloop = TRUE)
 
 ## ------------------------------------------------------------------------
-cat(paste("The maximum correlation error with the error loop is ", 
-          round(B$maxerr, 5), ".", sep = ""))
-
-## ------------------------------------------------------------------------
 Bcorr_error = round(B$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors with the error loop is [", 
-          round(quantile(as.numeric(Bcorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Bcorr_error))
 
 ## ------------------------------------------------------------------------
 knitr::kable(B$summary_ordinal[[1]], caption = "Variable 1")
@@ -221,14 +206,8 @@ C <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                nb_eps = nb_eps, rho = Rey, seed = seed)
 
 ## ------------------------------------------------------------------------
-cat(paste("The maximum correlation error without the error loop is ", 
-          round(C$maxerr, 5), ".", sep = ""))
-
-## ------------------------------------------------------------------------
 Ccorr_error = round(C$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors without the error loop is [", 
-          round(quantile(as.numeric(Ccorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Ccorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Ccorr_error))
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
 D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
@@ -239,14 +218,8 @@ D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                nb_eps = nb_eps, rho = Rey, seed = seed, errorloop = TRUE)
 
 ## ------------------------------------------------------------------------
-cat(paste("The maximum correlation error with the error loop is ", 
-          round(D$maxerr, 5), ".", sep = ""))
-
-## ------------------------------------------------------------------------
 Dcorr_error = round(D$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors with the error loop is [", 
-          round(quantile(as.numeric(Dcorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Dcorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Dcorr_error))
 
 ## ------------------------------------------------------------------------
 knitr::kable(D$summary_ordinal[[1]], caption = "Variable 1")

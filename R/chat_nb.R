@@ -19,7 +19,7 @@
 #' @return A scalar equal to the correlation upper bound.
 #' @references Please see references for \code{\link[SimMultiCorrData]{chat_pois}}.
 #'
-chat_nb <- function(size, prob, mu = NULL, n_unif = 10000, seed = 1234) {
+chat_nb <- function(size, prob = NULL, mu = NULL, n_unif = 10000, seed = 1234) {
   set.seed(seed)
   u <- runif(n_unif, 0, 1)
   if (length(prob) > 0) {

@@ -95,7 +95,9 @@ ordnorm <- function(marginal, rho, support = list(), epsilon = 0.001,
           if (rho0[q, r] * (rho0[q, r]/rhoordold[q, r]) >= 1) {
             rho[q, r] <- rhoold[q, r] * (1 + 0.1 * (1 - rhoold[q, r]) *
                                            sign(rho0[q, r] - rhoord[q, r]))
-          }	else {
+          }
+          if ((rho0[q, r] * (rho0[q, r]/rhoordold[q, r]) > -1) &
+              (rho0[q, r] * (rho0[q, r]/rhoordold[q, r]) < 1)) {
             rho[q, r] <- rhoold[q, r] * (rho0[q, r]/rhoord[q, r])
           }
           rho[r, q] <- rho[q, r]

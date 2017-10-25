@@ -17,13 +17,13 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 Sometimes a target (continuous) distribution's standardized cumulants yield polynomial transformation constants that generate an invalid power method pdf.  This is an important consideration when utilizing a simulated distribution to perform power analysis or hypothesis testing.  In the case of Headrick's fifth-order approximation [-@Head2002], @HeadKow proposed that a correction can be used to increase the sixth cumulant's value in order to produce a valid pdf.  This is discussed in the help pages for `find_constants` and the simulation functions (`nonnormvar1`, `rcorrvar`, and `rcorrvar2`).  These functions allow the user to input a `Six` vector of correction values, and then choose the smallest value that generates a valid pdf.  When Headrick generated his Table 1 (2002, p.691 - 692) containing the fifth-order polynomial transformation constants for some common symmetrical and asymmetrical theoretical densities, he did not discuss whether the constants generate valid power method pdfs.  His 2007 paper with Kowalchuk explained how to verify if a given set of constants generates a valid pdf (for both Fleishman's third-order [-@Fleish] and Headrick's fifth-order method).  These checks are implemented in `pdf_check`, which is called by `find_constants`.
 
 ## Example
-The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.  (Note that the `printr` package is invoked to display the tables.)
+The following example illustrates the use of the sixth cumulant correction vector when finding the constants for each of Headrick's Table 1 distributions (given in `Headrick.dist`), and compares distributions generated with the corrections to those generated without the corrections.  (Note that the `printr` @Printr package is invoked to display the tables.)
 
 ### Step 1) Find the theoretical standardized cumulants for each distribution.
 The parameters are stored in `H_params`.  The order of the columns corresponds to the order of the columns in `Headrick.dist`.  The columns of `H_params` are named as inputs for `calc_theory`.  Please see the appropriate R help page concerning the parameterization of each distribution.  We are rounding the calculated standardized cumulants to *10* decimal places to ensure that the symmetric distributions have $\Large \gamma_{1} = 0$ and $\Large \gamma_{3} = 0$.
 ```{r, warning = FALSE, message = FALSE}
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 H_stcum <- matrix(1, nrow = 4, ncol = ncol(Headrick.dist))
 for (i in 1:ncol(H_params)) {
   if (is.na(H_params[2, i])) {

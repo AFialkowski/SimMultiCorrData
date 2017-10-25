@@ -4,7 +4,7 @@
 \alias{chat_nb}
 \title{Calculate Upper Frechet-Hoeffding Correlation Bound: Negative Binomial - Normal Variables}
 \usage{
-chat_nb(size, prob, mu = NULL, n_unif = 10000, seed = 1234)
+chat_nb(size, prob = NULL, mu = NULL, n_unif = 10000, seed = 1234)
 }
 \arguments{
 \item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}

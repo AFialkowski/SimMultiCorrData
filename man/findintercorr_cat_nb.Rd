@@ -2,7 +2,7 @@
 % Please edit documentation in R/findintercorr_cat_nb.R
 \name{findintercorr_cat_nb}
 \alias{findintercorr_cat_nb}
-\title{Calculate Intermediate MVN Correlation for Ordinal - Negative Binomial Variables: Method 1}
+\title{Calculate Intermediate MVN Correlation for Ordinal - Negative Binomial Variables: Correlation Method 1}
 \usage{
 findintercorr_cat_nb(rho_cat_nb, marginal, size, prob, mu = NULL,
   nrand = 1e+05, seed = 1234)

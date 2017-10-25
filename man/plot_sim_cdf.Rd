@@ -6,7 +6,9 @@
 \usage{
 plot_sim_cdf(sim_y, title = "Empirical Cumulative Distribution Function",
   ylower = NULL, yupper = NULL, calc_cprob = FALSE, delta = 5,
-  color = "dark blue", fill = "blue", hline = "dark green")
+  color = "dark blue", fill = "blue", hline = "dark green",
+  text.size = 11, title.text.size = 15, axis.text.size = 10,
+  axis.title.size = 13)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -27,6 +29,14 @@ up to y = delta and the region on the plot is filled with a dashed horizontal li
 \item{fill}{the fill color if \code{calc_cprob} = TRUE (default = "blue)}
 
 \item{hline}{the dashed horizontal line color drawn at \code{delta} if \code{calc_cprob} = TRUE (default = "dark green")}
+
+\item{text.size}{the size of the text displaying the cumulative probability up to \code{delta} if \code{calc_cprob} = TRUE}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

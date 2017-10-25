@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Continuous - Negative Binomial Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Continuous - Negative Binomial Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k_cont x k_nb} intermediate matrix of correlations for the \code{k_cont} continuous and
 #'     \code{k_nb} Negative Binomial variables. It extends the method of Amatya & Demirtas (2015, \doi{10.1080/00949655.2014.953534}) to

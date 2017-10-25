@@ -1,7 +1,8 @@
 #' @title Generate Variables for Error Loop
 #'
 #' @description This function simulates the continuous, ordinal (r >= 2 categories), Poisson, or Negative Binomial variables
-#'     used in \code{\link[SimMultiCorrData]{error_loop}}.  It is called in each iteration and works pairwise (i.e. for 2 variables).
+#'     used in \code{\link[SimMultiCorrData]{error_loop}}.  It is called in each iteration, regenerates all variables, and calculates the
+#'     resulting correlation matrix.
 #'     This function would not ordinarily be called directly by the user.
 #'
 #' @param marginal a list of length equal \code{k_cat}; the i-th element is a vector of the cumulative
@@ -56,241 +57,73 @@
 error_vars <- function(marginal, support, method, means, vars, constants, lam,
                        size, prob, mu, Sigma, rho_calc, q, r, k_cat, k_cont,
                        k_pois, k_nb, Y_cat, Y, Yb, Y_pois, Y_nb, n, seed) {
-  eig <- eigen(matrix(c(1, Sigma[q, r], Sigma[r, q], 1), nrow = 2, ncol = 2,
-                     byrow = T), symmetric = TRUE)
-  sqrteigval <- diag(sqrt(eig$values), nrow = 2, ncol = 2)
+  eig <- eigen(Sigma, symmetric = TRUE)
+  sqrteigval <- diag(sqrt(pmax(eig$values, 0)))
   eigvec <- eig$vectors
   fry <- eigvec %*% sqrteigval
   set.seed(seed)
-  X <- matrix(rnorm(2*n), n)
+  X <- matrix(rnorm(ncol(Sigma) * n), n)
   X <- scale(X, TRUE, FALSE)
   X <- X %*% svd(X, nu = 0)$v
   X <- scale(X, FALSE, TRUE)
   X <- fry %*% t(X)
   X <- t(X)
-  if (q >= 1 & q <= k_cat & r >= 1 & r <= k_cat) {
-    X_cat <- X
-    Y_cat[, q] <- as.integer(cut(X_cat[, 1],
-                                 breaks = c(min(X_cat[, 1]) - 1,
-                                            qnorm(marginal[[q]]),
-                                            max(X_cat[, 1]) + 1)))
-    Y_cat[, q] <- support[[q]][Y_cat[, q]]
-    Y_cat[, r] <- as.integer(cut(X_cat[, 2],
-                                 breaks = c(min(X_cat[, 2]) - 1,
-                                            qnorm(marginal[[r]]),
-                                            max(X_cat[, 2]) + 1)))
-    Y_cat[, r] <- support[[r]][Y_cat[, r]]
-    rho_calc[q, r] <- cor(Y_cat[, c(q, r)])[1, 2]
-  }
-  if (q >= 1 & q <= k_cat & r >= (k_cat + 1) & r <= (k_cat + k_cont)) {
-    X_cat <- matrix(X[, 1], nrow = n, ncol = 1)
-    Y_cat[, q] <- as.integer(cut(X_cat[, 1],
-                                 breaks = c(min(X_cat[, 1]) - 1,
-                                            qnorm(marginal[[q]]),
-                                            max(X_cat[, 1]) + 1)))
-    Y_cat[, q] <- support[[q]][Y_cat[, q]]
-    X_cont <- matrix(X[, 2], nrow = n, ncol = 1)
-    if (method == "Fleishman") {
-      Y[, (r - k_cat)] <- constants[(r - k_cat), 1] +
-        constants[(r - k_cat), 2] * X_cont[, 1] +
-        constants[(r - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(r - k_cat), 4] * X_cont[, 1]^3
+  if (k_cat > 0) {
+    X_cat <- X[, 1:k_cat, drop = FALSE]
+    Y_cat <- matrix(1, nrow = n, ncol = ncol(X_cat))
+    for (i in 1:ncol(X_cat)) {
+      Y_cat[, i] <- as.integer(cut(X_cat[, i],
+                                   breaks = c(min(X_cat[, i]) - 1,
+                                              qnorm(marginal[[i]]),
+                                              max(X_cat[, i])  +  1)))
+      Y_cat[, i] <- support[[i]][Y_cat[, i]]
     }
-    if (method == "Polynomial") {
-      Y[, (r - k_cat)] <- constants[(r - k_cat), 1] +
-        constants[(r - k_cat), 2] * X_cont[, 1] +
-        constants[(r - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(r - k_cat), 4] * X_cont[, 1]^3 +
-        constants[(r - k_cat), 5] * X_cont[, 1]^4 +
-        constants[(r - k_cat), 6] * X_cont[, 1]^5
+  }
+  if (k_cont > 0) {
+    X_cont <- X[, (k_cat + 1):(k_cat + k_cont), drop = FALSE]
+    Y_cont <- matrix(1, nrow = n, ncol = ncol(X_cont))
+    Yb <- matrix(1, nrow = n, ncol = ncol(X_cont))
+    for (i in 1:ncol(X_cont)) {
+      if (method == "Fleishman") {
+        Yb[, i] <- constants[i, 1] +
+          constants[i, 2] * X_cont[, i] +
+          constants[i, 3] * X_cont[, i]^2 +
+          constants[i, 4] * X_cont[, i]^3
+      }
+      if (method == "Polynomial") {
+        Yb[, i] <- constants[i, 1] +
+          constants[i, 2] * X_cont[, i] +
+          constants[i, 3] * X_cont[, i]^2 +
+          constants[i, 4] * X_cont[, i]^3 +
+          constants[i, 5] * X_cont[, i]^4 +
+          constants[i, 6] * X_cont[, i]^5
+      }
+      Y_cont[, i] <- means[i] + sqrt(vars[i]) * Yb[, i]
     }
-    Yb[, (r - k_cat)] <- means[(r - k_cat)] +
-      sqrt(vars[(r - k_cat)]) * Y[, (r - k_cat)]
-    rho_calc[q, r] <- cor(cbind(Y_cat[, q], Yb[, (r - k_cat)]))[1, 2]
   }
-  if (q >= 1 & q <= k_cat & r >= (k_cat + k_cont + 1) &
-      r <= (k_cat + k_cont + k_pois)) {
-    X_cat <- matrix(X[, 1], nrow = n, ncol = 1)
-    X_pois <- matrix(X[, 2], nrow = n, ncol = 1)
-    Y_cat[, q] <- as.integer(cut(X_cat[, 1],
-                                 breaks = c(min(X_cat[, 1]) - 1,
-                                            qnorm(marginal[[q]]),
-                                            max(X_cat[, 1]) + 1)))
-    Y_cat[, q] <- support[[q]][Y_cat[, q]]
-    Y_pois[, r - (k_cat + k_cont)] <- qpois(pnorm(X_pois[, 1]),
-                                            lam[r - (k_cat + k_cont)])
-    rho_calc[q, r] <- cor(cbind(Y_cat[, q],
-                                Y_pois[, (r - (k_cat + k_cont))]))[1, 2]
+  if (k_pois > 0) {
+    X_pois <- X[, (k_cat + k_cont + 1):(k_cat + k_cont + k_pois),
+                drop = FALSE]
+    Y_pois <- matrix(1, nrow = n, ncol = ncol(X_pois))
+    for (i in 1:ncol(X_pois)) {
+      Y_pois[, i] <- qpois(pnorm(X_pois[, i]), lam[i])
+    }
   }
-  if (q >= 1 & q <= k_cat & r >= (k_cat + k_cont + k_pois + 1) &
-      r <= (k_cat + k_cont + k_pois + k_nb)) {
-    X_cat <- matrix(X[, 1], nrow = n, ncol = 1)
-    X_nb <- matrix(X[, 2], nrow = n, ncol = 1)
-    Y_cat[, q] <- as.integer(cut(X_cat[, 1],
-                                 breaks = c(min(X_cat[, 1]) - 1,
-                                            qnorm(marginal[[q]]),
-                                            max(X_cat[, 1]) + 1)))
-    Y_cat[, q] <- support[[q]][Y_cat[, q]]
+  if (k_nb > 0) {
+    X_nb <- X[, (k_cat + k_cont + k_pois + 1):ncol(X), drop = FALSE]
+    Y_nb <- matrix(1, nrow = n, ncol = ncol(X_nb))
     if (length(prob) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                prob[r - (k_cat + k_cont + k_pois)])
+      for (i in 1:ncol(X_nb)) {
+        Y_nb[, i] <- qnbinom(pnorm(X_nb[, i]), size[i], prob[i])
+      }
     }
     if (length(mu) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu = mu[r - (k_cat + k_cont + k_pois)])
+      for (i in 1:ncol(X_nb)) {
+        Y_nb[, i] <- qnbinom(pnorm(X_nb[, i]), size[i], mu = mu[i])
+      }
     }
-    rho_calc[q, r] <-
-      cor(cbind(Y_cat[, q], Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
   }
-  if (q >= (k_cat + 1) & q <= (k_cat + k_cont) & r >= (k_cat + 1) &
-      r <= (k_cat + k_cont)) {
-    X_cont <- X
-    if (method == "Fleishman") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3
-      Y[, (r - k_cat)] <- constants[(r - k_cat), 1] +
-        constants[(r - k_cat), 2] * X_cont[, 2] +
-        constants[(r - k_cat), 3] * X_cont[, 2]^2 +
-        constants[(r - k_cat), 4] * X_cont[, 2]^3
-    }
-    if (method == "Polynomial") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3 +
-        constants[(q - k_cat), 5] * X_cont[, 1]^4 +
-        constants[(q - k_cat), 6] * X_cont[, 1]^5
-      Y[, (r - k_cat)] <- constants[(r - k_cat), 1] +
-        constants[(r - k_cat), 2] * X_cont[, 2] +
-        constants[(r - k_cat), 3] * X_cont[, 2]^2 +
-        constants[(r - k_cat), 4] * X_cont[, 2]^3 +
-        constants[(r - k_cat), 5] * X_cont[, 2]^4 +
-        constants[(r - k_cat), 6] * X_cont[, 2]^5
-    }
-    Yb[, (q - k_cat)] <- means[(q - k_cat)] +
-      sqrt(vars[(q - k_cat)]) * Y[, (q - k_cat)]
-    Yb[, (r - k_cat)] <- means[(r - k_cat)] +
-      sqrt(vars[(r - k_cat)]) * Y[, (r - k_cat)]
-    rho_calc[q, r] <- cor(Yb[, c((q - k_cat), (r - k_cat))])[1, 2]
-  }
-  if (q >= (k_cat + 1) & q <= (k_cat + k_cont) & r >= (k_cat + k_cont + 1) &
-      r <= (k_cat + k_cont + k_pois)) {
-    X_cont <- matrix(X[, 1], nrow = n, ncol = 1)
-    X_pois <- matrix(X[, 2], nrow = n, ncol = 1)
-    if (method == "Fleishman") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3
-    }
-    if (method == "Polynomial") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3 +
-        constants[(q - k_cat), 5] * X_cont[, 1]^4 +
-        constants[(q - k_cat), 6] * X_cont[, 1]^5
-    }
-    Yb[, (q - k_cat)] <- means[(q - k_cat)] +
-      sqrt(vars[(q - k_cat)]) * Y[, (q - k_cat)]
-    Y_pois[, r - (k_cat + k_cont)] <- qpois(pnorm(X_pois[, 1]),
-                                            lam[r - (k_cat + k_cont)])
-    rho_calc[q, r] <- cor(cbind(Yb[, (q - k_cat)],
-                                Y_pois[, (r - (k_cat + k_cont))]))[1, 2]
-  }
-  if (q >= (k_cat + 1) & q <= (k_cat + k_cont) &
-      r >= (k_cat + k_cont + k_pois + 1) &
-      r <= (k_cat + k_cont + k_pois + k_nb)) {
-    X_cont <- matrix(X[, 1], nrow = n, ncol = 1)
-    X_nb <- matrix(X[, 2], nrow = n, ncol = 1)
-    if (method == "Fleishman") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3
-    }
-    if (method == "Polynomial") {
-      Y[, (q - k_cat)] <- constants[(q - k_cat), 1] +
-        constants[(q - k_cat), 2] * X_cont[, 1] +
-        constants[(q - k_cat), 3] * X_cont[, 1]^2 +
-        constants[(q - k_cat), 4] * X_cont[, 1]^3 +
-        constants[(q - k_cat), 5] * X_cont[, 1]^4 +
-        constants[(q - k_cat), 6] * X_cont[, 1]^5
-    }
-    Yb[, (q - k_cat)] <- means[(q - k_cat)] +
-      sqrt(vars[(q - k_cat)]) * Y[, (q - k_cat)]
-    if (length(prob) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                prob[r - (k_cat + k_cont + k_pois)])
-    }
-    if (length(mu) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu = mu[r - (k_cat + k_cont + k_pois)])
-    }
-    rho_calc[q, r] <- cor(cbind(Yb[, (q - k_cat)],
-                                Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
-  }
-  if (q >= (k_cat + k_cont + 1) & q <= (k_cat + k_cont + k_pois) &
-      r >= (k_cat + k_cont + 1) & r <= (k_cat + k_cont + k_pois)) {
-    X_pois <- X
-    Y_pois[, q-(k_cat + k_cont)] <- qpois(pnorm(X_pois[, 1]),
-                                          lam[q - (k_cat + k_cont)])
-    Y_pois[, r - (k_cat + k_cont)] <- qpois(pnorm(X_pois[, 2]),
-                                            lam[r - (k_cat + k_cont)])
-    rho_calc[q, r] <- cor(cbind(Y_pois[, (q - (k_cat + k_cont))],
-                                Y_pois[, (r - (k_cat + k_cont))]))[1, 2]
-  }
-  if (q >= (k_cat + k_cont + 1) & q <= (k_cat + k_cont + k_pois) &
-      r >= (k_cat + k_cont + k_pois + 1) &
-      r <= (k_cat + k_cont + k_pois + k_nb)) {
-    X_pois <- matrix(X[, 1], nrow = n, ncol = 1)
-    X_nb <- matrix(X[, 2], nrow = n, ncol = 1)
-    Y_pois[, q-(k_cat + k_cont)] <- qpois(pnorm(X_pois[, 1]),
-                                          lam[q - (k_cat + k_cont)])
-    if (length(prob) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                prob[r - (k_cat + k_cont + k_pois)])
-    }
-    if (length(mu) > 0) {
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[r - (k_cat + k_cont + k_pois)],
-                mu = mu[r - (k_cat + k_cont + k_pois)])
-    }
-    rho_calc[q, r] <- cor(cbind(Y_pois[, (q - (k_cat + k_cont))],
-                                Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
-  }
-  if (q >= (k_cat + k_cont + k_pois + 1) &
-      q <= (k_cat + k_cont + k_pois + k_nb) &
-      r >= (k_cat + k_cont + k_pois + 1) &
-      r <= (k_cat + k_cont + k_pois + k_nb)) {
-    X_nb <- X
-    if (length(prob) > 0) {
-      Y_nb[, q - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[q - (k_cat + k_cont + k_pois)],
-                prob[q - (k_cat + k_cont + k_pois)])
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 2]), size[r - (k_cat + k_cont + k_pois)],
-                prob[r - (k_cat + k_cont + k_pois)])
-    }
-    if (length(mu) > 0) {
-      Y_nb[, q - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 1]), size[q - (k_cat + k_cont + k_pois)],
-                mu = mu[q - (k_cat + k_cont + k_pois)])
-      Y_nb[, r - (k_cat + k_cont + k_pois)] <-
-        qnbinom(pnorm(X_nb[, 2]), size[r - (k_cat + k_cont + k_pois)],
-                mu = mu[r - (k_cat + k_cont + k_pois)])
-    }
-    rho_calc[q, r] <- cor(cbind(Y_nb[, (q - (k_cat + k_cont + k_pois))],
-                                Y_nb[, (r - (k_cat + k_cont + k_pois))]))[1, 2]
-  }
-  rho_calc[r, q] <- rho_calc[q, r]
-  return(list(Sigma = Sigma, rho_calc = rho_calc, Y_cat = Y_cat, Y = Y,
-              Yb = Yb, Y_pois = Y_pois, Y_nb = Y_nb))
+  rho_calc <- cor(cbind(Y_cat, Y_cont, Y_pois, Y_nb))
+  return(list(Sigma = Sigma, rho_calc = rho_calc, Y_cat = Y_cat, Y = Yb,
+              Yb = Y_cont, Y_pois = Y_pois, Y_nb = Y_nb))
 }

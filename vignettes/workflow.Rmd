@@ -25,16 +25,16 @@ A **step-by-step guideline** for data simulation is as follows:
 
 1. If continuous variables are desired, verify that the standardized kurtoses are greater than the **lower kurtosis bounds**.  These bounds can be calculated using `calc_lower_skurt`, given the skewness (for `method` = "Fleishman") and standardized fifth and sixth cumulants (for `method` = "Polynomial", referring to Headrick's method) for each variable.  Different seeds should be examined to see if a lower boundary can be found.  If a lower bound produces power method constants that yield an invalid pdf, the user may wish to provide a `Skurt` vector of kurtosis corrections.  In this case, `calc_lower_skurt` will attempt to find the smallest value that produces a kurtosis which yields a valid power method pdf.  In addition, if `method` = "Polynomial", a sixth cumulant correction vector (`Six`) may be used to facilitate convergence of the root-solving algorithm.  Since this step can take considerable computation time, the user may instead wish to perform this check after simulation if any of the variables have invalid power method pdfs.
 
-1. Check if the target correlation matrix falls within the **feasible correlation bounds**, given the parameters for the desired distributions.  The *ordering of the variables* in the correlation matrix *MUST* be 1st ordinal, 2nd continuous, 3rd Poisson, and 4th Negative Binomial.  These bounds can be calculated using either `valid_corr` (method 1) or `valid_corr2` (method 2).  Note that falling within these bounds does not guarantee that the target correlation can be achieved.  However, the check can alert the user to pairwise correlations that obviously fall outside the bounds.
+1. Check if the target correlation matrix falls within the **feasible correlation bounds**, given the parameters for the desired distributions.  The *ordering of the variables* in the correlation matrix *MUST* be 1st ordinal, 2nd continuous, 3rd Poisson, and 4th Negative Binomial.  These bounds can be calculated using either `valid_corr` (correlation method 1) or `valid_corr2` (correlation method 2).  Note that falling within these bounds does not guarantee that the target correlation can be achieved.  However, the check can alert the user to pairwise correlations that obviously fall outside the bounds.
 
-1. **Generate the variables** using either method 1 and `rcorrvar` or method 2 and `rcorrvar2`.  The user may want to try both to see which gives a better approximation to the variables and correlation matrix.  The accuracy and simulation time will vary by situation.  Again, the *ordering of the variables* in the correlation matrix *MUST* be 1st ordinal, 2nd continuous, 3rd Poisson, and 4th Negative Binomial.  In addition, the error loop can minimize the correlation errors in most situations.
+1. **Generate the variables** using either correlation method 1 and `rcorrvar` or correlation method 2 and `rcorrvar2`.  The user may want to try both to see which gives a better approximation to the variables and correlation matrix.  The accuracy and simulation time will vary by situation.  Again, the *ordering of the variables* in the correlation matrix *MUST* be 1st ordinal, 2nd continuous, 3rd Poisson, and 4th Negative Binomial.  In addition, the error loop can minimize the correlation errors in most situations.
 
 1. **Summarize the results numerically**.  The functions `rcorrvar` and `rcorrvar2` provide data.frames containing summaries by variable type and the maximum error between the final and target correlation matrices.  Additional summary functions include: `sim_cdf_prob` (to calculate a cumulative probability up to a given continuous y value), `power_norm_corr` (to calculate the correlation between a continuous variable and the generating standard normal variable), `stats_pdf` (to calculate the 100 * alpha percent symmetric trimmed mean, median, mode, and maximum height of a valid power method pdf).
 
 1. **Summarize the results graphically**.  Comparing the simulated data to the target distribution demonstrates simulation accuracy.  The graphing functions provided in this package can be used to display simulated data values, pdfs, or cdfs.  The target distributions (either by theoretical distribution name or given an empirical data set) can be added to the data value or pdf plots.  Cumulative probabilities can be added to the cdf plots (for continuous variables).
 
 ## Example
-The following example generates 3 continuous, 1 binary, 1 ordinal, 3 Poisson, and 2 Negative Binomial variables.  The standardized cumulants produce power method constants that yield valid pdfs, so no sixth cumulant corrections are needed.  See the **Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs** vignette for examples of using the sixth cumulant correction.  (Note that the `printr` package is invoked to display the tables.)
+The following example generates 3 continuous, 1 binary, 1 ordinal, 3 Poisson, and 2 Negative Binomial variables.  The standardized cumulants produce power method constants that yield valid pdfs, so no sixth cumulant corrections are needed.  See the **Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs** vignette for examples of using the sixth cumulant correction.  (Note that the `printr` @Printr package is invoked to display the tables.)
 
 The **continuous variables** come from the following distributions:
 
@@ -44,10 +44,10 @@ The **continuous variables** come from the following distributions:
 
 The **ordinal variables** have the following cumulative probabilities:
 
-1. 0.3 (*2 categories*)
+1. c(0.3, 0.75) (*3 categories*)
 1. c(0.2, 0.5, 0.9) (*4 categories*)
 
-The last probability in each case is assumed to be 1, and should not be included.  The binary variables do not have to be listed first.
+The last probability in each case is assumed to be 1, and should not be included.
 
 The **Poisson variables** have the following lambda (mean, `lam`) values:
 
@@ -64,14 +64,14 @@ Either success probabilities (`prob`) or means (`mu`) should be given for all va
 
 ### Step 1: Set up the distributions and obtain the standardized cumulants
 ```{r, warning = FALSE, message = FALSE}
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 
 # Turn off scientific notation
 options(scipen = 999)
 
 # Set seed and sample size
-seed <- 1234
+seed <- 11
 n <- 10000
 
 # Continuous Distributions
@@ -86,7 +86,7 @@ M3 <- calc_theory(Dist = "Beta", params = c(4, 2))
 M <- cbind(M1, M2, M3)
 
 # Binary and Ordinal Distributions
-marginal <- list(0.3, c(0.2, 0.5, 0.9))
+marginal <- list(c(0.3, 0.75), c(0.2, 0.5, 0.9))
 support <- list() # default support will be generated inside simulation
 
 # Poisson Distributions
@@ -101,21 +101,18 @@ ncont <- ncol(M)
 npois <- length(lam)
 nnb <- length(size)
 
-# Create correlation matrix from a uniform distribution (-0.7, 0.7)
+# Create correlation matrix from a uniform distribution (0.2, 0.7)
 set.seed(seed)
 Rey <- diag(1, nrow = (ncat + ncont + npois + nnb))
 for (i in 1:nrow(Rey)) {
   for (j in 1:ncol(Rey)) {
-    if (i > j) Rey[i, j] <- runif(1, -0.7, 0.7)
+    if (i > j) Rey[i, j] <- runif(1, 0.2, 0.7)
     Rey[j, i] <- Rey[i, j]
   }
 }
 
-# Test for positive-definiteness
-library(Matrix)
-if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
-  Rey <- as.matrix(nearPD(Rey, corr = T, keepDiag = T)$mat)
-}
+# Check to see if Rey is positive-definite
+min(eigen(Rey, symmetric = TRUE)$values) < 0
 ```
 
 ### Step 2: Calculate the lower kurtosis bounds for the continuous variables
@@ -177,7 +174,7 @@ The original lower kurtosis boundary (see `Lower[[3]]$Invalid.C`) of `r round(mi
 
 The remaining steps vary by simulation method:
 
-### Method 1
+### Correlation Method 1
 #### Step 3: Verify the target correlation matrix falls within the feasible correlation bounds
 ```{r, warning = FALSE}
 # Make sure Rey is within upper and lower correlation limits
@@ -199,27 +196,11 @@ A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               lam = lam, size = size, prob = prob, rho = Rey, seed = seed)
 ```
 
-Look at the maximum correlation error:
-```{r}
-cat(paste("The maximum correlation error without the error loop is ", 
-          round(A$maxerr, 5), ".", sep = ""))
-```
-
-Look at the interquartile-range of correlation errors:
+Summarize the correlation errors:
 ```{r}
 Acorr_error = round(A$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors without the error loop is [", 
-          round(quantile(as.numeric(Acorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Acorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Acorr_error))
 ```
-
-Note the **warning messages** produced above (suppressed in execution for this vignette).  These indicate:
-
-1. It may not be possible to generate the desired correlation matrix with ordinal variables having the specified marginals, and
-
-1. The nearest positive-definite matrix was used.
-
-This presents an excellent situation for using the error loop.
 
 Simulate variables with the error loop (using default settings of `epsilon` = 0.001 and `maxit` = 1000).
 ```{r, warning = FALSE, message = FALSE}
@@ -231,21 +212,13 @@ B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
               errorloop = TRUE)
 ```
 
-Look at the maximum correlation error:
-```{r}
-cat(paste("The maximum correlation error with the error loop is ", 
-          round(B$maxerr, 5), ".", sep = ""))
-```
-
-Look at the interquartile-range of correlation errors:
+Summarize the correlation errors:
 ```{r}
 Bcorr_error = round(B$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors with the error loop is [", 
-          round(quantile(as.numeric(Bcorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Bcorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Bcorr_error))
 ```
 
-The simulation utilizing the error loop provides better results and will be chosen for subsequent analysis.
+Based on the interquartile range, the simulation utilizing the error loop will be chosen for subsequent analysis.
 
 #### Step 5: Summarize the results numerically
 **1) Ordinal variables**
@@ -359,7 +332,7 @@ plot_sim_pdf_theory(B$Neg_Bin_variables[, 1], cont_var = FALSE,
                 Dist = "Negative_Binomial", params = c(3, 0.2))
 ```
 
-### Method 2
+### Correlation Method 2
 Method 2 requires cumulative probability truncation vectors for the count variables (`pois_eps` for Poisson and `nb_eps` for Negative Binomial).  Each entry is the amount removed from the total cumulative probability when creating a finite support for that variable (see `max_count_support`).  The entries may vary by variable.
 
 #### Step 3: Verify the target correlation matrix falls within the feasible correlation bounds
@@ -387,21 +360,13 @@ C <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                nb_eps = nb_eps, rho = Rey, seed = seed)
 ```
 
-Look at the maximum correlation error:
-```{r}
-cat(paste("The maximum correlation error without the error loop is ", 
-          round(C$maxerr, 5), ".", sep = ""))
-```
-
-Look at the interquartile-range of correlation errors:
+Summarize the correlation errors:
 ```{r}
 Ccorr_error = round(C$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors without the error loop is [", 
-          round(quantile(as.numeric(Ccorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Ccorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Ccorr_error))
 ```
 
-These results indicate that for these distributions, **Method 1** and **Method 2** have similar correlation errors.
+These results indicate that for these distributions, **Correlation Method 1** and **Correlation Method 2** have similar correlation errors.
 
 Simulate variables with the error loop (using default settings of `epsilon` = 0.001 and `maxit` = 1000).
 ```{r, warning = FALSE, message = FALSE}
@@ -413,21 +378,13 @@ D <- rcorrvar2(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
                nb_eps = nb_eps, rho = Rey, seed = seed, errorloop = TRUE)
 ```
 
-Look at the maximum correlation error:
-```{r}
-cat(paste("The maximum correlation error with the error loop is ", 
-          round(D$maxerr, 5), ".", sep = ""))
-```
-
-Look at the interquartile-range of correlation errors:
+Summarize the correlation errors:
 ```{r}
 Dcorr_error = round(D$correlations - Rey, 6)
-cat(paste("The IQR of correlation errors with the error loop is [", 
-          round(quantile(as.numeric(Dcorr_error), 0.25), 5), ", ",
-          round(quantile(as.numeric(Dcorr_error), 0.75), 5), "].", sep = ""))
+summary(as.numeric(Dcorr_error))
 ```
 
-The simulation utilizing the error loop provides better results and will be chosen for subsequent analysis.
+Based on the interquartile range, the simulation utilizing the error loop will be chosen for subsequent analysis.
 
 #### Step 5: Summarize the results numerically
 **1) Ordinal variables**   

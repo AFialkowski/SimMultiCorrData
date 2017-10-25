@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Continuous - Poisson Variables: Method 2
+#' @title Calculate Intermediate MVN Correlation for Continuous - Poisson Variables: Correlation Method 2
 #'
 #' @description This function calculates a \code{k_cont x k_pois} intermediate matrix of correlations for the \code{k_cont} continuous and
 #'     \code{k_pois} Poisson variables. It extends the methods of Demirtas et al. (2012, \doi{10.1002/sim.5362}) and

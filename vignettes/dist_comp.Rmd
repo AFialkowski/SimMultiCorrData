@@ -16,7 +16,7 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5)
 
 @HeadKow outlined a general method for comparing a simulated distribution $\Large Y$ to a given theoretical distribution $\Large Y^*$.  Note that these could easily be modified for comparison to an empirical vector of data:
 
-1. **Obtain the standardized cumulants** (skewness, kurtosis, fifth, and sixth) for $\Large Y^*$.  This can be done using `calc_theory` along with either the distribution name (plus up to 3 parameters) or the pdf fx (plus support bounds).  In the case of an empirical vector of data, use `calc_moments` or `calc_fisherk`.
+1. **Obtain the standardized cumulants** (skewness, kurtosis, fifth, and sixth) for $\Large Y^*$.  This can be done using `calc_theory` along with either the distribution name (plus up to 4 parameters) or the pdf fx (plus support bounds).  In the case of an empirical vector of data, use `calc_moments` or `calc_fisherk`.
 
 1. **Obtain the constants** for $\Large Y$.  This can be done using `find_constants` or by simulating the distribution with `nonnormvar1`.
 
@@ -36,8 +36,8 @@ Use these steps to compare a simulated **exponential(mean = 2) variable** to the
 ### Step 1: Obtain the standardized cumulants
 In R, the exponential parameter is `rate <- 1/mean`.
 ```{r, warning = FALSE, message = FALSE}
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 stcums <- calc_theory(Dist = "Exponential", params = 0.5)
 ```
 

@@ -15,6 +15,12 @@
 #' @param ext_y a vector of external data (required)
 #' @param target_color the histogram fill color for the target data (default = "dark green")
 #' @param nbins the number of bins to use in generating the histograms (default = 100)
+#' @param legend.position the position of the legend
+#' @param legend.justification the justification of the legend
+#' @param legend.text.size the size of the legend labels
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import ggplot2
 #' @export
 #' @keywords plot, simulated, external, Fleishman, Headrick
@@ -77,7 +83,11 @@
 plot_sim_ext <- function(sim_y, title = "Simulated Data Values",
                          ylower = NULL, yupper = NULL,
                          power_color = "dark blue", ext_y = NULL,
-                         target_color = "dark green", nbins = 100) {
+                         target_color = "dark green", nbins = 100,
+                         legend.position = c(0.975, 0.9),
+                         legend.justification = c(1, 1),
+                         legend.text.size = 10, title.text.size = 15,
+                         axis.text.size = 10, axis.title.size = 13) {
   if (is.null(ext_y)) stop("You must provide an external data set.")
   sim_y <- sd(ext_y) * scale(sim_y) + mean(ext_y)
   if (is.null(ylower) & is.null(yupper)) {
@@ -95,13 +105,15 @@ plot_sim_ext <- function(sim_y, title = "Simulated Data Values",
     geom_histogram(data = data2[data2$type == "theory", ],
                    aes_(~y, fill = ~type), bins = nbins) +
     scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
-    theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-          axis.text.x = element_text(size = 10),
-          axis.title.x = element_text(size = 13),
-          axis.text.y = element_text(size = 10),
-          axis.title.y = element_text(size = 13),
-          legend.text = element_text(size = 10),
-          legend.position = c(0.975, 0.9), legend.justification = c(1, 1)) +
+    theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                    hjust = 0.5),
+          axis.text.x = element_text(size = axis.text.size),
+          axis.title.x = element_text(size = axis.title.size),
+          axis.text.y = element_text(size = axis.text.size),
+          axis.title.y = element_text(size = axis.title.size),
+          legend.text = element_text(size = legend.text.size),
+          legend.position = legend.position,
+          legend.justification = legend.justification) +
     scale_fill_manual(name = "", values = c("sim" = power_color,
                                             "theory" = target_color),
                       labels = c("Simulated Variable", "Target Variable"))

@@ -3,27 +3,29 @@
 #' @description This function corrects the final correlation of simulated variables to be within a precision value (\code{epsilon}) of the
 #'     target correlation.  It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error
 #'     is less than epsilon or the number of iterations exceeds the maximum number set by the user (\code{maxit}).  It uses
-#'     \code{\link[SimMultiCorrData]{error_vars}} to simulate the pair of variables in each iteration.  This function would not
-#'     ordinarily be called directly by the user.  The function is a
+#'     \code{\link[SimMultiCorrData]{error_vars}} to simulate all variables and calculate the correlation of all variables in each
+#'     iteration.  This function would not ordinarily be called directly by the user.  The function is a
 #'     modification of  Barbiero & Ferrari's \code{\link[GenOrd]{ordcont}} function in \code{\link[GenOrd]{GenOrd-package}}.
 #'     The \code{\link[GenOrd]{ordcont}} has been modified in the following ways:
 #'
-#'     1) it works for continuous, ordinal (r >= 2 categories), and count variables
+#'     1) It works for continuous, ordinal (r >= 2 categories), and count variables.
 #'
-#'     2) the initial correlation check has been removed because this intermediate correlation
+#'     2) The initial correlation check has been removed because this intermediate correlation
 #'     Sigma from \code{\link[SimMultiCorrData]{rcorrvar}} or \code{\link[SimMultiCorrData]{rcorrvar2}} has already been
-#'     checked for positive-definiteness and used to generate variables (however, the pairwise correlation is checked in each
-#'     iteration for positive-definiteness using the method of Higham (2002) and the \code{\link[Matrix]{nearPD}} function)
+#'     checked for positive-definiteness and used to generate variables.
 #'
-#'     3) the final positive-definite check has been removed
+#'     3) Eigenvalue decomposition is done on \code{Sigma} to impose the correct interemdiate correlations on the normal variables.
+#'     If \code{Sigma} is not positive-definite, the negative eigen values are replaced with 0.
 #'
-#'     4) the intermediate correlation update function was changed to accomodate more situations
+#'     3) The final positive-definite check has been removed.
 #'
-#'     5) a final "fail-safe" check was added at the end of the iteration loop where if the absolute
+#'     4) The intermediate correlation update function was changed to accomodate more situations.
+#'
+#'     5) A final "fail-safe" check was added at the end of the iteration loop where if the absolute
 #'     error between the final and target pairwise correlation is still > 0.1, the intermediate correlation is set
-#'     equal to the target correlation (if \code{extra_correct} = "TRUE"), and
+#'     equal to the target correlation (if \code{extra_correct} = "TRUE").
 #'
-#'     6) allowing specifications for the sample size and the seed for reproducibility.
+#'     6) Allowing specifications for the sample size and the seed for reproducibility.
 #'
 #' @param k_cat the number of ordinal (r >= 2 categories) variables
 #' @param k_cont the number of continuous variables
@@ -65,7 +67,6 @@
 #' @param extra_correct if "TRUE", a final "fail-safe" check is used at the end of the iteration loop where if the absolute
 #'     error between the final and target pairwise correlation is still > 0.1, the intermediate correlation is set
 #'     equal to the target correlation
-#' @importFrom Matrix nearPD
 #' @export
 #' @keywords error, correlation
 #' @seealso \code{\link[GenOrd]{ordcont}}, \code{\link[SimMultiCorrData]{rcorrvar}}, \code{\link[SimMultiCorrData]{rcorrvar2}},
@@ -114,7 +115,6 @@ error_loop <- function(k_cat, k_cont, k_pois, k_nb, Y_cat, Y, Yb, Y_pois, Y_nb,
   k <- k_cat + k_cont + k_pois + k_nb
   niter <- matrix(0, k, k)
   Sigmaold <- Sigma
-  rho_calcold <- rho_calc
   for (q in 1:(k - 1)) {
     for (r in (q + 1):k) {
       if (rho0[q, r] == 0) {
@@ -122,26 +122,21 @@ error_loop <- function(k_cat, k_cont, k_pois, k_nb, Y_cat, Y, Yb, Y_pois, Y_nb,
       } else {
         it <- 0
         while (abs(rho_calc[q, r] - rho0[q, r]) > epsilon & (it < maxit)) {
-          if (rho0[q, r] * (rho0[q, r]/rho_calcold[q, r]) <= -1) {
+          if (rho0[q, r] * (rho0[q, r]/rho_calc[q, r]) <= -1) {
             Sigma[q, r] <- Sigmaold[q, r] *
               (1 + 0.1 * (1 - Sigmaold[q, r]) *
                  -sign(rho0[q, r] - rho_calc[q, r]))
           }
-          if (rho0[q, r] * (rho0[q, r]/rho_calcold[q, r]) >= 1) {
+          if (rho0[q, r] * (rho0[q, r]/rho_calc[q, r]) >= 1) {
             Sigma[q, r] <- Sigmaold[q, r] *
               (1 + 0.1 * (1 - Sigmaold[q, r]) *
                  sign(rho0[q, r] - rho_calc[q, r]))
-          }	else {
+          }
+          if ((rho0[q, r] * (rho0[q, r]/rho_calc[q, r]) > -1) &
+              (rho0[q, r] * (rho0[q, r]/rho_calc[q, r]) < 1)) {
             Sigma[q, r] <- Sigmaold[q, r] * (rho0[q, r]/rho_calc[q, r])
           }
           Sigma[r, q] <- Sigma[q, r]
-          Sigma2 <- matrix(c(1, Sigma[q, r], Sigma[r, q], 1),
-                           nrow = 2, ncol = 2, byrow = T)
-          if (min(eigen(Sigma2, symmetric = TRUE)$values) < 0) {
-            Sigma2 <- nearPD(Sigma2, corr = T, keepDiag = T)$mat
-            Sigma[q, r] <- Sigma2[1, 2]
-            Sigma[r, q] <- Sigma[q, r]
-          }
           EV <- error_vars(marginal = marginal, support = support,
                            method = method, means = means, vars = vars,
                            constants = constants, lam = lam,
@@ -158,8 +153,7 @@ error_loop <- function(k_cat, k_cont, k_pois, k_nb, Y_cat, Y, Yb, Y_pois, Y_nb,
           Yb <- EV$Yb
           Y_pois <- EV$Y_pois
           Y_nb <- EV$Y_nb
-          Sigmaold[q, r] <- Sigma[q, r]
-          Sigmaold[r, q] <- Sigmaold[q, r]
+          Sigmaold <- Sigma
           it <- it + 1
         }
         if (extra_correct == TRUE) {
@@ -188,6 +182,7 @@ error_loop <- function(k_cat, k_cont, k_pois, k_nb, Y_cat, Y, Yb, Y_pois, Y_nb,
       }
     }
   }
+  rho_calc <- cor(cbind(Y_cat, Yb, Y_pois, Y_nb))
   return(list(Sigma = Sigma, rho_calc = rho_calc, Y_cat = Y_cat, Y = Y,
               Yb = Yb, Y_pois = Y_pois, Y_nb = Y_nb, niter = niter))
 }

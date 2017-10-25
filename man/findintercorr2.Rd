@@ -2,7 +2,7 @@
 % Please edit documentation in R/findintercorr2.R
 \name{findintercorr2}
 \alias{findintercorr2}
-\title{Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Method 2}
+\title{Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Correlation Method 2}
 \usage{
 findintercorr2(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), constants, marginal = list(),
@@ -70,9 +70,9 @@ This function calculates a \code{k x k} intermediate matrix of correlations, whe
     \code{\link[SimMultiCorrData]{rcorrvar2}}, and would only be used separately if the user wants to find the intermediate correlation matrix
     only.  The simulation functions also return the intermediate correlation matrix.
 }
-\section{Overview of Method 2}{
+\section{Overview of Correlation Method 2}{
 
-    The intermediate correlations used in method 2 are less simulation based than those in method 1, and no seed is needed.
+    The intermediate correlations used in correlation method 2 are less simulation based than those in correlation method 1, and no seed is needed.
     Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error
     has been reached (if possible).  In addition, method 2 differs from method 1 in the following ways:
 

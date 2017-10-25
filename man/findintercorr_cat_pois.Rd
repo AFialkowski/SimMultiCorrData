@@ -2,7 +2,7 @@
 % Please edit documentation in R/findintercorr_cat_pois.R
 \name{findintercorr_cat_pois}
 \alias{findintercorr_cat_pois}
-\title{Calculate Intermediate MVN Correlation for Ordinal - Poisson Variables: Method 1}
+\title{Calculate Intermediate MVN Correlation for Ordinal - Poisson Variables: Correlation Method 1}
 \usage{
 findintercorr_cat_pois(rho_cat_pois, marginal, lam, nrand = 1e+05,
   seed = 1234)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/findintercorr_nb.R
 \name{findintercorr_nb}
 \alias{findintercorr_nb}
-\title{Calculate Intermediate MVN Correlation for Negative Binomial Variables: Method 1}
+\title{Calculate Intermediate MVN Correlation for Negative Binomial Variables: Correlation Method 1}
 \usage{
 findintercorr_nb(rho_nb, size, prob, mu = NULL, nrand = 1e+05,
   seed = 1234)

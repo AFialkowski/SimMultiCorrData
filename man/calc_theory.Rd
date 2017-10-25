@@ -4,21 +4,25 @@
 \alias{calc_theory}
 \title{Find Theoretical Standardized Cumulants for Continuous Distributions}
 \usage{
-calc_theory(Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-  "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular",
-  "Uniform", "Weibull"), params = NULL, fx = NULL, lower = NULL,
-  upper = NULL, sub = 1000)
+calc_theory(Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders",
+  "Chisq", "Dagum", "Exponential", "Exp-Geometric", "Exp-Logarithmic",
+  "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+  "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma",
+  "Lognormal", "Lomax", "Makeham", "Maxwell", "Nakagami", "Paralogistic",
+  "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t",
+  "Topp-Leone", "Triangular", "Uniform", "Weibull"), params = NULL,
+  fx = NULL, lower = NULL, upper = NULL, sub = 1000)
 }
 \arguments{
-\item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull".
-Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-comes from the \code{\link[triangle]{triangle}} package.}
+\item{Dist}{name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+"Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+"Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+"Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+"Uniform", "Weibull".
+Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+\code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.}
 
-\item{params}{a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)}
+\item{params}{a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)}
 
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if Dist supplied instead)}
@@ -35,7 +39,7 @@ A vector of the mean, standard deviation, skewness, standardized kurtosis, and s
 }
 \description{
 This function calculates the theoretical mean, standard deviation, skewness,
-    standardized kurtosis, and standardized fifth and sixth cumulants given either a Distribution name (plus up to 3
+    standardized kurtosis, and standardized fifth and sixth cumulants given either a Distribution name (plus up to 4
     parameters) or a pdf (with specified lower and upper support bounds).  The result can be used as input to
     \code{\link[SimMultiCorrData]{find_constants}} or for data simulation.
 

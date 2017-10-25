@@ -7,10 +7,17 @@
 plot_sim_pdf_theory(sim_y, title = "Simulated Probability Density Function",
   ylower = NULL, yupper = NULL, power_color = "dark blue",
   overlay = TRUE, cont_var = TRUE, target_color = "dark green",
-  target_lty = 2, Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
-  "Gaussian", "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t",
-  "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial"),
-  params = NULL, fx = NULL, lower = NULL, upper = NULL)
+  target_lty = 2, Dist = c("Benini", "Beta", "Beta-Normal",
+  "Birnbaum-Saunders", "Chisq", "Dagum", "Exponential", "Exp-Geometric",
+  "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian",
+  "Gompertz", "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic",
+  "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell", "Nakagami",
+  "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala",
+  "Skewnormal", "t", "Topp-Leone", "Triangular", "Uniform", "Weibull",
+  "Poisson", "Negative_Binomial"), params = NULL, fx = NULL, lower = NULL,
+  upper = NULL, legend.position = c(0.975, 0.9),
+  legend.justification = c(1, 1), legend.text.size = 10,
+  title.text.size = 15, axis.text.size = 10, axis.title.size = 13)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -32,15 +39,15 @@ or pdf function fx (with bounds = ylower, yupper)}
 
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
 
-\item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial".
-Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-comes from the \code{\link[triangle]{triangle}} package.}
+\item{Dist}{name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+"Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+"Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+"Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+"Uniform", "Weibull", "Poisson", and "Negative_Binomial".
+Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+\code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.}
 
-\item{params}{a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)}
+\item{params}{a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)}
 
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
@@ -48,13 +55,25 @@ comes from the \code{\link[triangle]{triangle}} package.}
 \item{lower}{the lower support bound for \code{fx}}
 
 \item{upper}{the upper support bound for \code{fx}}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
 This plots the pdf of simulated continuous or count data and overlays the target pdf (if \code{overlay} = TRUE),
-    which is specified by distribution name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
+    which is specified by distribution name (plus up to 4 parameters) or pdf function \code{fx} (plus support bounds).
     If a continuous target distribution is provided (\code{cont_var = TRUE}), the simulated data \eqn{y} is
     scaled and then transformed (i.e. \eqn{y = sigma * scale(y) + mu}) so that it has the same mean (\eqn{mu}) and variance (\eqn{sigma^2}) as the
     target distribution.  If the variable is Negative Binomial, the parameters must be size and success probability (not mu).

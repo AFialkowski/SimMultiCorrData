@@ -6,7 +6,9 @@
 \usage{
 plot_sim_pdf_ext(sim_y, title = "Simulated Probability Density Function",
   ylower = NULL, yupper = NULL, power_color = "dark blue", ext_y = NULL,
-  target_color = "dark green", target_lty = 2)
+  target_color = "dark green", target_lty = 2, legend.position = c(0.975,
+  0.9), legend.justification = c(1, 1), legend.text.size = 10,
+  title.text.size = 15, axis.text.size = 10, axis.title.size = 13)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -24,6 +26,18 @@ plot_sim_pdf_ext(sim_y, title = "Simulated Probability Density Function",
 \item{target_color}{the histogram color for the target pdf (default = "dark green")}
 
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

@@ -1,4 +1,4 @@
-#' @title Calculate Maximum Support Value for Count Variables: Method 2
+#' @title Calculate Maximum Support Value for Count Variables: Correlation Method 2
 #'
 #' @description This function calculates the maximum support value for count variables by extending the method of Barbiero &
 #'     Ferrari (2015, \doi{10.1002/asmb.2072}) to include Negative Binomial variables.  In order for count variables to be treated as ordinal in the

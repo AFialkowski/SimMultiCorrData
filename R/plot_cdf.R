@@ -27,6 +27,10 @@
 #' @param hline the dashed horizontal line color drawn at delta if \code{calc_cprob} = TRUE (default = "dark green")
 #' @param n the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 10000)
 #' @param seed the seed value for random number generation (default = 1234)
+#' @param text.size the size of the text displaying the cumulative probability up to \code{delta} if \code{calc_cprob} = TRUE
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import stats
 #' @import utils
 #' @import ggplot2
@@ -89,7 +93,9 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
                      sigma = 1, title = "Cumulative Distribution Function",
                      ylower = NULL, yupper = NULL, calc_cprob = FALSE,
                      delta = 5, color = "dark blue", fill = "blue",
-                     hline = "dark green", n = 10000, seed = 1234) {
+                     hline = "dark green", n = 10000, seed = 1234,
+                     text.size = 11, title.text.size = 15,
+                     axis.text.size = 10, axis.title.size = 13) {
   set.seed(seed)
   c <- as.numeric(c)
   z <- rnorm(n, 0, 1)
@@ -117,11 +123,13 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
     geom_hline(yintercept = 1, lty = 2, colour = "#333333") +
     scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
     scale_y_continuous(name = "Cumulative Probability") +
-    theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-          legend.position = "none", axis.text.x  = element_text(size = 10),
-          axis.title.x = element_text(size = 13),
-          axis.text.y  = element_text(size = 10),
-          axis.title.y = element_text(size = 13))
+    theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                    hjust = 0.5),
+          legend.position = "none",
+          axis.text.x  = element_text(size = axis.text.size),
+          axis.title.x = element_text(size = axis.title.size),
+          axis.text.y  = element_text(size = axis.text.size),
+          axis.title.y = element_text(size = axis.title.size))
   if (calc_cprob == FALSE) return(plot1)
   if (calc_cprob == TRUE) {
     cprob <- cdf_prob(c = c, method = method, delta = delta, mu = mu,
@@ -131,7 +139,7 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
     text_one <- textGrob(paste("Cumulative probability = ",
                                round(cprob$cumulative_prob, 4), ", y = ",
                                round(delta, 4), sep = ""),
-                         gp = gpar(fontsize = 11, fontface = "bold",
+                         gp = gpar(fontsize = text.size, fontface = "bold",
                                    col = hline))
     plot1 <- plot1 +
       geom_area(data = data2, aes_(x = ~y, y = ~phi), fill = fill) +

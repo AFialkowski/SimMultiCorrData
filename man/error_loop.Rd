@@ -99,27 +99,29 @@ A list with the following components:
 This function corrects the final correlation of simulated variables to be within a precision value (\code{epsilon}) of the
     target correlation.  It updates the pairwise intermediate MVN correlation iteratively in a loop until either the maximum error
     is less than epsilon or the number of iterations exceeds the maximum number set by the user (\code{maxit}).  It uses
-    \code{\link[SimMultiCorrData]{error_vars}} to simulate the pair of variables in each iteration.  This function would not
-    ordinarily be called directly by the user.  The function is a
+    \code{\link[SimMultiCorrData]{error_vars}} to simulate all variables and calculate the correlation of all variables in each
+    iteration.  This function would not ordinarily be called directly by the user.  The function is a
     modification of  Barbiero & Ferrari's \code{\link[GenOrd]{ordcont}} function in \code{\link[GenOrd]{GenOrd-package}}.
     The \code{\link[GenOrd]{ordcont}} has been modified in the following ways:
 
-    1) it works for continuous, ordinal (r >= 2 categories), and count variables
+    1) It works for continuous, ordinal (r >= 2 categories), and count variables.
 
-    2) the initial correlation check has been removed because this intermediate correlation
+    2) The initial correlation check has been removed because this intermediate correlation
     Sigma from \code{\link[SimMultiCorrData]{rcorrvar}} or \code{\link[SimMultiCorrData]{rcorrvar2}} has already been
-    checked for positive-definiteness and used to generate variables (however, the pairwise correlation is checked in each
-    iteration for positive-definiteness using the method of Higham (2002) and the \code{\link[Matrix]{nearPD}} function)
+    checked for positive-definiteness and used to generate variables.
 
-    3) the final positive-definite check has been removed
+    3) Eigenvalue decomposition is done on \code{Sigma} to impose the correct interemdiate correlations on the normal variables.
+    If \code{Sigma} is not positive-definite, the negative eigen values are replaced with 0.
 
-    4) the intermediate correlation update function was changed to accomodate more situations
+    3) The final positive-definite check has been removed.
 
-    5) a final "fail-safe" check was added at the end of the iteration loop where if the absolute
+    4) The intermediate correlation update function was changed to accomodate more situations.
+
+    5) A final "fail-safe" check was added at the end of the iteration loop where if the absolute
     error between the final and target pairwise correlation is still > 0.1, the intermediate correlation is set
-    equal to the target correlation (if \code{extra_correct} = "TRUE"), and
+    equal to the target correlation (if \code{extra_correct} = "TRUE").
 
-    6) allowing specifications for the sample size and the seed for reproducibility.
+    6) Allowing specifications for the sample size and the seed for reproducibility.
 }
 \references{
 Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given

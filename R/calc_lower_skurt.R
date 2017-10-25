@@ -293,7 +293,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                    method)$valid.pdf))
       colnames(C) <- c("skew", "c0", "c1", "c2", "c3", "skurtosis",
                        "valid.pdf")
-      constants2 <- C[C$valid.pdf == "TRUE", ]
+      constants2 <- C[C$valid.pdf == "TRUE", , drop = FALSE]
       if (length(Skurt) == 0) {
         stop.time <- Sys.time()
         Time <- round(difftime(stop.time, start.time,
@@ -362,7 +362,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                                     a = skews)[1]),
                           TRUE, FALSE)
       }
-      xstart2 <- xstart[which(test == TRUE), ]
+      xstart2 <- xstart[which(test == TRUE), , drop = FALSE]
       if (is.null(xstart2)) {
         stop(error1)
       } else {
@@ -379,6 +379,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
         if (is.null(converged)) {
           stop(error1)
         } else {
+          converged <- converged[!duplicated(converged), , drop = FALSE]
           constants <- data.frame(converged,
                                   rep("FALSE", nrow(converged)),
                                   rep(0, nrow(converged)),
@@ -437,10 +438,10 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
               constants$valid.pdf[i] <- "FALSE"
             }
           }
-          constants2 <- constants[constants$valid.pdf == "TRUE", ]
+          constants2 <- constants[constants$valid.pdf == "TRUE", , drop = FALSE]
           if (nrow(constants2) != 0) {
             m <- min(constants2$skurtosis)
-            C2 <- constants2[constants2$skurtosis == m, ]
+            C2 <- constants2[constants2$skurtosis == m, , drop = FALSE]
             stop.time <- Sys.time()
             Time <- round(difftime(stop.time, start.time,
                                    units = "min"), 3)
@@ -450,7 +451,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
           } else {
             if (length(Skurt) == 0) {
               m <- min(constants$skurtosis)
-              C2 <- constants[constants$skurtosis == m, ]
+              C2 <- constants[constants$skurtosis == m, , drop = FALSE]
               stop.time <- Sys.time()
               Time <- round(difftime(stop.time, start.time,
                                      units = "min"), 3)
@@ -484,11 +485,11 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
             }
             if (nrow(constants2) != 0) {
               constants2 <-  data.frame(skews, constants2, "TRUE",
-                                        min(constants$skurtosis) + Skurt[v - 1])
+                                      min(constants$skurtosis) + Skurt[v - 1])
               colnames(constants2) <- c("skew", "c0", "c1", "c2", "c3",
                                         "valid.pdf", "skurtosis")
               m <- min(constants2$skurtosis)
-              C2 <- constants2[constants2$skurtosis == m, ]
+              C2 <- constants2[constants2$skurtosis == m, , drop = FALSE]
               stop.time <- Sys.time()
               Time <- round(difftime(stop.time, start.time,
                                      units = "min"), 3)
@@ -498,7 +499,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
             }
             if (nrow(constants2) == 0) {
               m <- min(constants$skurtosis)
-              C2 <- constants[constants$skurtosis == m, ]
+              C2 <- constants[constants$skurtosis == m, , drop = FALSE]
               stop.time <- Sys.time()
               Time <- round(difftime(stop.time, start.time,
                                      units = "min"), 3)
@@ -582,7 +583,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                              sixths))[1]),
                TRUE, FALSE)
     }
-    xstart2 <- xstart[which(test == TRUE), ]
+    xstart2 <- xstart[which(test == TRUE), , drop = FALSE]
     constants0 <- NULL
     if (is.null(xstart2)) {
       stop(error1)
@@ -598,7 +599,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
           converged <- rbind(converged, nl_solution$x)
         }
       }
-      constants <- converged
+      constants <- converged[!duplicated(converged), , drop = FALSE]
       if (is.null(converged)) {
         constants <- data.frame()
         if (length(Six) == 0) {
@@ -619,7 +620,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                                          Six[v]))[1]),
                          TRUE, FALSE)
               }
-              xstart2 <- xstart[which(test == TRUE), ]
+              xstart2 <- xstart[which(test == TRUE), , drop = FALSE]
               v <- v + 1
               if (v > length(Six)) break
             }
@@ -638,7 +639,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                 }
               }
             }
-            constants <- converged
+            constants <- converged[!duplicated(converged), , drop = FALSE]
             if(v > length(Six)) break
           }
           SixCorr1 <- Six[v - 1]
@@ -681,11 +682,11 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                  "lambda2", "lambda3", "lambda4",
                                  "valid.pdf", "skurtosis")
         constants0 <- constants
-        constants2 <- constants[constants$valid.pdf == "TRUE", ]
+        constants2 <- constants[constants$valid.pdf == "TRUE", , drop = FALSE]
       }
       if (nrow(constants2) != 0) {
         m <- min(constants2$skurtosis)
-        C2 <- constants2[constants2$skurtosis == m, ]
+        C2 <- constants2[constants2$skurtosis == m, , drop = FALSE]
         stop.time <- Sys.time()
         Time <- round(difftime(stop.time, start.time,
                                units = "min"), 3)
@@ -696,7 +697,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
       if (nrow(constants2) == 0) {
         if (length(Skurt) == 0) {
           m <- min(constants0$skurtosis)
-          C2 <- constants0[constants0$skurtosis == m, ]
+          C2 <- constants0[constants0$skurtosis == m, , drop = FALSE]
           stop.time <- Sys.time()
           Time <- round(difftime(stop.time, start.time,
                                  units = "min"), 3)
@@ -738,7 +739,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                                     "c0", "c1", "c2", "c3", "c4",
                                     "c5", "valid.pdf", "skurtosis")
           m <- min(constants2$skurtosis)
-          C2 <- constants2[constants2$skurtosis == m, ]
+          C2 <- constants2[constants2$skurtosis == m, , drop = FALSE]
           stop.time <- Sys.time()
           Time <- round(difftime(stop.time, start.time,
                                  units = "min"), 3)
@@ -749,7 +750,7 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
         }
         if (nrow(constants2) == 0) {
           m <- min(constants0$skurtosis)
-          C2 <- constants0[constants0$skurtosis == m, ]
+          C2 <- constants0[constants0$skurtosis == m, , drop = FALSE]
           stop.time <- Sys.time()
           Time <- round(difftime(stop.time, start.time,
                                  units = "min"), 3)

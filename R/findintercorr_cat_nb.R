@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Ordinal - Negative Binomial Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Ordinal - Negative Binomial Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k_cat x k_nb} intermediate matrix of correlations for the k_cat ordinal (r >=
 #'     2 categories) and k_nb Negative Binomial variables. It extends the method of Amatya & Demirtas (2015, \doi{10.1080/00949655.2014.953534})

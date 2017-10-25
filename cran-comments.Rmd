@@ -5,29 +5,31 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-## Resubmission
-This is a resubmission. In this version I have:
-* Modified the examples in the vignettes so they take less time to build.
-* Added DOI entries for references in DESCRIPTION.
+## New version
+This is a new version of the package (from 0.1.0 to 0.2.0).
 
 ## Test environments
-* local OS 'Windows 10' install, 'R 3.4.0'
+* local OS 'Windows 10' install, 'R 3.4.1'
 * 'win-builder' (devel and release)
 * 'CentOS', 'R 3.3.1'
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs.  
+0 errors | 0 warnings | 0 notes
 
-There was 1 NOTE:
+Check with 'win-builder' (release) did produce 1 note:
 
-"New submission."
+"Possibly mis-spelled words in DESCRIPTION"
 
-This is a new package.
+These were double checked and are spelled correctly.
 
-## Reverse dependencies
+"Found the following (possibly) invalid URLs:
+  URL: http://doi.org/10.1112/plms/s2-30.1.199"
 
-This is a new release, so there are no reverse dependencies.
+"Found the following (possibly) invalid DOIs:
+  DOI: 10.1002/asmb.901"
+
+These were both checked and are correct.
 
 ## Downstream dependencies
 

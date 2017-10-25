@@ -7,7 +7,7 @@
 #'     user).  Given a vector of polynomial
 #'     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical probabilities
 #'     using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  If \code{overlay} = TRUE, the target distribution is also plotted given either a
-#'     distribution name (plus up to 3 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
+#'     distribution name (plus up to 4 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
 #'     scaled and then transformed so that it has the same mean and variance as the target distribution.
 #'     It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
 #'     (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.
@@ -28,24 +28,34 @@
 #'     or pdf function fx (with bounds = ylower, yupper)
 #' @param target_color the line color for the target pdf (default = "dark green")
 #' @param target_lty the line type for the target pdf (default = 2, dashed line)
-#' @param Dist name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-#'     "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull".
-#'     Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-#'     for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-#'     rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-#'     come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-#'     comes from the \code{\link[triangle]{triangle}} package.
-#' @param params a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)
+#' @param Dist name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+#'     "Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+#'     "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+#'     "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+#'     "Uniform", "Weibull".
+#'     Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+#'     \code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.
+#' @param params a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)
 #' @param fx a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 #'     (keep NULL if \code{Dist} supplied instead)
 #' @param lower the lower support bound for \code{fx}
 #' @param upper the upper support bound for \code{fx}
 #' @param n the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 100)
 #' @param seed the seed value for random number generation (default = 1234)
+#' @param legend.position the position of the legend
+#' @param legend.justification the justification of the legend
+#' @param legend.text.size the size of the legend labels
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import ggplot2
 #' @import stats
 #' @import utils
-#' @importFrom VGAM dpareto rpareto dgenray rgenray dlaplace rlaplace
+#' @importFrom VGAM dbenini rbenini dbetanorm rbetanorm dbisa rbisa ddagum rdagum dexpgeom rexpgeom dexplog rexplog
+#'     dexppois rexppois dfisk rfisk dfrechet rfrechet dgompertz rgompertz dgumbel rgumbel dkumar rkumar dlaplace rlaplace dlind rlind
+#'     dlgamma rlgamma dlomax rlomax dmakeham rmakeham dmaxwell rmaxwell dnaka rnaka dparalogistic
+#'     rparalogistic dpareto rpareto dperks rperks dgenray rgenray drice rrice dsinmad rsinmad dskewnorm rskewnorm
+#'     dtopple rtopple
 #' @importFrom triangle dtriangle rtriangle
 #' @export
 #' @keywords plot, theoretical, pdf, Fleishman, Headrick
@@ -91,13 +101,25 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
                             ylower = NULL, yupper = NULL,
                             power_color = "dark blue", overlay = TRUE,
                             target_color = "dark green", target_lty = 2,
-                            Dist = c("Beta", "Chisq", "Exponential", "F",
-                                     "Gamma", "Gaussian", "Laplace",
-                                     "Logistic", "Lognormal", "Pareto",
-                                     "Rayleigh", "t", "Triangular", "Uniform",
-                                     "Weibull"), params = NULL,
-                            fx = NULL, lower = NULL, upper = NULL,
-                            n = 100, seed = 1234) {
+                            Dist = c("Benini", "Beta", "Beta-Normal",
+                                     "Birnbaum-Saunders", "Chisq", "Dagum",
+                                     "Exponential", "Exp-Geometric",
+                                     "Exp-Logarithmic", "Exp-Poisson", "F",
+                                     "Fisk", "Frechet", "Gamma", "Gaussian",
+                                     "Gompertz", "Gumbel", "Kumaraswamy",
+                                     "Laplace", "Lindley", "Logistic",
+                                     "Loggamma", "Lognormal", "Lomax",
+                                     "Makeham", "Maxwell", "Nakagami",
+                                     "Paralogistic", "Pareto", "Perks",
+                                     "Rayleigh", "Rice", "Singh-Maddala",
+                                     "Skewnormal", "t", "Topp-Leone",
+                                     "Triangular", "Uniform", "Weibull"),
+                            params = NULL, fx = NULL, lower = NULL,
+                            upper = NULL, n = 100, seed = 1234,
+                            legend.position = c(0.975, 0.9),
+                            legend.justification = c(1, 1),
+                            legend.text.size = 10, title.text.size = 15,
+                            axis.text.size = 10, axis.title.size = 13) {
   if (overlay == FALSE) {
     set.seed(seed)
     c <- as.numeric(c)
@@ -109,7 +131,8 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
     for (i in 1:length(z)) {
       phi[i] <- dnorm(z[i])
       if (method == "Fleishman") {
-        y[i] <- sigma * (c[1] + c[2] * z[i] + c[3] * z[i]^2 + c[4] * z[i]^3) + mu
+        y[i] <- sigma * (c[1] + c[2] * z[i] + c[3] * z[i]^2 + c[4] * z[i]^3) +
+          mu
         fy[i] <- phi[i]/(sigma * (c[2] + 2 * c[3] * z[i] + 3 * c[4] * z[i]^2))
       }
       if (method == "Polynomial") {
@@ -128,13 +151,15 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
       ggtitle(title) + geom_line() +
       scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
       scale_y_continuous(name = "Probability") +
-      theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-            axis.text.x = element_text(size = 10),
-            axis.title.x = element_text(size = 13),
-            axis.text.y = element_text(size = 10),
-            axis.title.y = element_text(size = 13),
-            legend.text = element_text(size = 10),
-            legend.position = c(0.975, 0.9), legend.justification=c(1, 1)) +
+      theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                      hjust = 0.5),
+            axis.text.x = element_text(size = axis.text.size),
+            axis.title.x = element_text(size = axis.title.size),
+            axis.text.y = element_text(size = axis.text.size),
+            axis.title.y = element_text(size = axis.title.size),
+            legend.text = element_text(size = legend.text.size),
+            legend.position = legend.position,
+            legend.justification = legend.justification) +
       scale_colour_manual(name = "", values = c(power_color),
                           labels = "Power Method")
     return(plot1)
@@ -180,25 +205,43 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
         y_fx[j] <- fx(x[j])
       }
     }
+    D <-
+      data.frame(Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders",
+                          "Chisq", "Dagum", "Exponential", "Exp-Geometric",
+                          "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk",
+                          "Frechet", "Gamma", "Gaussian", "Gompertz", "Gumbel",
+                          "Kumaraswamy", "Laplace", "Lindley", "Logistic",
+                          "Loggamma", "Lognormal", "Lomax", "Makeham",
+                          "Maxwell", "Nakagami", "Paralogistic",
+                          "Pareto", "Perks", "Rayleigh", "Rice",
+                          "Singh-Maddala", "Skewnormal", "t", "Topp-Leone",
+                          "Triangular", "Uniform", "Weibull"),
+                 pdf = c("dbenini", "dbeta", "dbetanorm", "dbisa", "dchisq",
+                         "ddagum", "dexp", "dexpgeom", "dexplog", "dexppois",
+                         "df", "dfisk", "dfrechet", "dgamma", "dnorm",
+                         "dgompertz", "dgumbel", "dkumar", "dlaplace",
+                         "dlind", "dlogis", "dlgamma", "dlnorm",
+                         "dlomax", "dmakeham", "dmaxwell", "dnaka",
+                         "dparalogistic", "dpareto", "dperks", "dgenray",
+                         "drice", "dsinmad", "dskewnorm", "dt", "dtopple",
+                         "dtriangle", "dunif", "dweibull"),
+                 fx = c("rbenini", "rbeta", "rbetanorm", "rbisa", "rchisq",
+                        "rdagum", "rexp", "rexpgeom", "rexplog", "rexppois",
+                        "rf", "rfisk", "rfrechet", "rgamma", "rnorm",
+                        "rgompertz", "rgumbel", "rkumar", "rlaplace",
+                        "rlind", "rlogis", "rlgamma", "rlnorm",
+                        "rlomax", "rmakeham", "rmaxwell", "rnaka",
+                        "rparalogistic", "rpareto", "rperks", "rgenray",
+                        "rrice", "rsinmad", "rskewnorm", "rt", "rtopple",
+                        "rtriangle", "runif", "rweibull"),
+                 Lower = as.numeric(c(params[1], 0, -Inf, rep(0, 9),
+                                      params[1], 0, -Inf, 0, -Inf, 0, -Inf,
+                                      0, -Inf, -Inf, rep(0, 6),
+                                      params[1], rep(0, 4), -Inf, -Inf, 0,
+                                      params[1], params[1], 0)),
+                 Upper = as.numeric(c(Inf, 1, rep(Inf, 15), 1, rep(Inf, 17),
+                                      1, params[2], params[2], Inf)))
     if (is.null(fx)) {
-      D <- data.frame(Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
-                               "Gaussian", "Laplace", "Logistic", "Lognormal",
-                               "Pareto", "Rayleigh", "t", "Triangular",
-                               "Uniform", "Weibull"),
-                      pdf = c("dbeta", "dchisq", "dexp", "df", "dgamma",
-                              "dnorm", "dlaplace", "dlogis", "dlnorm",
-                              "dpareto", "dgenray", "dt", "dtriangle",
-                              "dunif", "dweibull"),
-                      fx = c("rbeta", "rchisq", "rexp", "rf", "rgamma",
-                             "rnorm", "rlaplace", "rlogis", "rlnorm",
-                             "rpareto", "rgenray", "rt", "rtriangle",
-                             "runif", "rweibull"),
-                      Lower = as.numeric(c(0, 0, 0, 0, 0, -Inf, -Inf, -Inf,
-                                           0, params[1], 0, -Inf, params[1],
-                                           params[1], 0)),
-                      Upper = as.numeric(c(1, Inf, Inf, Inf, Inf, Inf, Inf,
-                                           Inf, Inf, Inf, Inf, Inf, params[2],
-                                           params[2], Inf)))
       i <- match(Dist, D$Dist)
       p <- as.character(D$pdf[i])
       for (j in 1:n) {
@@ -206,6 +249,8 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
         if (length(params) == 2) y_fx[j] <- get(p)(x[j], params[1], params[2])
         if (length(params) == 3) y_fx[j] <- get(p)(x[j], params[1], params[2],
                                                    params[3])
+        if (length(params) == 4) y_fx[j] <- get(p)(x[j], params[1], params[2],
+                                                   params[3], params[4])
       }
     }
     data <- data.frame(y = y, fy = fy, type = as.factor(rep("sim", length(y))))
@@ -220,13 +265,15 @@ plot_pdf_theory <- function(c = NULL, method = c("Fleishman", "Polynomial"),
       scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
       scale_y_continuous(name = "Probability",
                          limits = c(min(data2$fy), max(data2$fy))) +
-      theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-            axis.text.x = element_text(size = 10),
-            axis.title.x = element_text(size = 13),
-            axis.text.y = element_text(size = 10),
-            axis.title.y = element_text(size = 13),
-            legend.text = element_text(size = 10),
-            legend.position = c(0.975, 0.9), legend.justification = c(1, 1)) +
+      theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                      hjust = 0.5),
+            axis.text.x = element_text(size = axis.text.size),
+            axis.title.x = element_text(size = axis.title.size),
+            axis.text.y = element_text(size = axis.text.size),
+            axis.title.y = element_text(size = axis.title.size),
+            legend.text = element_text(size = legend.text.size),
+            legend.position = legend.position,
+            legend.justification = legend.justification) +
       scale_colour_manual(name = "", values = c(power_color, target_color),
                           labels = c("Power Method", "Target")) +
       scale_linetype_manual(name ="", values = c(1, target_lty),

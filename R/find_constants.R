@@ -142,7 +142,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
       if (nrow(converged) == 0) {
         warning(error)
       } else {
-        constants <- converged
+        constants <- converged[!duplicated(converged), , drop = FALSE]
         constants <- data.frame(cbind(-constants[, 2], constants),
                                 rep("FALSE", nrow(constants)))
         colnames(constants) <- c("c0", "c1", "c2", "c3", "valid")
@@ -161,7 +161,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
             constants$valid[i] <- "FALSE"
           }
         }
-        constants2 <- constants[constants$valid == "TRUE", ]
+        constants2 <- constants[constants$valid == "TRUE", , drop = FALSE]
         if (nrow(constants2) == 0) {
           freq <- table(round(constants[, 2], 6))
           constants <-
@@ -228,7 +228,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
         }
       }
       constants2 <- data.frame()
-      constants <- converged
+      constants <- converged[!duplicated(converged), , drop = FALSE]
       constants0 <- NULL
       if (!is.null(converged)) {
         constants <- data.frame(cbind(-constants[, 2] - 3 * constants[, 4],
@@ -251,7 +251,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
             constants$valid[i] <- "FALSE"
           }
         }
-        constants2 <- constants[constants$valid == "TRUE", ]
+        constants2 <- constants[constants$valid == "TRUE", , drop = FALSE]
         freq <- table(round(constants[, 2], 6))
         constants <- subset(constants, round(constants[, 2], 6) ==
                               as.numeric(names(freq[freq == max(freq)])[1]))
@@ -275,7 +275,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
               }
             }
             if (!is.null(converged)) {
-              constants <- converged
+              constants <- converged[!duplicated(converged), , drop = FALSE]
               constants <- cbind(-constants[, 2] - 3 * constants[, 4],
                                  constants)
               for (i in 1:nrow(constants)) {

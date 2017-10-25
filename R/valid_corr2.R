@@ -1,10 +1,10 @@
-#' @title Determine Correlation Bounds for Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Method 2
+#' @title Determine Correlation Bounds for Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Correlation Method 2
 #'
 #' @description This function calculates the lower and upper correlation bounds for the given distributions and
 #'     checks if a given target correlation matrix rho is within the bounds.  It should be used before simulation with
 #'     \code{\link[SimMultiCorrData]{rcorrvar2}}.  However, even if all pairwise correlations fall within the bounds, it is still possible
 #'     that the desired correlation matrix is not feasible.  This is particularly true when ordinal variables (r >= 2 categories) are
-#'     generated.  Therefore, this function should be used as a general check to eliminate pairwise correlations that are obviously
+#'     generated or negative correlations are desired.  Therefore, this function should be used as a general check to eliminate pairwise correlations that are obviously
 #'     not reproducible.  It will help prevent errors when executing the simulation.
 #'
 #'     Note: Some pieces of the function code have been adapted from Demirtas, Hu, & Allozi's (2017) \code{\link[PoisBinOrdNor]{validation_specs}}.
@@ -137,7 +137,7 @@
 #' @return \code{U_rho} the upper correlation bound
 #' @return If continuous variables are desired, additional components are:
 #' @return \code{constants} the calculated constants
-#' @return \code{SixCorr} a vector of the sixth cumulant correction values
+#' @return \code{sixth_correction} a vector of the sixth cumulant correction values
 #' @return \code{valid.pdf} a vector with i-th component equal to "TRUE" if variable Y_i has a valid power method pdf, else "FALSE"
 #' @return If a target correlation matrix rho is provided, each pairwise correlation is checked to see if it is within the lower and upper
 #' bounds.  If the correlation is outside the bounds, the indices of the variable pair are given.
@@ -256,40 +256,61 @@ valid_corr2 <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
     Valid.PDF <- numeric(k_cont)
     set.seed(seed)
     X_cont <- matrix(rnorm(k_cont * n), n, k_cont)
+    csame.dist <- NULL
+    for (i in 2:length(skews)) {
+      if (skews[i] %in% skews[1:(i - 1)]) {
+        csame <- which(skews[1:(i - 1)] == skews[i])
+        for (j in 1:length(csame)) {
+          if (method == "Polynomial" &
+              (skurts[i] == skurts[csame[j]]) &
+              (fifths[i] == fifths[csame[j]]) &
+              (sixths[i] == sixths[csame[j]])) {
+            csame.dist <- rbind(csame.dist, c(csame[j], i))
+            break
+          }
+          if (method == "Fleishman" &
+              (skurts[i] == skurts[csame[j]])) {
+            csame.dist <- rbind(csame.dist, c(csame[j], i))
+            break
+          }
+        }
+      }
+    }
     if (method == "Fleishman") {
-      constants <- matrix(1, nrow = k_cont, ncol = 4)
+      constants <- matrix(NA, nrow = k_cont, ncol = 4)
       colnames(constants) <- c("c0", "c1", "c2", "c3")
     }
     if (method == "Polynomial") {
-      constants <- matrix(1, nrow = k_cont, ncol = 6)
+      constants <- matrix(NA, nrow = k_cont, ncol = 6)
       colnames(constants) <- c("c0", "c1", "c2", "c3", "c4", "c5")
     }
     for (i in 1:k_cont) {
-      if (length(Six) == 0) {
+      if (!is.null(csame.dist)) {
+        rind <- which(csame.dist[, 2] == i)
+        if (length(rind) > 0) {
+          constants[i, ] <- constants[csame.dist[rind, 1], ]
+          SixCorr[i] <- SixCorr[csame.dist[rind, 1]]
+          Valid.PDF[i] <- Valid.PDF[csame.dist[rind, 1]]
+        }
+      }
+      if (sum(is.na(constants[i, ])) > 0) {
+        if (length(Six) == 0) Six2 <- NULL else
+          Six2 <- Six[[i]]
         cons <-
           suppressWarnings(find_constants(method = method, skews = skews[i],
                                           skurts = skurts[i],
                                           fifths = fifths[i],
-                                          sixths = sixths[i], Six = Six,
-                                          cstart = NULL, n = 25,
-                                          seed = seed))
-      } else {
-        cons <-
-          suppressWarnings(find_constants(method = method, skews = skews[i],
-                                          skurts = skurts[i],
-                                          fifths = fifths[i],
-                                          sixths = sixths[i], Six = Six[[i]],
-                                          cstart = NULL, n = 25,
-                                          seed = seed))
+                                          sixths = sixths[i], Six = Six2,
+                                          n = 25, seed = seed))
+        if (length(cons) == 1 | is.null(cons)) {
+          stop(paste("Constants can not be found for continuous variable ", i,
+                     ".", sep = ""))
+        }
+        con_solution <- cons$constants
+        SixCorr[i] <- ifelse(is.null(cons$SixCorr1), NA, cons$SixCorr1)
+        Valid.PDF[i] <- cons$valid
+        constants[i, ] <- con_solution
       }
-      if (length(cons) == 1 | is.null(cons)) {
-        stop(paste("Constants can not be found for continuous variable ", i,
-                   ".", sep = ""))
-      }
-      con_solution <- cons$constants
-      SixCorr[i] <- ifelse(is.null(cons$SixCorr1), NA, cons$SixCorr1)
-      Valid.PDF[i] <- cons$valid
-      constants[i, ] <- con_solution
       cat("\n", "Constants: Distribution ", i, " \n")
     }
     Y <- Yb <- matrix(1, nrow = n, ncol = k_cont)

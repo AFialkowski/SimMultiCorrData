@@ -23,6 +23,12 @@
 #' @param target_color the histogram color for the target pdf (default = "dark green")
 #' @param target_lty the line type for the target pdf (default = 2, dashed line)
 #' @param seed the seed value for random number generation (default = 1234)
+#' @param legend.position the position of the legend
+#' @param legend.justification the justification of the legend
+#' @param legend.text.size the size of the legend labels
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import stats
 #' @import utils
 #' @import ggplot2
@@ -75,7 +81,10 @@ plot_pdf_ext <- function(c = NULL, method = c("Fleishman", "Polynomial"),
                          ylower = NULL, yupper = NULL,
                          power_color = "dark blue", ext_y = NULL,
                          target_color = "dark green", target_lty = 2,
-                         seed = 1234) {
+                         seed = 1234, legend.position = c(0.975, 0.9),
+                         legend.justification = c(1, 1), legend.text.size = 10,
+                         title.text.size = 15, axis.text.size = 10,
+                         axis.title.size = 13) {
   if (is.null(ext_y)) stop("You must provide an external data set.")
   c <- as.numeric(c)
   set.seed(seed)
@@ -114,13 +123,15 @@ plot_pdf_ext <- function(c = NULL, method = c("Fleishman", "Polynomial"),
                  aes_(x = ~y, colour = ~type, lty = ~type)) +
     scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
     scale_y_continuous(name = "Probability") +
-    theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-          axis.text.x = element_text(size = 10),
-          axis.title.x = element_text(size = 13),
-          axis.text.y = element_text(size = 10),
-          axis.title.y = element_text(size = 13),
-          legend.text = element_text(size = 10),
-          legend.position = c(0.975, 0.9), legend.justification = c(1, 1)) +
+    theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                    hjust = 0.5),
+          axis.text.x = element_text(size = axis.text.size),
+          axis.title.x = element_text(size = axis.title.size),
+          axis.text.y = element_text(size = axis.text.size),
+          axis.title.y = element_text(size = axis.title.size),
+          legend.text = element_text(size = legend.text.size),
+          legend.position = legend.position,
+          legend.justification = legend.justification) +
     scale_colour_manual(name = "", values = c(power_color, target_color),
                         labels = c("Power Method", "Target")) +
     scale_linetype_manual(name = "", values = c(1, target_lty),

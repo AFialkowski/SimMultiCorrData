@@ -85,7 +85,8 @@ A list with the following components:
 }
 \description{
 This function simulates the continuous, ordinal (r >= 2 categories), Poisson, or Negative Binomial variables
-    used in \code{\link[SimMultiCorrData]{error_loop}}.  It is called in each iteration and works pairwise (i.e. for 2 variables).
+    used in \code{\link[SimMultiCorrData]{error_loop}}.  It is called in each iteration, regenerates all variables, and calculates the
+    resulting correlation matrix.
     This function would not ordinarily be called directly by the user.
 }
 \references{

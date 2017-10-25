@@ -1,7 +1,7 @@
 #' @title Plot Simulated Data and Target Distribution Data by Name or Function for Continuous or Count Variables
 #'
 #' @description This plots simulated continuous or count data and overlays data (if \code{overlay} = TRUE) generated from the target
-#'     distribution, which is specified by name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
+#'     distribution, which is specified by name (plus up to 4 parameters) or pdf function \code{fx} (plus support bounds).
 #'     Due to the integration involved in evaluating the cdf using \code{fx}, only continuous \code{fx} may be supplied.  Both are plotted
 #'     as histograms.  If a continuous target distribution is specified (\code{cont_var = TRUE}), the simulated data \eqn{y} is
 #'     scaled and then transformed (i.e. \eqn{y = sigma * scale(y) + mu}) so that it has the same mean (\eqn{mu}) and variance (\eqn{sigma^2}) as the
@@ -19,14 +19,14 @@
 #' @param cont_var TRUE (default) for continuous variables, FALSE for count variables
 #' @param target_color the histogram fill color for the target distribution (default = "dark green")
 #' @param nbins the number of bins to use when creating the histograms (default = 100)
-#' @param Dist name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-#'     "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial".
-#'     Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-#'     for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-#'     rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-#'     come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-#'     comes from the \code{\link[triangle]{triangle}} package.
-#' @param params a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)
+#' @param Dist name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+#'     "Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+#'     "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+#'     "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+#'     "Uniform", "Weibull", "Poisson", and "Negative_Binomial".
+#'     Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+#'     \code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.
+#' @param params a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)
 #' @param fx a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 #'     (keep NULL if \code{Dist} supplied instead)
 #' @param lower the lower support bound for a supplied fx, else keep NULL
@@ -34,10 +34,20 @@
 #' @param seed the seed value for random number generation (default = 1234)
 #' @param sub the number of subdivisions to use in the integration to calculate the cdf from fx; if no result, try increasing
 #'     sub (requires longer computation time; default = 1000)
+#' @param legend.position the position of the legend
+#' @param legend.justification the justification of the legend
+#' @param legend.text.size the size of the legend labels
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import ggplot2
 #' @import stats
 #' @import utils
-#' @importFrom VGAM dpareto rpareto dgenray rgenray dlaplace rlaplace
+#' @importFrom VGAM dbenini rbenini dbetanorm rbetanorm dbisa rbisa ddagum rdagum dexpgeom rexpgeom dexplog rexplog
+#'     dexppois rexppois dfisk rfisk dfrechet rfrechet dgompertz rgompertz dgumbel rgumbel dkumar rkumar dlaplace rlaplace dlind rlind
+#'     dlgamma rlgamma dlomax rlomax dmakeham rmakeham dmaxwell rmaxwell dnaka rnaka dparalogistic
+#'     rparalogistic dpareto rpareto dperks rperks dgenray rgenray drice rrice dsinmad rsinmad dskewnorm rskewnorm
+#'     dtopple rtopple
 #' @importFrom triangle dtriangle rtriangle
 #' @export
 #' @keywords plot, theoretical, simulated, Fleishman, Headrick
@@ -98,14 +108,26 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
                             power_color = "dark blue", overlay = TRUE,
                             cont_var = TRUE,
                             target_color = "dark green", nbins = 100,
-                            Dist = c("Beta", "Chisq", "Exponential", "F",
-                                     "Gamma", "Gaussian", "Laplace",
-                                     "Logistic", "Lognormal", "Pareto",
-                                     "Rayleigh", "t", "Triangular",
-                                     "Uniform", "Weibull", "Poisson",
-                                     "Negative_Binomial"),
+                            Dist = c("Benini", "Beta", "Beta-Normal",
+                                     "Birnbaum-Saunders", "Chisq", "Dagum",
+                                     "Exponential", "Exp-Geometric",
+                                     "Exp-Logarithmic", "Exp-Poisson", "F",
+                                     "Fisk", "Frechet", "Gamma", "Gaussian",
+                                     "Gompertz", "Gumbel", "Kumaraswamy",
+                                     "Laplace", "Lindley", "Logistic",
+                                     "Loggamma", "Lognormal", "Lomax",
+                                     "Makeham", "Maxwell", "Nakagami",
+                                     "Paralogistic", "Pareto", "Perks",
+                                     "Rayleigh", "Rice", "Singh-Maddala",
+                                     "Skewnormal", "t", "Topp-Leone",
+                                     "Triangular", "Uniform", "Weibull",
+                                     "Poisson", "Negative_Binomial"),
                             params = NULL, fx = NULL, lower = NULL,
-                            upper = NULL, seed = 1234, sub = 1000) {
+                            upper = NULL, seed = 1234, sub = 1000,
+                            legend.position = c(0.975, 0.9),
+                            legend.justification = c(1, 1),
+                            legend.text.size = 10, title.text.size = 15,
+                            axis.text.size = 10, axis.title.size = 13) {
   if (overlay == FALSE) {
     if (is.null(ylower) & is.null(yupper)) {
       ylower <- min(sim_y)
@@ -117,13 +139,15 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
       geom_histogram(data = data[data$type == "sim", ],
                      aes_(~y, fill = ~type), bins = nbins) +
       scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
-      theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-            axis.text.x = element_text(size = 10),
-            axis.title.x = element_text(size = 13),
-            axis.text.y = element_text(size = 10),
-            axis.title.y = element_text(size = 13),
-            legend.text = element_text(size = 10),
-            legend.position = c(0.975, 0.9), legend.justification = c(1, 1)) +
+      theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                      hjust = 0.5),
+            axis.text.x = element_text(size = axis.text.size),
+            axis.title.x = element_text(size = axis.title.size),
+            axis.text.y = element_text(size = axis.text.size),
+            axis.title.y = element_text(size = axis.title.size),
+            legend.text = element_text(size = legend.text.size),
+            legend.position = legend.position,
+            legend.justification = legend.justification) +
       scale_fill_manual(name = "", values = power_color,
                         labels = c("Simulated Variable"))
     return(plot1)
@@ -157,25 +181,44 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
         y_fx[i] <- uniroot(cfx, c(lower, upper), tol = 0.0001, u = uni[i])$root
       }
     }
+    D <-
+      data.frame(Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders",
+                          "Chisq", "Dagum", "Exponential", "Exp-Geometric",
+                          "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk",
+                          "Frechet", "Gamma", "Gaussian", "Gompertz", "Gumbel",
+                          "Kumaraswamy", "Laplace", "Lindley", "Logistic",
+                          "Loggamma", "Lognormal", "Lomax",
+                          "Makeham", "Maxwell", "Nakagami", "Paralogistic",
+                          "Pareto", "Perks", "Rayleigh", "Rice",
+                          "Singh-Maddala", "Skewnormal", "t", "Topp-Leone",
+                          "Triangular", "Uniform", "Weibull", "Poisson",
+                          "Negative_Binomial"),
+                 pdf = c("dbenini", "dbeta", "dbetanorm", "dbisa", "dchisq",
+                         "ddagum", "dexp", "dexpgeom", "dexplog", "dexppois",
+                         "df", "dfisk", "dfrechet", "dgamma", "dnorm",
+                         "dgompertz", "dgumbel", "dkumar", "dlaplace",
+                         "dlind", "dlogis", "dlgamma", "dlnorm",
+                         "dlomax", "dmakeham", "dmaxwell", "dnaka",
+                         "dparalogistic", "dpareto", "dperks", "dgenray",
+                         "drice", "dsinmad", "dskewnorm", "dt", "dtopple",
+                         "dtriangle", "dunif", "dweibull", "dpois", "dnbinom"),
+                 fx = c("rbenini", "rbeta", "rbetanorm", "rbisa", "rchisq",
+                        "rdagum", "rexp", "rexpgeom", "rexplog", "rexppois",
+                        "rf", "rfisk", "rfrechet", "rgamma", "rnorm",
+                        "rgompertz", "rgumbel", "rkumar", "rlaplace",
+                        "rlind", "rlogis", "rlgamma", "rlnorm",
+                        "rlomax", "rmakeham", "rmaxwell", "rnaka",
+                        "rparalogistic", "rpareto", "rperks", "rgenray",
+                        "rrice", "rsinmad", "rskewnorm", "rt", "rtopple",
+                        "rtriangle", "runif", "rweibull", "rpois", "rnbinom"),
+                 Lower = as.numeric(c(params[1], 0, -Inf, rep(0, 9),
+                                      params[1], 0, -Inf, 0, -Inf, 0, -Inf,
+                                      0, -Inf, -Inf, rep(0, 6),
+                                      params[1], rep(0, 4), -Inf, -Inf, 0,
+                                      params[1], params[1], 0, 0, 0)),
+                 Upper = as.numeric(c(Inf, 1, rep(Inf, 15), 1, rep(Inf, 17),
+                                      1, params[2], params[2], Inf, Inf, Inf)))
     if (is.null(fx)) {
-      D <- data.frame(Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma",
-                               "Gaussian", "Laplace", "Logistic", "Lognormal",
-                               "Pareto", "Rayleigh", "t", "Triangular",
-                               "Uniform", "Weibull", "Poisson", "Negative_Binomial"),
-                      pdf = c("dbeta", "dchisq", "dexp", "df", "dgamma",
-                              "dnorm", "dlaplace", "dlogis", "dlnorm",
-                              "dpareto", "dgenray", "dt", "dtriangle",
-                              "dunif", "dweibull", "dpois", "dnbinom"),
-                      fx = c("rbeta", "rchisq", "rexp", "rf", "rgamma",
-                             "rnorm", "rlaplace", "rlogis", "rlnorm",
-                             "rpareto", "rgenray", "rt", "rtriangle",
-                             "runif", "rweibull", "rpois", "rnbinom"),
-                      Lower = as.numeric(c(0, 0, 0, 0, 0, -Inf, -Inf, -Inf,
-                                           0, params[1], 0, -Inf, params[1],
-                                           params[1], 0, 0, 0)),
-                      Upper = as.numeric(c(1, Inf, Inf, Inf, Inf, Inf, Inf,
-                                           Inf, Inf, Inf, Inf, Inf, params[2],
-                                           params[2], Inf, Inf, params[1])))
       i <- match(Dist, D$Dist)
       p <- as.character(D$fx[i])
       x <- 1:n
@@ -184,6 +227,8 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
       if (length(params) == 2) y_fx <- get(p)(n, params[1], params[2])
       if (length(params) == 3) y_fx <- get(p)(n, params[1], params[2],
                                               params[3])
+      if (length(params) == 4) y_fx <- get(p)(n, params[1], params[2],
+                                              params[3], params[4])
     }
     data <- data.frame(x = 1:length(sim_y), y = sim_y,
                        type = as.factor(rep("sim", length(sim_y))))
@@ -196,13 +241,15 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
       geom_histogram(data = data2[data2$type == "theory", ],
                      aes_(~y, fill = ~type), bins = nbins) +
       scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
-      theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-            axis.text.x = element_text(size = 10),
-            axis.title.x = element_text(size = 13),
-            axis.text.y = element_text(size = 10),
-            axis.title.y = element_text(size = 13),
-            legend.text = element_text(size = 10),
-            legend.position = c(0.975, 0.9), legend.justification = c(1, 1)) +
+      theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                      hjust = 0.5),
+            axis.text.x = element_text(size = axis.text.size),
+            axis.title.x = element_text(size = axis.title.size),
+            axis.text.y = element_text(size = axis.text.size),
+            axis.title.y = element_text(size = axis.title.size),
+            legend.text = element_text(size = legend.text.size),
+            legend.position = legend.position,
+            legend.justification = legend.justification) +
       scale_fill_manual(name = "", values = c("sim" = power_color,
                                               "theory" = target_color),
                         labels = c("Simulated Variable", "Target Variable"))

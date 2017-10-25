@@ -3,8 +3,8 @@
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4.5) 
 
 ## ---- warning = FALSE, message = FALSE-----------------------------------
-library(SimMultiCorrData)
-library(printr)
+library("SimMultiCorrData")
+library("printr")
 H_stcum <- matrix(1, nrow = 4, ncol = ncol(Headrick.dist))
 for (i in 1:ncol(H_params)) {
   if (is.na(H_params[2, i])) {

@@ -12,9 +12,9 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2017-06-29" />
+<meta name="date" content="2017-10-24" />
 
-<title>Comparison of Method 1 and Method 2</title>
+<title>Comparison of Correlation Method 1 and Correlation Method 2</title>
 
 
 
@@ -30,9 +30,9 @@
 
 
 
-<h1 class="title toc-ignore">Comparison of Method 1 and Method 2</h1>
+<h1 class="title toc-ignore">Comparison of Correlation Method 1 and Correlation Method 2</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2017-06-29</em></h4>
+<h4 class="date"><em>2017-10-24</em></h4>
 
 
 
@@ -59,9 +59,9 @@
 <p>Now the two methods will be contrasted.</p>
 </div>
 </div>
-<div id="overview-of-method-1" class="section level2">
-<h2>Overview of Method 1:</h2>
-<p>The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy increases with sample size and the number of repetitions (see <code>findintercorr</code>). Specifying the seed allows for reproducibility. In addition, method 1 differs from method 2 in the following ways:</p>
+<div id="overview-of-correlation-method-1" class="section level2">
+<h2>Overview of Correlation Method 1:</h2>
+<p>The intermediate correlations used in correlation method 1 are more simulation based than those in correlation method 2, which means that accuracy increases with sample size and the number of repetitions (see <code>findintercorr</code>). Specifying the seed allows for reproducibility. In addition, method 1 differs from method 2 in the following ways:</p>
 <ol style="list-style-type: decimal">
 <li><p>The intermediate correlation for <strong>count variables</strong> is based on the method of <em>Yahav &amp; Shmueli</em> <span class="citation">(2012)</span>, which uses a simulation based, logarithmic transformation of the target correlation. This method becomes less accurate as the variable mean gets closer to zero.</p>
 <ol style="list-style-type: lower-alpha">
@@ -81,7 +81,7 @@
 </ol>
 <div id="simulation-process" class="section level3">
 <h3>Simulation Process:</h3>
-<p>The algorithm used in the simulation function <code>rcorrvar</code> that employs method 1 is as follows:</p>
+<p>The algorithm used in the simulation function <code>rcorrvar</code> that employs correlation method 1 is as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>Preliminary checks on the distribution parameters and target correlation matrix <code>rho</code> are performed to ensure they are of the correct dimension, format, and/or sign. This function does NOT verify the feasibility of <code>rho</code>, given the distribution parameters. That should be done first using <code>valid_corr</code>, which checks if <code>rho</code> is within the feasible bounds and returns the lower and upper correlation limits.</p></li>
 <li><p>The constants are calculated for the continuous variables using <code>find_constants</code>. If no solutions are found that generate valid power method pdfs, the function will return constants that produce invalid pdfs (or a stop error if no solutions can be found). Errors regarding constant calculation are the most probable cause of function failure. Possible solutions include:</p>
@@ -99,9 +99,9 @@
 </ol>
 </div>
 </div>
-<div id="overview-of-method-2" class="section level2">
-<h2>Overview of Method 2:</h2>
-<p>The intermediate correlations used in method 2 are less simulation based than those in method 1 (see <code>findintercorr2</code>). Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible). In addition, method 2 differs from method 1 in the following ways:</p>
+<div id="overview-of-correlation-method-2" class="section level2">
+<h2>Overview of Correlation Method 2:</h2>
+<p>The intermediate correlations used in correlation method 2 are less simulation based than those in correlation method 1 (see <code>findintercorr2</code>). Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible). In addition, method 2 differs from method 1 in the following ways:</p>
 <ol style="list-style-type: decimal">
 <li><p>The intermediate correlations involving <strong>count variables</strong> are based on the methods of <em>Barbiero &amp; Ferrari</em> <span class="citation">(2012; 2015)</span>. The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability. This truncation factor may differ for each count variable (see <code>max_count_support</code>). The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of <code>ordnorm</code>.</p></li>
 <li><p>The <strong>continuous - count variable</strong> correlations are based on an extension of the method of <em>Demirtas et al.</em> <span class="citation">(2012)</span>, and the count variables are treated as ordinal. The correction factor is the product of the power method correlation between the continuous variable and the normal variable used to generate it (see <span class="citation">Headrick and Kowalchuk (2007)</span>) and the point-polyserial correlation between the ordinalized count variable and the normal variable used to generate it (see <span class="citation">Olsson, Drasgow, and Dorans (1982)</span>). The intermediate correlations are the ratio of the target correlations to the correction factor.</p>
@@ -112,7 +112,7 @@
 </ol>
 <div id="simulation-process-1" class="section level3">
 <h3>Simulation Process:</h3>
-<p>The algorithm used in the simulation function <code>rcorrvar2</code> that employs method 2 is similar to that described for <code>rcorrvar</code>, with a few modifications:</p>
+<p>The algorithm used in the simulation function <code>rcorrvar2</code> that employs correlation method 2 is similar to that described for <code>rcorrvar</code>, with a few modifications:</p>
 <ol style="list-style-type: decimal">
 <li><p>The feasibility of <code>rho</code>, given the distribution parameters, should be checked first using the function <code>valid_corr2</code>, which checks if <code>rho</code> is within the feasible bounds and returns the lower and upper correlation limits.</p></li>
 <li><p>After the support is created for the ordinal variables (if no support is provided), the maximum support for the count variables is determined using <code>max_count_support</code>, given truncation value vector <code>pois_eps</code> for Poisson variables and/or <code>nb_eps</code> for Negative Binomial variables. The cumulative probability truncation value may differ by variable, but a good value is <span class="math inline">\(0.0001\)</span>. The resulting supports and distribution parameters are used to create marginal lists, consisting of the cumulative probabilities for each count variable.</p></li>
@@ -127,28 +127,28 @@
 <p>Amatya, A, and H Demirtas. 2015. “Simultaneous Generation of Multivariate Mixed Data with Poisson and Normal Marginals.” <em>Journal of Statistical Computation and Simulation</em> 85 (15): 3129–39. doi:<a href="https://doi.org/10.1080/00949655.2014.953534">10.1080/00949655.2014.953534</a>.</p>
 </div>
 <div id="ref-FerrBarb_Pois">
-<p>Barbiero, A, and PA Ferrari. 2015. “Simulation of Correlated Poisson Variables.” <em>Applied Stochastic Models in Business and Industry</em> 31: 669–80. doi:<a href="https://doi.org/10.1002/asmb.2072">10.1002/asmb.2072</a>.</p>
+<p>Barbiero, A, and P A Ferrari. 2015. “Simulation of Correlated Poisson Variables.” <em>Applied Stochastic Models in Business and Industry</em> 31: 669–80. doi:<a href="https://doi.org/10.1002/asmb.2072">10.1002/asmb.2072</a>.</p>
 </div>
 <div id="ref-DemHed">
-<p>Demirtas, H, and D Hedeker. 2011. “A Practical Way for Computing Approximate Lower and Upper Correlation Bounds.” <em>American Statistician</em> 65 (2): 104–9. doi:<a href="https://doi.org/10.1198/tast.2011.10090">10.1198/tast.2011.10090</a>.</p>
+<p>Demirtas, H, and D Hedeker. 2011. “A Practical Way for Computing Approximate Lower and Upper Correlation Bounds.” <em>The American Statistician</em> 65 (2): 104–9. doi:<a href="https://doi.org/10.1198/tast.2011.10090">10.1198/tast.2011.10090</a>.</p>
 </div>
 <div id="ref-Dem_Power">
-<p>Demirtas, H, D Hedeker, and RJ Mermelstein. 2012. “Simulation of Massive Public Health Data by Power Polynomials.” <em>Statistics in Medicine</em> 31 (27): 3337–46. doi:<a href="https://doi.org/10.1002/sim.5362">10.1002/sim.5362</a>.</p>
+<p>Demirtas, H, D Hedeker, and R J Mermelstein. 2012. “Simulation of Massive Public Health Data by Power Polynomials.” <em>Statistics in Medicine</em> 31 (27): 3337–46. doi:<a href="https://doi.org/10.1002/sim.5362">10.1002/sim.5362</a>.</p>
 </div>
 <div id="ref-EmPied">
-<p>Emrich, LJ, and MR Piedmonte. 1991. “A Method for Generating High-Dimensional Multivariate Binary Variates.” <em>American Statistician</em> 45: 302–4. doi:<a href="https://doi.org/10.1080/00031305.1991.10475828">10.1080/00031305.1991.10475828</a>.</p>
+<p>Emrich, L J, and M R Piedmonte. 1991. “A Method for Generating High-Dimensional Multivariate Binary Variates.” <em>The American Statistician</em> 45: 302–4. doi:<a href="https://doi.org/10.1080/00031305.1991.10475828">10.1080/00031305.1991.10475828</a>.</p>
 </div>
 <div id="ref-FerrBarb_Ord">
-<p>Ferrari, PA, and A Barbiero. 2012. “Simulating Ordinal Data.” <em>Multivariate Behavioral Research</em> 47 (4): 566–89. doi:<a href="https://doi.org/10.1080/00273171.2012.692630">10.1080/00273171.2012.692630</a>.</p>
+<p>Ferrari, P A, and A Barbiero. 2012. “Simulating Ordinal Data.” <em>Multivariate Behavioral Research</em> 47 (4): 566–89. doi:<a href="https://doi.org/10.1080/00273171.2012.692630">10.1080/00273171.2012.692630</a>.</p>
 </div>
 <div id="ref-HeadKow">
-<p>Headrick, TC, and RK Kowalchuk. 2007. “The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data.” <em>Journal of Statistical Computation and Simulation</em> 77: 229–49. doi:<a href="https://doi.org/10.1080/10629360600605065">10.1080/10629360600605065</a>.</p>
+<p>Headrick, T C, and R K Kowalchuk. 2007. “The Power Method Transformation: Its Probability Density Function, Distribution Function, and Its Further Use for Fitting Data.” <em>Journal of Statistical Computation and Simulation</em> 77: 229–49. doi:<a href="https://doi.org/10.1080/10629360600605065">10.1080/10629360600605065</a>.</p>
 </div>
 <div id="ref-Higham">
-<p>Higham, N. 2002. “Computing the Nearest Correlation Matrix - a Problem from Finance.” <em>IMA Journal of Numerical Analysis</em> 22: 329–43.</p>
+<p>Higham, N. 2002. “Computing the Nearest Correlation Matrix - a Problem from Finance.” <em>IMA Journal of Numerical Analysis</em> 22 (3): 329–43. doi:<a href="https://doi.org/10.1093/imanum/22.3.329">10.1093/imanum/22.3.329</a>.</p>
 </div>
 <div id="ref-PolyCorr">
-<p>Olsson, U, F Drasgow, and NJ Dorans. 1982. “The Polyserial Correlation Coefficient.” <em>Psychometrika</em> 47 (3): 337–47. doi:<a href="https://doi.org/10.1007/BF02294164">10.1007/BF02294164</a>.</p>
+<p>Olsson, U, F Drasgow, and N J Dorans. 1982. “The Polyserial Correlation Coefficient.” <em>Psychometrika</em> 47 (3): 337–47. doi:<a href="https://doi.org/10.1007/BF02294164">10.1007/BF02294164</a>.</p>
 </div>
 <div id="ref-YahShm">
 <p>Yahav, I, and G Shmueli. 2012. “On Generating Multivariate Poisson Data in Management Science Applications.” <em>Applied Stochastic Models in Business and Industry</em> 28 (1): 91–102. doi:<a href="https://doi.org/10.1002/asmb.901">10.1002/asmb.901</a>.</p>

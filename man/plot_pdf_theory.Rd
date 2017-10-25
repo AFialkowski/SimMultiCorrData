@@ -7,11 +7,17 @@
 plot_pdf_theory(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   sigma = 1, title = "Probability Density Function", ylower = NULL,
   yupper = NULL, power_color = "dark blue", overlay = TRUE,
-  target_color = "dark green", target_lty = 2, Dist = c("Beta", "Chisq",
-  "Exponential", "F", "Gamma", "Gaussian", "Laplace", "Logistic", "Lognormal",
-  "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull"),
-  params = NULL, fx = NULL, lower = NULL, upper = NULL, n = 100,
-  seed = 1234)
+  target_color = "dark green", target_lty = 2, Dist = c("Benini", "Beta",
+  "Beta-Normal", "Birnbaum-Saunders", "Chisq", "Dagum", "Exponential",
+  "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet",
+  "Gamma", "Gaussian", "Gompertz", "Gumbel", "Kumaraswamy", "Laplace",
+  "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+  "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice",
+  "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular", "Uniform",
+  "Weibull"), params = NULL, fx = NULL, lower = NULL, upper = NULL,
+  n = 100, seed = 1234, legend.position = c(0.975, 0.9),
+  legend.justification = c(1, 1), legend.text.size = 10,
+  title.text.size = 15, axis.text.size = 10, axis.title.size = 13)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
@@ -41,15 +47,15 @@ or pdf function fx (with bounds = ylower, yupper)}
 
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
 
-\item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull".
-Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-comes from the \code{\link[triangle]{triangle}} package.}
+\item{Dist}{name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+"Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+"Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+"Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+"Uniform", "Weibull".
+Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+\code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.}
 
-\item{params}{a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)}
+\item{params}{a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)}
 
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
@@ -61,6 +67,18 @@ comes from the \code{\link[triangle]{triangle}} package.}
 \item{n}{the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 100)}
 
 \item{seed}{the seed value for random number generation (default = 1234)}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
@@ -73,7 +91,7 @@ This plots the theoretical power method probability density function: \deqn{f_p(
     user).  Given a vector of polynomial
     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical probabilities
     using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  If \code{overlay} = TRUE, the target distribution is also plotted given either a
-    distribution name (plus up to 3 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
+    distribution name (plus up to 4 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
     scaled and then transformed so that it has the same mean and variance as the target distribution.
     It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
     (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.

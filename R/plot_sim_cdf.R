@@ -22,6 +22,10 @@
 #' @param color the line color for the cdf (default = "dark blue")
 #' @param fill the fill color if \code{calc_cprob} = TRUE (default = "blue)
 #' @param hline the dashed horizontal line color drawn at \code{delta} if \code{calc_cprob} = TRUE (default = "dark green")
+#' @param text.size the size of the text displaying the cumulative probability up to \code{delta} if \code{calc_cprob} = TRUE
+#' @param title.text.size the size of the plot title
+#' @param axis.text.size the size of the axes text (tick labels)
+#' @param axis.title.size the size of the axes titles
 #' @import ggplot2
 #' @import grid
 #' @export
@@ -77,7 +81,9 @@ plot_sim_cdf <- function(sim_y,
                          title = "Empirical Cumulative Distribution Function",
                          ylower = NULL, yupper = NULL, calc_cprob = FALSE,
                          delta = 5, color = "dark blue", fill = "blue",
-                         hline = "dark green") {
+                         hline = "dark green", text.size = 11,
+                         title.text.size = 15, axis.text.size = 10,
+                         axis.title.size = 13) {
   if (is.null(ylower) & is.null(yupper)) {
     ylower <- min(sim_y)
     yupper <- max(sim_y)
@@ -88,11 +94,13 @@ plot_sim_cdf <- function(sim_y,
     geom_hline(yintercept = 1, lty = 2, colour = "#333333") + ggtitle(title) +
     scale_x_continuous(name = "y", limits = c(ylower, yupper)) +
     scale_y_continuous(name = "Cumulative Probability") +
-    theme(plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
-          legend.position = "none", axis.text.x  = element_text(size = 10),
-          axis.title.x = element_text(size = 13),
-          axis.text.y  = element_text(size = 10),
-          axis.title.y = element_text(size = 13))
+    theme(plot.title = element_text(size = title.text.size, face = "bold",
+                                    hjust = 0.5),
+          legend.position = "none",
+          axis.text.x  = element_text(size = axis.text.size),
+          axis.title.x = element_text(size = axis.title.size),
+          axis.text.y  = element_text(size = axis.text.size),
+          axis.title.y = element_text(size = axis.title.size))
   if (calc_cprob == FALSE) return(plot1)
   if (calc_cprob == TRUE) {
     cprob <- sim_cdf_prob(sim_y = sim_y, delta = delta)
@@ -101,7 +109,7 @@ plot_sim_cdf <- function(sim_y,
     text_one <- textGrob(paste("Cumulative probability = ",
                                round(cprob$cumulative_prob, 4), ", y = ",
                                round(delta, 4), sep = ""),
-                         gp = gpar(fontsize = 11, fontface = "bold",
+                         gp = gpar(fontsize = text.size, fontface = "bold",
                                    col = hline))
     plot1 <- plot1 +
       geom_area(data = data2, aes_(x = ~y, y = ~cum_prob), fill = fill) +

@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Negative Binomial Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Negative Binomial Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k_nb x k_nb} intermediate matrix of correlations for the Negative Binomial variables by
 #'     extending the method of Yahav & Shmueli (2012, \doi{10.1002/asmb.901}). The intermediate correlation between Z1 and Z2 (the

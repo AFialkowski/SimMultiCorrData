@@ -2,7 +2,7 @@
 % Please edit documentation in R/valid_corr.R
 \name{valid_corr}
 \alias{valid_corr}
-\title{Determine Correlation Bounds for Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Method 1}
+\title{Determine Correlation Bounds for Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Correlation Method 1}
 \usage{
 valid_corr(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
@@ -68,7 +68,7 @@ If continuous variables are desired, additional components are:
 
 \code{constants} the calculated constants
 
-\code{SixCorr} a vector of the sixth cumulant correction values
+\code{sixth_correction} a vector of the sixth cumulant correction values
 
 \code{valid.pdf} a vector with i-th component equal to "TRUE" if variable Y_i has a valid power method pdf, else "FALSE"
 
@@ -80,7 +80,7 @@ This function calculates the lower and upper correlation bounds for the given di
     checks if a given target correlation matrix \code{rho} is within the bounds.  It should be used before simulation with
     \code{\link[SimMultiCorrData]{rcorrvar}}.  However, even if all pairwise correlations fall within the bounds, it is still possible
     that the desired correlation matrix is not feasible.  This is particularly true when ordinal variables (r >= 2 categories) are
-    generated.  Therefore, this function should be used as a general check to eliminate pairwise correlations that are obviously
+    generated or negative correlations are desired.  Therefore, this function should be used as a general check to eliminate pairwise correlations that are obviously
     not reproducible.  It will help prevent errors when executing the simulation.
 
     Note: Some pieces of the function code have been adapted from Demirtas, Hu, & Allozi's (2017) \code{\link[PoisBinOrdNor]{validation_specs}}.

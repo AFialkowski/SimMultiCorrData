@@ -7,7 +7,9 @@
 plot_cdf(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   sigma = 1, title = "Cumulative Distribution Function", ylower = NULL,
   yupper = NULL, calc_cprob = FALSE, delta = 5, color = "dark blue",
-  fill = "blue", hline = "dark green", n = 10000, seed = 1234)
+  fill = "blue", hline = "dark green", n = 10000, seed = 1234,
+  text.size = 11, title.text.size = 15, axis.text.size = 10,
+  axis.title.size = 13)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
@@ -40,6 +42,14 @@ up to \eqn{delta = sigma * y + mu} and the region on the plot is filled with a d
 \item{n}{the number of random standard normal numbers to use in generating \eqn{y = p(z)} (default = 10000)}
 
 \item{seed}{the seed value for random number generation (default = 1234)}
+
+\item{text.size}{the size of the text displaying the cumulative probability up to \code{delta} if \code{calc_cprob} = TRUE}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Method 2
+#' @title Calculate Intermediate MVN Correlation for Ordinal, Continuous, Poisson, or Negative Binomial Variables: Correlation Method 2
 #'
 #' @description This function calculates a \code{k x k} intermediate matrix of correlations, where \code{k = k_cat + k_cont + k_pois + k_nb},
 #'     to be used in simulating variables with \code{\link[SimMultiCorrData]{rcorrvar2}}.  The ordering of the variables must be
@@ -10,8 +10,8 @@
 #'     \code{\link[SimMultiCorrData]{rcorrvar2}}, and would only be used separately if the user wants to find the intermediate correlation matrix
 #'     only.  The simulation functions also return the intermediate correlation matrix.
 #'
-#' @section Overview of Method 2:
-#'     The intermediate correlations used in method 2 are less simulation based than those in method 1, and no seed is needed.
+#' @section Overview of Correlation Method 2:
+#'     The intermediate correlations used in correlation method 2 are less simulation based than those in correlation method 1, and no seed is needed.
 #'     Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error
 #'     has been reached (if possible).  In addition, method 2 differs from method 1 in the following ways:
 #'
@@ -403,7 +403,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_cp <- ordnorm(marginal = cat_pois_marg, rho = rho_cp,
                         support = cat_pois_support,
                         epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_cat_pois <- Sigma_cp[1:k_cat, (k_cat + 1):(k_cat + k_pois)]
+    Sigma_cat_pois <- as.matrix(Sigma_cp[1:k_cat,
+                                         (k_cat + 1):(k_cat + k_pois)])
     Sigma_pois_cat <- t(Sigma_cat_pois)
   }
   if (k_cat > 0 & k_nb > 0) {
@@ -414,7 +415,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_cnb <- ordnorm(marginal = cat_nb_marg, rho = rho_cnb,
                          support = cat_nb_support,
                          epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_cat_nb <- Sigma_cnb[1:k_cat, (k_cat + 1):(k_cat + k_nb)]
+    Sigma_cat_nb <- as.matrix(Sigma_cnb[1:k_cat,
+                                        (k_cat + 1):(k_cat + k_nb)])
     Sigma_nb_cat <- t(Sigma_cat_nb)
   }
   if (k_cont > 0 & k_pois > 0) {
@@ -453,7 +455,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_pnb <- ordnorm(marginal = pois_nb_marg, rho = rho_pnb,
                          support = pois_nb_support,
                          epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_pois_nb <- Sigma_pnb[1:k_pois, (k_pois + 1):(k_pois + k_nb)]
+    Sigma_pois_nb <- as.matrix(Sigma_pnb[1:k_pois,
+                                         (k_pois + 1):(k_pois + k_nb)])
     Sigma_nb_pois <- t(Sigma_pois_nb)
   }
   if (k_cat > 0 & k_cont == 0 & k_pois == 0 & k_nb == 0) {

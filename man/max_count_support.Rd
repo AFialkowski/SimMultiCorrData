@@ -2,7 +2,7 @@
 % Please edit documentation in R/max_count_support.R
 \name{max_count_support}
 \alias{max_count_support}
-\title{Calculate Maximum Support Value for Count Variables: Method 2}
+\title{Calculate Maximum Support Value for Count Variables: Correlation Method 2}
 \usage{
 max_count_support(k_pois, k_nb, lam, pois_eps = NULL, size, prob, mu = NULL,
   nb_eps = NULL)

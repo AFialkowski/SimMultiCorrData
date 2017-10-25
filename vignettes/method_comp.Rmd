@@ -1,11 +1,11 @@
 ---
-title: "Comparison of Method 1 and Method 2"
+title: "Comparison of Correlation Method 1 and Correlation Method 2"
 author: "Allison C Fialkowski"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: Bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Comparison of Method 1 and Method 2}
+  %\VignetteIndexEntry{Comparison of Correlation Method 1 and Correlation Method 2}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -53,8 +53,8 @@ Correlations are computed pairwise.  `findintercorr_cont` is called for each pai
 
 Now the two methods will be contrasted.
 
-## Overview of Method 1:
-The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy increases with sample size and the number of repetitions (see `findintercorr`).  Specifying the seed allows for reproducibility.  In addition, method 1 differs from method 2 in the following ways:
+## Overview of Correlation Method 1:
+The intermediate correlations used in correlation method 1 are more simulation based than those in correlation method 2, which means that accuracy increases with sample size and the number of repetitions (see `findintercorr`).  Specifying the seed allows for reproducibility.  In addition, method 1 differs from method 2 in the following ways:
 
 1. The intermediate correlation for **count variables** is based on the method of *Yahav & Shmueli* [-@YahShm], which uses a simulation based, logarithmic transformation of the target correlation.  This method becomes less accurate as the variable mean gets closer to zero.
 
@@ -72,7 +72,7 @@ The intermediate correlations used in method 1 are more simulation based than th
     b) *Negative Binomial variables:* `findintercorr_cont_nb` is called to calculate the intermediate MVN correlation for all variables.
 
 ### Simulation Process: 
-The algorithm used in the simulation function `rcorrvar` that employs method 1 is as follows:
+The algorithm used in the simulation function `rcorrvar` that employs correlation method 1 is as follows:
 
 1. Preliminary checks on the distribution parameters and target correlation matrix `rho` are performed to ensure they are of the correct dimension, format, and/or sign.  This function does NOT verify the feasibility of `rho`, given the distribution parameters.  That should be done first using `valid_corr`,  which checks if `rho` is within the feasible bounds and returns the lower and upper correlation limits.
 
@@ -95,8 +95,8 @@ The algorithm used in the simulation function `rcorrvar` that employs method 1 i
 
 1. Summary statistics are calculated by variable type.
 
-## Overview of Method 2:
-The intermediate correlations used in method 2 are less simulation based than those in method 1  (see `findintercorr2`).  Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible).  In addition, method 2 differs from method 1 in the following ways:
+## Overview of Correlation Method 2:
+The intermediate correlations used in correlation method 2 are less simulation based than those in correlation method 1  (see `findintercorr2`).  Their calculations involve greater utilization of correction loops which make iterative adjustments until a maximum error has been reached (if possible).  In addition, method 2 differs from method 1 in the following ways:
 
 1. The intermediate correlations involving **count variables** are based on the methods of *Barbiero & Ferrari* [-@FerrBarb_Ord; -@FerrBarb_Pois].  The Poisson or Negative Binomial support is made finite by removing a small user-specified value (i.e. 1e-06) from the total cumulative probability.  This truncation factor may differ for each count variable (see `max_count_support`).  The count variables are subsequently treated as ordinal and intermediate correlations are calculated using the correction loop of `ordnorm`.
 
@@ -106,7 +106,7 @@ The intermediate correlations used in method 2 are less simulation based than th
     b) *Negative Binomial variables:* `findintercorr_cont_nb2` is called to calculate the intermediate MVN correlation for all variables.
 
 ### Simulation Process:
-The algorithm used in the simulation function `rcorrvar2` that employs method 2 is similar to that described for `rcorrvar`, with a few modifications:
+The algorithm used in the simulation function `rcorrvar2` that employs correlation method 2 is similar to that described for `rcorrvar`, with a few modifications:
 
 1. The feasibility of `rho`, given the distribution parameters, should be checked first using the function `valid_corr2`, which checks if `rho` is within the feasible bounds and returns the lower and upper correlation limits.
 

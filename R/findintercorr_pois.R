@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Poisson Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Poisson Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k_pois x k_pois} intermediate matrix of correlations for the
 #'     Poisson variables using the method of Yahav & Shmueli (2012, \doi{10.1002/asmb.901}). The intermediate correlation between Z1 and Z2 (the

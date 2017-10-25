@@ -1,4 +1,4 @@
-#' @title Calculate Intermediate MVN Correlation for Ordinal - Poisson Variables: Method 1
+#' @title Calculate Intermediate MVN Correlation for Ordinal - Poisson Variables: Correlation Method 1
 #'
 #' @description This function calculates a \code{k_cat x k_pois} intermediate matrix of correlations for the \code{k_cat} ordinal (r >=
 #'     2 categories) and \code{k_pois} Poisson variables. It extends the method of Amatya & Demirtas (2015, \doi{10.1080/00949655.2014.953534})

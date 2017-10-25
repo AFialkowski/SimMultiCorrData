@@ -2,7 +2,7 @@
 % Please edit documentation in R/rcorrvar.R
 \name{rcorrvar}
 \alias{rcorrvar}
-\title{Generation of Correlated Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Method 1}
+\title{Generation of Correlated Ordinal, Continuous, Poisson, and/or Negative Binomial Variables: Correlation Method 1}
 \usage{
 rcorrvar(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
@@ -157,7 +157,7 @@ This function simulates \code{k_cat} ordinal, \code{k_cont} continuous, \code{k_
     variables in \code{rho} must be \emph{ordinal} (r >= 2 categories), \emph{continuous}, \emph{Poisson}, and \emph{Negative Binomial}
     (note that it is possible for \code{k_cat}, \code{k_cont}, \code{k_pois}, and/or \code{k_nb} to be 0).  The vignette
     \bold{Overall Workflow for Data Simulation} provides a detailed example discussing the step-by-step simulation process and comparing
-    methods 1 and 2.
+    correlation methods 1 and 2.
 }
 \section{Variable Types and Required Inputs}{
 
@@ -212,9 +212,9 @@ successes is achieved.
 More details regarding the variable types can be found in the \bold{Variable Types} vignette.
 }
 
-\section{Overview of Method 1}{
+\section{Overview of Correlation Method 1}{
 
-    The intermediate correlations used in method 1 are more simulation based than those in method 2, which means that accuracy
+    The intermediate correlations used in correlation method 1 are more simulation based than those in method 2, which means that accuracy
     increases with sample size and the number of repetitions.  In addition, specifying the seed allows for reproducibility.  In
     addition, method 1 differs from method 2 in the following ways:
 
@@ -279,133 +279,97 @@ options(scipen = 999)
 seed <- 1234
 n <- 10000
 
-# Continuous Distributions: Normal, t (df = 10), Chisq (df = 4),
-#                           Beta (a = 4, b = 2), Gamma (a = 4, b = 4)
-Dist <- c("Gaussian", "t", "Chisq", "Beta", "Gamma")
+Dist <- c("Logistic", "Weibull")
+Params <- list(c(0, 1), c(3, 5))
+Stcum1 <- calc_theory(Dist[1], Params[[1]])
+Stcum2 <- calc_theory(Dist[2], Params[[2]])
+Stcum <- rbind(Stcum1, Stcum2)
+rownames(Stcum) <- Dist
+colnames(Stcum) <- c("mean", "sd", "skew", "skurtosis", "fifth", "sixth")
+Stcum
+Six <- list(seq(1.7, 1.8, 0.01), seq(0.10, 0.25, 0.01))
+marginal <- list(0.3)
+lam <- 0.5
+size <- 2
+prob <- 0.75
 
-# calculate standardized cumulants
-# those for the normal and t distributions are rounded to ensure the
-# correct values (i.e. skew = 0)
-
-M1 <- round(calc_theory(Dist = "Gaussian", params = c(0, 1)), 8)
-M2 <- round(calc_theory(Dist = "t", params = 10), 8)
-M3 <- calc_theory(Dist = "Chisq", params = 4)
-M4 <- calc_theory(Dist = "Beta", params = c(4, 2))
-M5 <- calc_theory(Dist = "Gamma", params = c(4, 4))
-M <- cbind(M1, M2, M3, M4, M5)
-M <- round(M[-c(1:2),], digits = 6)
-colnames(M) <- Dist
-rownames(M) <- c("skew", "skurtosis", "fifth", "sixth")
-means <- rep(0, length(Dist))
-vars <- rep(1, length(Dist))
-
-# Binary and Ordinal Distributions
-marginal <- list(0.3, 0.4, c(0.1, 0.5), c(0.3, 0.6, 0.9),
-                 c(0.2, 0.4, 0.7, 0.8))
-support <- list()
-
-# Poisson Distributions
-lam <- c(1, 5, 10)
-
-# Negative Binomial Distributions
-size <- c(3, 6)
-prob <- c(0.2, 0.8)
-
-ncat <- length(marginal)
-ncont <- ncol(M)
-npois <- length(lam)
-nnb <- length(size)
-
-# Create correlation matrix from a uniform distribution (-0.8, 0.8)
-set.seed(seed)
-Rey <- diag(1, nrow = (ncat + ncont + npois + nnb))
-for (i in 1:nrow(Rey)) {
-  for (j in 1:ncol(Rey)) {
-    if (i > j) Rey[i, j] <- runif(1, -0.8, 0.8)
-    Rey[j, i] <- Rey[i, j]
-  }
-}
-
-# Test for positive-definiteness
-library(Matrix)
-if(min(eigen(Rey, symmetric = TRUE)$values) < 0) {
-  Rey <- as.matrix(nearPD(Rey, corr = T, keepDiag = T)$mat)
-}
+Rey <- matrix(0.4, 5, 5)
+diag(Rey) <- 1
 
 # Make sure Rey is within upper and lower correlation limits
-valid <- valid_corr(k_cat = ncat, k_cont = ncont, k_pois = npois,
-                    k_nb = nnb, method = "Polynomial", means = means,
-                    vars = vars, skews = M[1, ], skurts = M[2, ],
-                    fifths = M[3, ], sixths = M[4, ], marginal = marginal,
+valid <- valid_corr(k_cat = 1, k_cont = 2, k_pois = 1, k_nb = 1,
+                    method = "Polynomial", means = Stcum[, 1],
+                    vars = Stcum[, 2]^2, skews = Stcum[, 3],
+                    skurts = Stcum[, 4], fifths = Stcum[, 5],
+                    sixths = Stcum[, 6], Six = Six, marginal = marginal,
                     lam = lam, size = size, prob = prob, rho = Rey,
                     seed = seed)
 
 # Simulate variables without error loop
-A <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-              k_nb = nnb, method = "Polynomial", means = means, vars = vars,
-              skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], marginal = marginal, lam = lam, size = size,
-              prob = prob, rho = Rey, seed = seed)
+Sim1 <- rcorrvar(n = n, k_cat = 1, k_cont = 2, k_pois = 1, k_nb = 1,
+                 method = "Polynomial", means = Stcum[, 1],
+                 vars = Stcum[, 2]^2, skews = Stcum[, 3],
+                 skurts = Stcum[, 4], fifths = Stcum[, 5],
+                 sixths = Stcum[, 6], Six = Six, marginal = marginal,
+                 lam = lam, size = size, prob = prob, rho = Rey,
+                 seed = seed)
+names(Sim1)
 
 # Look at the maximum correlation error
-A$maxerr
-Acorr_error = round(A$correlations - Rey, 6)
+Sim1$maxerr
+
+Sim1_error = round(Sim1$correlations - Rey, 6)
 
 # interquartile-range of correlation errors
-quantile(as.numeric(Acorr_error), 0.25)
-quantile(as.numeric(Acorr_error), 0.75)
+quantile(as.numeric(Sim1_error), 0.25)
+quantile(as.numeric(Sim1_error), 0.75)
 
-# Simulate variables with error loop (using default settings of
-# epsilon = 0.001 and maxit = 1000)
-B <- rcorrvar(n = 10000, k_cont = ncont, k_cat = ncat, k_pois = npois,
-              k_nb = nnb, method = "Polynomial", means = means, vars = vars,
-              skews = M[1, ], skurts = M[2, ], fifths = M[3, ],
-              sixths = M[4, ], marginal = marginal, lam = lam, size = size,
-              prob = prob, rho = Rey, seed = seed, errorloop = TRUE)
-
+# Simulate variables with error loop
+Sim1_EL <- rcorrvar(n = n, k_cat = 1, k_cont = 2,
+                    k_pois = 1, k_nb = 1, method = "Polynomial",
+                    means = Stcum[, 1], vars = Stcum[, 2]^2,
+                    skews = Stcum[, 3], skurts = Stcum[, 4],
+                    fifths = Stcum[, 5], sixths = Stcum[, 6],
+                    Six = Six, marginal = marginal, lam = lam,
+                    size = size, prob = prob, rho = Rey,
+                    seed = seed, errorloop = TRUE)
 # Look at the maximum correlation error
-B$maxerr
-Bcorr_error = round(B$correlations - Rey, 6)
+Sim1_EL$maxerr
+
+EL_error = round(Sim1_EL$correlations - Rey, 6)
 
 # interquartile-range of correlation errors
-quantile(as.numeric(Bcorr_error), 0.25)
-quantile(as.numeric(Bcorr_error), 0.75)
+quantile(as.numeric(EL_error), 0.25)
+quantile(as.numeric(EL_error), 0.75)
 
 # Look at results
 # Ordinal variables
-B$summary_ordinal
+Sim1_EL$summary_ordinal
 
 # Continuous variables
-round(B$constants, 6)
-round(B$summary_continuous, 6)
-round(B$summary_targetcont, 6)
-B$valid.pdf
+round(Sim1_EL$constants, 6)
+round(Sim1_EL$summary_continuous, 6)
+round(Sim1_EL$summary_targetcont, 6)
+Sim1_EL$valid.pdf
 
 # Count variables
-B$summary_Poisson
-B$summary_Neg_Bin
+Sim1_EL$summary_Poisson
+Sim1_EL$summary_Neg_Bin
 
 # Generate Plots
 
-# t (df = 10) (2nd continuous variable)
+# Logistic (1st continuous variable)
 # 1) Simulated Data CDF (find cumulative probability up to y = 0.5)
-plot_sim_cdf(B$continuous_variables[, 2], calc_cprob = TRUE, delta = 0.5)
+plot_sim_cdf(Sim1_EL$continuous_variables[, 1], calc_cprob = TRUE,
+             delta = 0.5)
 
 # 2) Simulated Data and Target Distribution PDFs
-plot_sim_pdf_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
+plot_sim_pdf_theory(Sim1_EL$continuous_variables[, 1], Dist = "Logistic",
+                    params = c(0, 1))
 
 # 3) Simulated Data and Target Distribution
-plot_sim_theory(B$continuous_variables[, 2], Dist = "t", params = 10)
-
-# Chisq (df = 4) (3rd continuous variable)
-# 1) Simulated Data CDF (find cumulative probability up to y = 0.5)
-plot_sim_cdf(B$continuous_variables[, 3], calc_cprob = TRUE, delta = 0.5)
-
-# 2) Simulated Data and Target Distribution PDFs
-plot_sim_pdf_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
-
-# 3) Simulated Data and Target Distribution
-plot_sim_theory(B$continuous_variables[, 3], Dist = "Chisq", params = 4)
+plot_sim_theory(Sim1_EL$continuous_variables[, 1], Dist = "Logistic",
+                params = c(0, 1))
 
 }
 }

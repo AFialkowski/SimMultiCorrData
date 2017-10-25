@@ -7,7 +7,9 @@
 plot_pdf_ext(c = NULL, method = c("Fleishman", "Polynomial"),
   title = "Probability Density Function", ylower = NULL, yupper = NULL,
   power_color = "dark blue", ext_y = NULL, target_color = "dark green",
-  target_lty = 2, seed = 1234)
+  target_lty = 2, seed = 1234, legend.position = c(0.975, 0.9),
+  legend.justification = c(1, 1), legend.text.size = 10,
+  title.text.size = 15, axis.text.size = 10, axis.title.size = 13)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
@@ -31,6 +33,18 @@ transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 \item{target_lty}{the line type for the target pdf (default = 2, dashed line)}
 
 \item{seed}{the seed value for random number generation (default = 1234)}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

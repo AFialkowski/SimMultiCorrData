@@ -2,7 +2,7 @@
 % Please edit documentation in R/findintercorr_cont_pois2.R
 \name{findintercorr_cont_pois2}
 \alias{findintercorr_cont_pois2}
-\title{Calculate Intermediate MVN Correlation for Continuous - Poisson Variables: Method 2}
+\title{Calculate Intermediate MVN Correlation for Continuous - Poisson Variables: Correlation Method 2}
 \usage{
 findintercorr_cont_pois2(method, constants, rho_cont_pois, pois_marg,
   pois_support)

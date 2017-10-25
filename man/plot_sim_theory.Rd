@@ -7,10 +7,17 @@
 plot_sim_theory(sim_y, title = "Simulated Data Values", ylower = NULL,
   yupper = NULL, power_color = "dark blue", overlay = TRUE,
   cont_var = TRUE, target_color = "dark green", nbins = 100,
-  Dist = c("Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-  "Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular",
-  "Uniform", "Weibull", "Poisson", "Negative_Binomial"), params = NULL,
-  fx = NULL, lower = NULL, upper = NULL, seed = 1234, sub = 1000)
+  Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+  "Dagum", "Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson",
+  "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz", "Gumbel",
+  "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal",
+  "Lomax", "Makeham", "Maxwell", "Nakagami", "Paralogistic", "Pareto", "Perks",
+  "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone",
+  "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial"),
+  params = NULL, fx = NULL, lower = NULL, upper = NULL, seed = 1234,
+  sub = 1000, legend.position = c(0.975, 0.9), legend.justification = c(1,
+  1), legend.text.size = 10, title.text.size = 15, axis.text.size = 10,
+  axis.title.size = 13)
 }
 \arguments{
 \item{sim_y}{a vector of simulated data}
@@ -32,15 +39,15 @@ or pdf function fx (with support bounds = lower, upper)}
 
 \item{nbins}{the number of bins to use when creating the histograms (default = 100)}
 
-\item{Dist}{name of the distribution. The possible values are: "Beta", "Chisq", "Exponential", "F", "Gamma", "Gaussian",
-"Laplace", "Logistic", "Lognormal", "Pareto", "Rayleigh", "t", "Triangular", "Uniform", "Weibull", "Poisson", "Negative_Binomial".
-Please refer to the documentation for each package (i.e. \code{\link[stats]{dgamma}})
-for information on appropriate parameter inputs.  The pareto (see \code{\link[VGAM]{dpareto}}), generalized
-rayleigh (see \code{\link[VGAM]{dgenray}}), and laplace (see \code{\link[VGAM]{dlaplace}}) distributions
-come from the \code{\link[VGAM]{VGAM}} package.  The triangular (see \code{\link[triangle]{dtriangle}}) distribution
-comes from the \code{\link[triangle]{triangle}} package.}
+\item{Dist}{name of the distribution. The possible values are: "Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders", "Chisq",
+"Exponential", "Exp-Geometric", "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk", "Frechet", "Gamma", "Gaussian", "Gompertz",
+"Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
+"Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
+"Uniform", "Weibull", "Poisson", and "Negative_Binomial".
+Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+\code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.}
 
-\item{params}{a vector of parameters (up to 3) for the desired distribution (keep NULL if \code{fx} supplied instead)}
+\item{params}{a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)}
 
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
@@ -53,13 +60,25 @@ comes from the \code{\link[triangle]{triangle}} package.}
 
 \item{sub}{the number of subdivisions to use in the integration to calculate the cdf from fx; if no result, try increasing
 sub (requires longer computation time; default = 1000)}
+
+\item{legend.position}{the position of the legend}
+
+\item{legend.justification}{the justification of the legend}
+
+\item{legend.text.size}{the size of the legend labels}
+
+\item{title.text.size}{the size of the plot title}
+
+\item{axis.text.size}{the size of the axes text (tick labels)}
+
+\item{axis.title.size}{the size of the axes titles}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.
 }
 \description{
 This plots simulated continuous or count data and overlays data (if \code{overlay} = TRUE) generated from the target
-    distribution, which is specified by name (plus up to 3 parameters) or pdf function \code{fx} (plus support bounds).
+    distribution, which is specified by name (plus up to 4 parameters) or pdf function \code{fx} (plus support bounds).
     Due to the integration involved in evaluating the cdf using \code{fx}, only continuous \code{fx} may be supplied.  Both are plotted
     as histograms.  If a continuous target distribution is specified (\code{cont_var = TRUE}), the simulated data \eqn{y} is
     scaled and then transformed (i.e. \eqn{y = sigma * scale(y) + mu}) so that it has the same mean (\eqn{mu}) and variance (\eqn{sigma^2}) as the

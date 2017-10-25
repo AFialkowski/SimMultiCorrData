@@ -2,7 +2,7 @@
 This is a new version of the package (from 0.1.0 to 0.2.0).
 
 ## Test environments
-* local OS 'Windows 10' install, 'R 3.4.1'
+* local OS 'Windows 10' install, 'R 3.4.2'
 * 'win-builder' (devel and release)
 * 'CentOS', 'R 3.3.1'
 

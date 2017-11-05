@@ -181,7 +181,8 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
         y_fx[i] <- uniroot(cfx, c(lower, upper), tol = 0.0001, u = uni[i])$root
       }
     }
-    D <-
+    if (is.null(fx)) {
+      D <-
       data.frame(Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders",
                           "Chisq", "Dagum", "Exponential", "Exp-Geometric",
                           "Exp-Logarithmic", "Exp-Poisson", "F", "Fisk",
@@ -218,7 +219,6 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
                                       params[1], params[1], 0, 0, 0)),
                  Upper = as.numeric(c(Inf, 1, rep(Inf, 15), 1, rep(Inf, 17),
                                       1, params[2], params[2], Inf, Inf, Inf)))
-    if (is.null(fx)) {
       i <- match(Dist, D$Dist)
       p <- as.character(D$fx[i])
       x <- 1:n

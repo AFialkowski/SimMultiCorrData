@@ -95,7 +95,7 @@ calc_theory <- function(Dist = c("Benini", "Beta", "Beta-Normal",
     m6 <- integrate(function(x, FUN = fx) (x - m)^6 * FUN(x), lower, upper,
                     subdivisions = sub, stop.on.error = FALSE)$value
   }
-  if (!is.null(Dist)) {
+  if (is.null(fx)) {
     D <-
       data.frame(Dist = c("Benini", "Beta", "Beta-Normal", "Birnbaum-Saunders",
                           "Chisq", "Dagum", "Exponential", "Exp-Geometric",

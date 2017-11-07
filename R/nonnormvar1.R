@@ -226,10 +226,15 @@ nonnormvar1 <- function(method = c("Fleishman", "Polynomial"), means = 0,
                                   sim_fifths, sim_sixths))
   colnames(cont_sum) <- c("Distribution", "n", "mean", "sd", "median", "min",
                           "max", "skew", "skurtosis", "fifth", "sixth")
-  target_sum <- as.data.frame(cbind(1, means, sqrt(vars), skews, skurts,
-                                    fifths, sixths))
-  colnames(target_sum) <- c("Distribution", "mean", "sd", "skew", "skurtosis",
-                            "fifth", "sixth")
+  if (method == "Fleishman") {
+    target_sum <- as.data.frame(cbind(1, means, sqrt(vars), skews, skurts))
+    colnames(target_sum) <- c("Distribution", "mean", "sd", "skew", "skurtosis")
+  } else {
+    target_sum <- as.data.frame(cbind(1, means, sqrt(vars), skews, skurts,
+                                      fifths, sixths))
+    colnames(target_sum) <- c("Distribution", "mean", "sd", "skew", "skurtosis",
+                              "fifth", "sixth")
+  }
   stop.time <- Sys.time()
   Time.constants <- round(difftime(stop.time.constants, start.time.constants,
                                    units = "min"), 3)

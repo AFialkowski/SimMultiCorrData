@@ -657,10 +657,17 @@ rcorrvar <- function(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     colnames(cont_sum) <- c("Distribution", "n", "mean", "sd", "median",
                             "min", "max", "skew", "skurtosis", "fifth",
                             "sixth")
-    target_sum <- as.data.frame(cbind(c(1:k_cont), means, sqrt(vars), skews,
-                                      skurts, fifths, sixths))
-    colnames(target_sum) <- c("Distribution", "mean", "sd", "skew",
-                              "skurtosis", "fifth", "sixth")
+    if (method == "Fleishman") {
+      target_sum <- as.data.frame(cbind(c(1:k_cont), means, sqrt(vars), skews,
+                                        skurts))
+      colnames(target_sum) <- c("Distribution", "mean", "sd", "skew",
+                                "skurtosis")
+    } else {
+      target_sum <- as.data.frame(cbind(c(1:k_cont), means, sqrt(vars), skews,
+                                        skurts, fifths, sixths))
+      colnames(target_sum) <- c("Distribution", "mean", "sd", "skew",
+                                "skurtosis", "fifth", "sixth")
+    }
     result <- append(result, list(constants = as.data.frame(constants),
                                   continuous_variables = as.data.frame(Yb),
                                   summary_continuous = cont_sum,

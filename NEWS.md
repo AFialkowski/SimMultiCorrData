@@ -1,5 +1,6 @@
 # SimMultiCorrData 0.2.1
-Fixed `calc_theory()` and plotting functions which call it to permit *pdf* specified by `fx`, `lower`, and `upper`.
+1. Updated `calc_theory()` and plotting functions which call it to permit *pdf* specified by `fx`, `lower`, and `upper`.
+2. Fixed `rcorrvar()` and `rcorrvar2()` summary of continuous variables when using `method = "Fleishman"`.
 
 # SimMultiCorrData 0.2.0
 1. Fixed error in `findintercorr2()` so now you can generate 1 ordinal variable using correlation method 2 (with `rcorrvar2()`).

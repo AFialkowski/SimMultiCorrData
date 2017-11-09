@@ -7,7 +7,7 @@
 rcorrvar(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
   skews = NULL, skurts = NULL, fifths = NULL, sixths = NULL,
-  Six = list(), marginal = list(), support = list(), nrand = 100000,
+  Six = list(), marginal = list(), support = list(), nrand = 1e+05,
   lam = NULL, size = NULL, prob = NULL, mu = NULL, Sigma = NULL,
   rho = NULL, cstart = NULL, seed = 1234, errorloop = FALSE,
   epsilon = 0.001, maxit = 1000, extra_correct = TRUE)

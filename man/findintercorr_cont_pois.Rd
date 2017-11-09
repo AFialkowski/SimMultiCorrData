@@ -4,7 +4,7 @@
 \alias{findintercorr_cont_pois}
 \title{Calculate Intermediate MVN Correlation for Continuous - Poisson Variables: Correlation Method 1}
 \usage{
-findintercorr_cont_pois(method, constants, rho_cont_pois, lam, nrand = 100000,
+findintercorr_cont_pois(method, constants, rho_cont_pois, lam, nrand = 1e+05,
   seed = 1234)
 }
 \arguments{

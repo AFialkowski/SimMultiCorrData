@@ -9,7 +9,7 @@ valid_corr2(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
   skews = NULL, skurts = NULL, fifths = NULL, sixths = NULL,
   Six = list(), marginal = list(), lam = NULL, pois_eps = NULL,
   size = NULL, prob = NULL, mu = NULL, nb_eps = NULL, rho = NULL,
-  n = 100000, seed = 1234)
+  n = 1e+05, seed = 1234)
 }
 \arguments{
 \item{k_cat}{the number of ordinal (r >= 2 categories) variables (default = 0)}

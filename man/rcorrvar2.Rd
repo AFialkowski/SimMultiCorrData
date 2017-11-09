@@ -8,8 +8,8 @@ rcorrvar2(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), means = NULL, vars = NULL,
   skews = NULL, skurts = NULL, fifths = NULL, sixths = NULL,
   Six = list(), marginal = list(), support = list(), lam = NULL,
-  pois_eps = rep(0.0001, 2), size = NULL, prob = NULL, mu = NULL,
-  nb_eps = rep(0.0001, 2), Sigma = NULL, rho = NULL, cstart = NULL,
+  pois_eps = rep(1e-04, 2), size = NULL, prob = NULL, mu = NULL,
+  nb_eps = rep(1e-04, 2), Sigma = NULL, rho = NULL, cstart = NULL,
   seed = 1234, errorloop = FALSE, epsilon = 0.001, maxit = 1000,
   extra_correct = TRUE)
 }

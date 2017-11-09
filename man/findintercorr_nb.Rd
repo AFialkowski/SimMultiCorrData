@@ -4,7 +4,7 @@
 \alias{findintercorr_nb}
 \title{Calculate Intermediate MVN Correlation for Negative Binomial Variables: Correlation Method 1}
 \usage{
-findintercorr_nb(rho_nb, size, prob, mu = NULL, nrand = 100000,
+findintercorr_nb(rho_nb, size, prob, mu = NULL, nrand = 1e+05,
   seed = 1234)
 }
 \arguments{

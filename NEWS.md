@@ -1,6 +1,9 @@
 # SimMultiCorrData 0.2.1
 1. Updated `calc_theory()` and plotting functions which call it to permit *pdf* specified by `fx`, `lower`, and `upper`.
-2. Fixed `rcorrvar()` and `rcorrvar2()` summary of continuous variables when using `method = "Fleishman"`.
+2. Adjusted `rcorrvar()` and `rcorrvar2()` summary of continuous variables when using `method = "Fleishman"`.
+3. Fixed error in `rcorrvar()`, `rcorrvar2()`, `valid_corr()`, `valid_corr2()`, and `error_loop()` to permit 0 or 1 continuous variables.
+4. Updated `calc_lower_skurt()` for case of non-convergence when applying `Six` vector with `method = "Polynomial"`.
+5. Added `lower` and `upper` parameters to `plot_cdf()` to use as inputs for `cdf_prob()`.
 
 # SimMultiCorrData 0.2.0
 1. Fixed error in `findintercorr2()` so now you can generate 1 ordinal variable using correlation method 2 (with `rcorrvar2()`).

@@ -1,5 +1,5 @@
 ## New version
-This is a new version of the package (from 0.1.0 to 0.2.0).
+This is a patch update of the package (from 0.2.0 to 0.2.1) to fix some errors.
 
 ## Test environments
 * local OS 'Windows 10' install, 'R 3.4.2'
@@ -15,14 +15,6 @@ Check with 'win-builder' (release) did produce 1 note:
 "Possibly mis-spelled words in DESCRIPTION"
 
 These were double checked and are spelled correctly.
-
-"Found the following (possibly) invalid URLs:
-  URL: http://doi.org/10.1112/plms/s2-30.1.199"
-
-"Found the following (possibly) invalid DOIs:
-  DOI: 10.1002/asmb.901"
-
-These were both checked and are correct.
 
 ## Downstream dependencies
 

@@ -6,7 +6,7 @@
 \usage{
 findintercorr(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   method = c("Fleishman", "Polynomial"), constants, marginal = list(),
-  support = list(), nrand = 1e+05, lam = NULL, size = NULL,
+  support = list(), nrand = 100000, lam = NULL, size = NULL,
   prob = NULL, mu = NULL, rho = NULL, seed = 1234, epsilon = 0.001,
   maxit = 1000)
 }

@@ -29,8 +29,10 @@
 #' @param params a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)
 #' @param fx a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 #'     (keep NULL if \code{Dist} supplied instead)
-#' @param lower the lower support bound for a supplied fx, else keep NULL
-#' @param upper the upper support bound for a supplied fx, else keep NULL
+#' @param lower the lower support bound for a supplied fx, else keep NULL (note: if an error is thrown from \code{uniroot},
+#'     try a slightly higher lower bound; i.e., 0.0001 instead of 0)
+#' @param upper the upper support bound for a supplied fx, else keep NULL (note: if an error is thrown from \code{uniroot},
+#'     try a lower upper bound; i.e., 100000 instead of Inf)
 #' @param seed the seed value for random number generation (default = 1234)
 #' @param sub the number of subdivisions to use in the integration to calculate the cdf from fx; if no result, try increasing
 #'     sub (requires longer computation time; default = 1000)
@@ -178,7 +180,8 @@ plot_sim_theory <- function(sim_y, title = "Simulated Data Values",
         u
       y_fx <- rep(NA, n)
       for (i in 1:n) {
-        y_fx[i] <- uniroot(cfx, c(lower, upper), tol = 0.0001, u = uni[i])$root
+        y_fx[i] <- uniroot(cfx, c(lower, upper), extendInt="yes", tol = 0.0001,
+                           u = uni[i])$root
       }
     }
     if (is.null(fx)) {

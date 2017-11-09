@@ -639,7 +639,11 @@ calc_lower_skurt <- function(method = c("Fleishman", "Polynomial"),
                 }
               }
             }
-            constants <- converged[!duplicated(converged), , drop = FALSE]
+            if (!is.null(converged)) {
+              constants <- converged[!duplicated(converged), , drop = FALSE]
+            } else {
+              constants <- data.frame()
+            }
             if(v > length(Six)) break
           }
           SixCorr1 <- Six[v - 1]

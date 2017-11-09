@@ -9,7 +9,7 @@ plot_cdf(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   yupper = NULL, calc_cprob = FALSE, delta = 5, color = "dark blue",
   fill = "blue", hline = "dark green", n = 10000, seed = 1234,
   text.size = 11, title.text.size = 15, axis.text.size = 10,
-  axis.title.size = 13)
+  axis.title.size = 13, lower = -1000000, upper = 1000000)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
@@ -50,6 +50,10 @@ up to \eqn{delta = sigma * y + mu} and the region on the plot is filled with a d
 \item{axis.text.size}{the size of the axes text (tick labels)}
 
 \item{axis.title.size}{the size of the axes titles}
+
+\item{lower}{lower bound for \code{cdf_prob}}
+
+\item{upper}{upper bound for \code{cdf_prob}}
 }
 \value{
 A \code{\link[ggplot2]{ggplot2}} object.

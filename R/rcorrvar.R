@@ -418,8 +418,8 @@ rcorrvar <- function(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
   if (!isSymmetric(rho) | min(eigen(rho, symmetric = TRUE)$values) < 0 |
       !all(diag(rho) == 1)) stop("Correlation matrix not valid!")
   start.time.constants <- Sys.time()
-  if (k_cont >= 1) {
-    csame.dist <- NULL
+  csame.dist <- NULL
+  if (k_cont > 1) {
     for (i in 2:length(skews)) {
       if (skews[i] %in% skews[1:(i - 1)]) {
         csame <- which(skews[1:(i - 1)] == skews[i])
@@ -439,6 +439,8 @@ rcorrvar <- function(n = 10000, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
         }
       }
     }
+  }
+  if (k_cont >= 1) {
     if (method == "Fleishman") {
       constants <- matrix(NA, nrow = k_cont, ncol = 4)
       colnames(constants) <- c("c0", "c1", "c2", "c3")

@@ -52,9 +52,11 @@ Please refer to the documentation for each package (either \code{\link[stats]{st
 \item{fx}{a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
 (keep NULL if \code{Dist} supplied instead)}
 
-\item{lower}{the lower support bound for a supplied fx, else keep NULL}
+\item{lower}{the lower support bound for a supplied fx, else keep NULL (note: if an error is thrown from \code{uniroot},
+try a slightly higher lower bound; i.e., 0.0001 instead of 0)}
 
-\item{upper}{the upper support bound for a supplied fx, else keep NULL}
+\item{upper}{the upper support bound for a supplied fx, else keep NULL (note: if an error is thrown from \code{uniroot},
+try a lower upper bound; i.e., 100000 instead of Inf)}
 
 \item{seed}{the seed value for random number generation (default = 1234)}
 

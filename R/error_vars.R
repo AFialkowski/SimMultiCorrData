@@ -68,6 +68,7 @@ error_vars <- function(marginal, support, method, means, vars, constants, lam,
   X <- scale(X, FALSE, TRUE)
   X <- fry %*% t(X)
   X <- t(X)
+  Y_cont <- Yb
   if (k_cat > 0) {
     X_cat <- X[, 1:k_cat, drop = FALSE]
     Y_cat <- matrix(1, nrow = n, ncol = ncol(X_cat))

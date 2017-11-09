@@ -249,12 +249,8 @@ valid_corr <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
   }
   L_sigma <- diag(k)
   U_sigma <- diag(k)
-  if (k_cont >= 1) {
-    SixCorr <- numeric(k_cont)
-    Valid.PDF <- numeric(k_cont)
-    set.seed(seed)
-    X_cont <- matrix(rnorm(k_cont * n), n, k_cont)
-    csame.dist <- NULL
+  csame.dist <- NULL
+  if (k_cont > 1) {
     for (i in 2:length(skews)) {
       if (skews[i] %in% skews[1:(i - 1)]) {
         csame <- which(skews[1:(i - 1)] == skews[i])
@@ -274,6 +270,12 @@ valid_corr <- function(k_cat = 0, k_cont = 0, k_pois = 0, k_nb = 0,
         }
       }
     }
+  }
+  if (k_cont >= 1) {
+    SixCorr <- numeric(k_cont)
+    Valid.PDF <- numeric(k_cont)
+    set.seed(seed)
+    X_cont <- matrix(rnorm(k_cont * n), n, k_cont)
     if (method == "Fleishman") {
       constants <- matrix(NA, nrow = k_cont, ncol = 4)
       colnames(constants) <- c("c0", "c1", "c2", "c3")

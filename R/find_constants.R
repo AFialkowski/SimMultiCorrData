@@ -119,7 +119,7 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
   if (method == "Fleishman") {
     error <- "No valid power method constants could be found for the specified
              cumulants.  Try using a different seed or increasing n.\n"
-    if (skews == 0 & skurts == 0) {
+    if (round(skews, 8) == 0 & round(skurts, 8) == 0) {
       constants <- c(0, 1, 0, 0)
       names(constants) <- c("c0", "c1", "c2", "c3")
       return(list(constants = constants, valid = "TRUE"))
@@ -188,7 +188,8 @@ find_constants <- function(method = c("Fleishman", "Polynomial"), skews = NULL,
              cumulants.  Try using more starting values or increasing the
              value of the sixth cumulant by specifying a Six vector of
              correction values.\n"
-    if (skews == 0 & skurts == 0 & fifths == 0 & sixths == 0) {
+    if (round(skews, 8) == 0 & round(skurts, 8) == 0 & round(fifths, 8) == 0 &
+        round(sixths, 8) == 0) {
       constants <- c(0, 1, 0, 0, 0, 0)
       names(constants) <- c("c0", "c1", "c2", "c3", "c4", "c5")
       return(list(constants = constants, valid = "TRUE", SixCorr1 = SixCorr1))

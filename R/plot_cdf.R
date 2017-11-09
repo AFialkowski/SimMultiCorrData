@@ -31,6 +31,8 @@
 #' @param title.text.size the size of the plot title
 #' @param axis.text.size the size of the axes text (tick labels)
 #' @param axis.title.size the size of the axes titles
+#' @param lower lower bound for \code{cdf_prob}
+#' @param upper upper bound for \code{cdf_prob}
 #' @import stats
 #' @import utils
 #' @import ggplot2
@@ -95,7 +97,8 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
                      delta = 5, color = "dark blue", fill = "blue",
                      hline = "dark green", n = 10000, seed = 1234,
                      text.size = 11, title.text.size = 15,
-                     axis.text.size = 10, axis.title.size = 13) {
+                     axis.text.size = 10, axis.title.size = 13,
+                     lower = -1e06, upper = 1e06) {
   set.seed(seed)
   c <- as.numeric(c)
   z <- rnorm(n, 0, 1)
@@ -133,7 +136,7 @@ plot_cdf <- function(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   if (calc_cprob == FALSE) return(plot1)
   if (calc_cprob == TRUE) {
     cprob <- cdf_prob(c = c, method = method, delta = delta, mu = mu,
-                      sigma = sigma)
+                      sigma = sigma, lower = lower, upper = upper)
     data2 <- data.frame(y = data[data[, 1] <= delta, 1],
                         phi = data[data[, 1] <= delta, 2])
     text_one <- textGrob(paste("Cumulative probability = ",

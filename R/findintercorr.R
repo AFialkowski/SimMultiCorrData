@@ -104,8 +104,8 @@
 #' @param support a list of length equal to \code{k_cat}; the i-th element is a vector of containing the r
 #'     ordered support values; if not provided (i.e. \code{support} = list()), the default is for the i-th element to be the vector 1, ..., r
 #' @param nrand the number of random numbers to generate in calculating the bound (default = 10000)
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
-#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
+#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})
 #' @param prob a vector of success probability parameters
 #' @param mu a vector of mean parameters (*Note: either \code{prob} or \code{mu} should be supplied for all Negative Binomial variables,
 #'     not a mixture; default = NULL)

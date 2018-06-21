@@ -7,7 +7,7 @@
 #'     used to find the lower kurtosis boundary for a given skewness and standardized fifth and sixth cumulants
 #'     in \code{\link[SimMultiCorrData]{calc_lower_skurt}}.  The partial derivatives are described in Headrick (2002,
 #'     \doi{10.1016/S0167-9473(02)00072-5}), but he does not provide
-#'     the actual equations. The equations used here were found with \code{\link[stats]{D}}.
+#'     the actual equations. The equations used here were found with \code{D} (see \code{\link[stats]{deriv}}).
 #'     Here, \eqn{\lambda_{1}, ..., \lambda_{4}} are the Lagrangean multipliers, \eqn{\gamma_{1}, \gamma_{3}, \gamma_{4}} are the user-specified
 #'     values of skewness, fifth cumulant, and sixth cumulant, and \eqn{f, g, h, i, j} are the equations for standardized kurtosis, variance,
 #'     fifth cumulant, and sixth cumulant expressed in terms of the constants.  This function would not ordinarily be called by the user.

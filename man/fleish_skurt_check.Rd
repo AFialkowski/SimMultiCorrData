@@ -30,7 +30,7 @@ This function gives the first-order conditions of the Fleishman Transformation L
     \eqn{\lambda} is the Lagrangean multiplier, \eqn{\gamma_{1}} is skewness, and \eqn{g(c1, c3)} is the equation for skewness expressed
     in terms of c1 and c3 only.  It should be noted that these equations are for \eqn{\gamma_{1} > 0}.  Negative skew values are handled within
     \code{\link[SimMultiCorrData]{calc_lower_skurt}}.  Headrick & Sawilowsky (2002) gave equations for the first-order derivatives \eqn{dF/dc1}
-    and \eqn{dF/dc3}.  These were verified and \eqn{dF/d\lambda} was calculated using \code{\link[stats]{D}}.  The second-order conditions to
+    and \eqn{dF/dc3}.  These were verified and \eqn{dF/d\lambda} was calculated using \code{D} (see \code{\link[stats]{deriv}}).  The second-order conditions to
     verify that the kurtosis is a global minimum are in \code{\link[SimMultiCorrData]{fleish_Hessian}}.
     This function would not ordinarily be called by the user.
 }

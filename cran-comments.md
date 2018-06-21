@@ -1,10 +1,10 @@
 ## New version
-This is a patch update of the package (from 0.2.0 to 0.2.1) to fix some errors.
+This is a patch update of the package (from 0.2.1 to 0.2.2) to fix some errors.
 
 ## Test environments
-* local OS 'Windows 10' install, 'R 3.4.2'
+* local OS 'Windows 10' install, 'R 3.4.4'
 * 'win-builder' (devel and release)
-* 'CentOS', 'R 3.3.1'
+* 'CentOS', 'R 3.4.4'
 
 ## R CMD check results
 

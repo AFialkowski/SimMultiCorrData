@@ -8,7 +8,7 @@
 #'     Then the intermediate correlation is found as follows:
 #'     \deqn{\rho_{z1,z2} = (1/b) * log((\rho_{y1,y2} - c)/a)}, where \eqn{a = -(maxcor * mincor)/(maxcor + mincor)},
 #'     \eqn{b = log((maxcor + a)/a)}, and \eqn{c = -a}.  The function adapts code from Amatya & Demirtas' (2016) package
-#'     \code{\link[PoisNor]{PoisNor}} by:
+#'     \code{\link[PoisNor]{PoisNor-package}} by:
 #'
 #'     1) allowing specifications for the number of random variates and the seed for reproducibility
 #'
@@ -21,8 +21,8 @@
 #'     This function would not ordinarily be called by the user.
 #'
 #' @param rho_pois_nb a \code{k_pois x k_nb} matrix of target correlations
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
-#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
+#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})
 #' @param prob a vector of success probability parameters
 #' @param mu a vector of mean parameters (*Note: either \code{prob} or \code{mu} should be supplied for all Negative Binomial variables,
 #'     not a mixture; default = NULL)
@@ -32,7 +32,7 @@
 #' @import utils
 #' @export
 #' @keywords intermediate, correlation, Poisson, Negative Binomial, method 1
-#' @seealso \code{\link[PoisNor]{PoisNor}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},
+#' @seealso \code{\link[PoisNor]{PoisNor-package}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},
 #'     \code{\link[SimMultiCorrData]{findintercorr_nb}},
 #'     \code{\link[SimMultiCorrData]{findintercorr}}, \code{\link[SimMultiCorrData]{rcorrvar}}
 #' @return the \code{k_pois x k_nb} intermediate correlation matrix whose rows represent the \code{k_pois} Poisson variables and

@@ -56,7 +56,7 @@ up to \eqn{delta = sigma * y + mu} and the region on the plot is filled with a d
 \item{upper}{upper bound for \code{cdf_prob}}
 }
 \value{
-A \code{\link[ggplot2]{ggplot2}} object.
+A \code{\link[ggplot2]{ggplot2-package}} object.
 }
 \description{
 This plots the theoretical power method cumulative distribution function:
@@ -66,9 +66,9 @@ This plots the theoretical power method cumulative distribution function:
     transformation constants, the function generates \eqn{sigma * y + mu} and calculates the theoretical cumulative probabilities
     using \eqn{F_p(Z)(p(z), F_Z(z))}.  If \code{calc_cprob} = TRUE, the cumulative probability up to \eqn{delta = sigma * y + mu} is
     calculated (see \code{\link[SimMultiCorrData]{cdf_prob}}) and the region on the plot is filled with a dashed horizontal
-    line drawn at \eqn{F_p(Z)(delta)}.  The cumulative probability is stated on top of the line.  It returns a \code{\link[ggplot2]{ggplot2}} object so
+    line drawn at \eqn{F_p(Z)(delta)}.  The cumulative probability is stated on top of the line.  It returns a \code{\link[ggplot2]{ggplot2-package}} object so
     the user can modify as necessary.  The graph parameters (i.e. \code{title}, \code{color}, \code{fill}, \code{hline}) are
-    \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+    \code{\link[ggplot2]{ggplot2-package}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
@@ -122,8 +122,8 @@ Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{cdf_prob}},
-    \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}, \code{\link[ggplot2]{geom_hline}},
-    \code{\link[ggplot2]{geom_area}}
+    \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_path}}, \code{\link[ggplot2]{geom_abline}},
+    \code{\link[ggplot2]{geom_ribbon}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

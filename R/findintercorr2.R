@@ -110,8 +110,8 @@
 #'     if the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1; default = list())
 #' @param support a list of length equal to \code{k_cat}; the i-th element is a vector of containing the r
 #'     ordered support values; if not provided (i.e. \code{support} = list()), the default is for the i-th element to be the vector 1, ..., r
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
-#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
+#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})
 #' @param prob a vector of success probability parameters
 #' @param mu a vector of mean parameters (*Note: either \code{prob} or \code{mu} should be supplied for all Negative Binomial variables,
 #'     not a mixture; default = NULL)
@@ -403,8 +403,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_cp <- ordnorm(marginal = cat_pois_marg, rho = rho_cp,
                         support = cat_pois_support,
                         epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_cat_pois <- as.matrix(Sigma_cp[1:k_cat,
-                                         (k_cat + 1):(k_cat + k_pois)])
+    Sigma_cat_pois <- Sigma_cp[1:k_cat, (k_cat + 1):(k_cat + k_pois),
+                               drop = FALSE]
     Sigma_pois_cat <- t(Sigma_cat_pois)
   }
   if (k_cat > 0 & k_nb > 0) {
@@ -415,8 +415,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_cnb <- ordnorm(marginal = cat_nb_marg, rho = rho_cnb,
                          support = cat_nb_support,
                          epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_cat_nb <- as.matrix(Sigma_cnb[1:k_cat,
-                                        (k_cat + 1):(k_cat + k_nb)])
+    Sigma_cat_nb <- Sigma_cnb[1:k_cat, (k_cat + 1):(k_cat + k_nb),
+                              drop = FALSE]
     Sigma_nb_cat <- t(Sigma_cat_nb)
   }
   if (k_cont > 0 & k_pois > 0) {
@@ -455,8 +455,8 @@ findintercorr2 <- function(n, k_cont = 0, k_cat = 0, k_pois = 0, k_nb = 0,
     Sigma_pnb <- ordnorm(marginal = pois_nb_marg, rho = rho_pnb,
                          support = pois_nb_support,
                          epsilon = epsilon, maxit = maxit)$SigmaC
-    Sigma_pois_nb <- as.matrix(Sigma_pnb[1:k_pois,
-                                         (k_pois + 1):(k_pois + k_nb)])
+    Sigma_pois_nb <- Sigma_pnb[1:k_pois, (k_pois + 1):(k_pois + k_nb),
+                               drop = FALSE]
     Sigma_nb_pois <- t(Sigma_pois_nb)
   }
   if (k_cat > 0 & k_cont == 0 & k_pois == 0 & k_nb == 0) {

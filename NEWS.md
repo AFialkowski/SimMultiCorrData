@@ -1,3 +1,10 @@
+# SimMultiCorrData 0.2.2      
+1. Fixed error in formation of intermediate matrices with `findintercorr2`.     
+2. Fixed check for repeated continuous distribution when using `method` = "Fleishman".
+3. Updated citations.
+4. Fixed function/package links in documentation.
+5. Added automated testing with 'testthat' package.
+
 # SimMultiCorrData 0.2.1
 1. Updated `calc_theory()` and plotting functions which call it to permit *pdf* specified by `fx`, `lower`, and `upper`.
 2. Adjusted `rcorrvar()` and `rcorrvar2()` summary of continuous variables when using `method = "Fleishman"`.

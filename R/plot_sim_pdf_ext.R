@@ -4,8 +4,8 @@
 #'      given external data vector.  The external data is a required input.  The simulated data is centered and scaled to have the same
 #'      mean and variance as the external data set.  If the user wants to only plot simulated data,
 #'      \code{\link[SimMultiCorrData]{plot_sim_theory}} should be used instead (with \code{overlay = FALSE}).
-#'      It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
-#'      (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.
+#'      It returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.  The graph parameters
+#'      (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2-package}} parameters.
 #'      It works for valid or invalid power method pdfs.
 #' @param sim_y a vector of simulated data
 #' @param title the title for the graph (default = "Simulated Probability Density Function")
@@ -24,8 +24,8 @@
 #' @import ggplot2
 #' @export
 #' @keywords plot, simulated, external, pdf, Fleishman, Headrick
-#' @seealso \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_density}}
-#' @return A \code{\link[ggplot2]{ggplot2}} object.
+#' @seealso \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_density}}
+#' @return A \code{\link[ggplot2]{ggplot2-package}} object.
 #' @references Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 #'
 #' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.

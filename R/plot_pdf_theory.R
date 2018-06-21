@@ -9,8 +9,8 @@
 #'     using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  If \code{overlay} = TRUE, the target distribution is also plotted given either a
 #'     distribution name (plus up to 4 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
 #'     scaled and then transformed so that it has the same mean and variance as the target distribution.
-#'     It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
-#'     (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.
+#'     It returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.  The graph parameters
+#'     (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2-package}} parameters.
 #'     It works for valid or invalid power method pdfs.
 #' @param c a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =
 #'     "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}
@@ -33,7 +33,7 @@
 #'     "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
 #'     "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
 #'     "Uniform", "Weibull".
-#'     Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+#'     Please refer to the documentation for each package (either \code{\link[stats]{stats-package}}, \code{\link[VGAM]{VGAM-package}}, or
 #'     \code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.
 #' @param params a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)
 #' @param fx a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
@@ -60,8 +60,8 @@
 #' @export
 #' @keywords plot, theoretical, pdf, Fleishman, Headrick
 #' @seealso \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{calc_theory}},
-#'     \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}
-#' @return A \code{\link[ggplot2]{ggplot2}} object.
+#'     \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_path}}
+#' @return A \code{\link[ggplot2]{ggplot2-package}} object.
 #' @references Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 #'
 #' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.

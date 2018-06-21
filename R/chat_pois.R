@@ -4,7 +4,7 @@
 #'     and the normal variable used to generate it.  It is used in \code{\link[SimMultiCorrData]{findintercorr_cat_pois}}
 #'     and \code{\link[SimMultiCorrData]{findintercorr_cont_pois}} in calculating the intermediate MVN correlations.  This uses
 #'     the method of Amatya & Demirtas (2015, \doi{10.1080/00949655.2014.953534}).  This function would not ordinarily be called directly by the user.
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
 #' @param n_unif the number of uniform random numbers to generate in calculating the bound (default = 10000)
 #' @param seed the seed used in random number generation (default = 1234)
 #' @import stats

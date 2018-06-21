@@ -43,11 +43,11 @@ component equal to NULL}
 probabilities defining the marginal distribution of the i-th variable;
 if the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1; default = list())}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{pois_eps}{a vector of length \code{k_pois} containing the truncation values (i.e. = rep(0.0001, k_pois); default = NULL)}
 
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 

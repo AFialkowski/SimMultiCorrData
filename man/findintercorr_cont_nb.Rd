@@ -16,7 +16,7 @@ c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by 
 
 \item{rho_cont_nb}{a \code{k_cont x k_nb} matrix of target correlations among continuous and Negative Binomial variables}
 
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 

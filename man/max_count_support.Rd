@@ -12,11 +12,11 @@ max_count_support(k_pois, k_nb, lam, pois_eps = NULL, size, prob, mu = NULL,
 
 \item{k_nb}{the number of Negative Binomial variables}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{pois_eps}{a vector of length k_pois containing the truncation values (i.e. = rep(0.0001, k_pois); default = NULL)}
 
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 

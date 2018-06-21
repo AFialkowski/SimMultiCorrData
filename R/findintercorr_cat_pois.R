@@ -16,7 +16,7 @@
 #' @param marginal a list of length equal to \code{k_cat}; the i-th element is a vector of the cumulative
 #'     probabilities defining the marginal distribution of the i-th variable;
 #'     if the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1)
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
 #' @param nrand the number of random numbers to generate in calculating the bound (default = 10000)
 #' @param seed the seed used in random number generation (default = 1234)
 #' @import stats

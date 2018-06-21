@@ -26,7 +26,7 @@ This function gives the second-order conditions necessary to verify that a kurto
     Here, \eqn{F(c1, c3, \lambda) = f(c1, c3) + \lambda * [\gamma_{1} - g(c1, c3)]} is the Fleishman Transformation Lagrangean expression
     (see \code{\link[SimMultiCorrData]{fleish_skurt_check}}).  Headrick & Sawilowsky (2002) gave equations for the second-order derivatives
     \eqn{d^2 F/dc1^2}, \eqn{d^2 F/dc3^2}, and \eqn{d^2 F/(dc1 dc3)}.  These were verified and \eqn{dg/dc1} and \eqn{dg/dc3} were calculated
-    using \code{\link[stats]{D}}.  This function would not ordinarily be called by the user.
+    using \code{D} (see \code{\link[stats]{deriv}}).  This function would not ordinarily be called by the user.
 }
 \references{
 Please see references for \code{\link[SimMultiCorrData]{fleish_skurt_check}}.

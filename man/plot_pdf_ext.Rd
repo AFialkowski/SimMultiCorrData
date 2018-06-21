@@ -47,7 +47,7 @@ transformation and "Polynomial" uses Headrick's fifth-order transformation.}
 \item{axis.title.size}{the size of the axes titles}
 }
 \value{
-A \code{\link[ggplot2]{ggplot2}} object.
+A \code{\link[ggplot2]{ggplot2-package}} object.
 }
 \description{
 This plots the theoretical power method probability density function: \deqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z)),} as given in
@@ -59,8 +59,8 @@ This plots the theoretical power method probability density function: \deqn{f_p(
     probabilities using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  The target distribution is also plotted given a vector
     of external data.  This external data is required.  The \eqn{y} values are centered and scaled to have the same mean and standard
     deviation as the external data.  If the user wants to only plot the power method pdf,
-    \code{\link[SimMultiCorrData]{plot_pdf_theory}} should be used instead with \code{overlay = FALSE}.  It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
-    \code{power_color}, \code{target_color}, \code{nbins}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+    \code{\link[SimMultiCorrData]{plot_pdf_theory}} should be used instead with \code{overlay = FALSE}.  It returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
+    \code{power_color}, \code{target_color}, \code{nbins}) are \code{\link[ggplot2]{ggplot2-package}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
@@ -106,7 +106,7 @@ Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{calc_theory}},
-    \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}, \code{\link[ggplot2]{geom_density}}
+    \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_path}}, \code{\link[ggplot2]{geom_density}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

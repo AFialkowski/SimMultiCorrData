@@ -7,7 +7,7 @@
 chat_nb(size, prob = NULL, mu = NULL, n_unif = 10000, seed = 1234)
 }
 \arguments{
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 

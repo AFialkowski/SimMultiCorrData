@@ -10,9 +10,9 @@ findintercorr_pois_nb(rho_pois_nb, lam, size, prob, mu = NULL,
 \arguments{
 \item{rho_pois_nb}{a \code{k_pois x k_nb} matrix of target correlations}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 
@@ -36,7 +36,7 @@ This function calculates a \code{k_pois x k_nb} intermediate matrix of correlati
     Then the intermediate correlation is found as follows:
     \deqn{\rho_{z1,z2} = (1/b) * log((\rho_{y1,y2} - c)/a)}, where \eqn{a = -(maxcor * mincor)/(maxcor + mincor)},
     \eqn{b = log((maxcor + a)/a)}, and \eqn{c = -a}.  The function adapts code from Amatya & Demirtas' (2016) package
-    \code{\link[PoisNor]{PoisNor}} by:
+    \code{\link[PoisNor]{PoisNor-package}} by:
 
     1) allowing specifications for the number of random variates and the seed for reproducibility
 
@@ -51,7 +51,7 @@ This function calculates a \code{k_pois x k_nb} intermediate matrix of correlati
 Please see references for \code{\link[SimMultiCorrData]{findintercorr_pois}}.
 }
 \seealso{
-\code{\link[PoisNor]{PoisNor}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},
+\code{\link[PoisNor]{PoisNor-package}}, \code{\link[SimMultiCorrData]{findintercorr_pois}},
     \code{\link[SimMultiCorrData]{findintercorr_nb}},
     \code{\link[SimMultiCorrData]{findintercorr}}, \code{\link[SimMultiCorrData]{rcorrvar}}
 }

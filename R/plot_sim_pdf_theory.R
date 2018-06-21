@@ -5,13 +5,13 @@
 #'     If a continuous target distribution is provided (\code{cont_var = TRUE}), the simulated data \eqn{y} is
 #'     scaled and then transformed (i.e. \eqn{y = sigma * scale(y) + mu}) so that it has the same mean (\eqn{mu}) and variance (\eqn{sigma^2}) as the
 #'     target distribution.  If the variable is Negative Binomial, the parameters must be size and success probability (not mu).
-#'     The function returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
-#'     \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+#'     The function returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.  The graph parameters (i.e. \code{title},
+#'     \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2-package}} parameters.  It works for valid or invalid power method pdfs.
 #' @param sim_y a vector of simulated data
 #' @param title the title for the graph (default = "Simulated Probability Density Function")
 #' @param ylower the lower y value to use in the plot (default = NULL, uses minimum simulated y value)
 #' @param yupper the upper y value (default = NULL, uses maximum simulated y value)
-#' @param power_color the histogram color for the simulated variable
+#' @param power_color the line color for the simulated variable
 #' @param overlay if TRUE (default), the target distribution is also plotted given either a distribution name (and parameters)
 #'     or pdf function fx (with bounds = ylower, yupper)
 #' @param cont_var TRUE (default) for continuous variables, FALSE for count variables
@@ -22,7 +22,7 @@
 #'     "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
 #'     "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
 #'     "Uniform", "Weibull", "Poisson", and "Negative_Binomial".
-#'     Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+#'     Please refer to the documentation for each package (either \code{\link[stats]{stats-package}}, \code{\link[VGAM]{VGAM-package}}, or
 #'     \code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.
 #' @param params a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)
 #' @param fx a pdf input as a function of x only, i.e. fx <- function(x) 0.5*(x-1)^2; must return a scalar
@@ -45,8 +45,8 @@
 #' @export
 #' @keywords plot, simulated, theoretical, pdf, Fleishman, Headrick
 #' @seealso \code{\link[SimMultiCorrData]{calc_theory}},
-#'     \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}, \code{\link[ggplot2]{geom_density}}
-#' @return A \code{\link[ggplot2]{ggplot2}} object.
+#'     \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_path}}, \code{\link[ggplot2]{geom_density}}
+#' @return A \code{\link[ggplot2]{ggplot2-package}} object.
 #' @references Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 #'
 #' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.

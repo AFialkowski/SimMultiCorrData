@@ -40,16 +40,16 @@ plot_sim_ext(sim_y, title = "Simulated Data Values", ylower = NULL,
 \item{axis.title.size}{the size of the axes titles}
 }
 \value{
-A \code{\link[ggplot2]{ggplot2}} object.
+A \code{\link[ggplot2]{ggplot2-package}} object.
 }
 \description{
 This plots simulated continuous or count data and overlays external data, both as histograms.
     The external data is a required input.  The simulated data is centered and scaled to have the same mean and variance as the external
     data set.  If the user wants to only plot simulated data, \code{\link[SimMultiCorrData]{plot_sim_theory}} should be used instead
     with \code{overlay = FALSE}.
-    It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
+    It returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.
     The graph parameters (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{nbins}) are
-    \code{\link[ggplot2]{ggplot2}} parameters.  It works for valid or invalid power method pdfs.
+    \code{\link[ggplot2]{ggplot2-package}} parameters.  It works for valid or invalid power method pdfs.
 }
 \examples{
 \dontrun{
@@ -109,7 +109,7 @@ Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 }
 \seealso{
-\code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_histogram}}
+\code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_histogram}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

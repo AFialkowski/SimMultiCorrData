@@ -16,7 +16,7 @@ c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by 
 
 \item{rho_cont_pois}{a \code{k_cont x k_pois} matrix of target correlations among continuous and Poisson variables}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{nrand}{the number of random numbers to generate in calculating the bound (default = 10000)}
 

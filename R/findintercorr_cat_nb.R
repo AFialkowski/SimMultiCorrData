@@ -16,7 +16,7 @@
 #' @param marginal a list of length equal to \code{k_cat}; the i-th element is a vector of the cumulative
 #'     probabilities defining the marginal distribution of the i-th variable;
 #'     if the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1)
-#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})
+#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})
 #' @param prob a vector of success probability parameters
 #' @param mu a vector of mean parameters (*Note: either \code{prob} or \code{mu} should be supplied for all Negative Binomial variables,
 #'     not a mixture; default = NULL)

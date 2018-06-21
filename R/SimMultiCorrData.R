@@ -100,9 +100,6 @@
 #' Barbiero A, Ferrari PA (2015). GenOrd: Simulation of Discrete Random Variables with Given
 #'     Correlation Matrix and Marginal Distributions. R package version 1.4.0. \url{https://CRAN.R-project.org/package=GenOrd}
 #'
-#' Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-#'     \url{https://CRAN.R-project.org/package=nleqslv}
-#'
 #' Demirtas H (2006). A method for multivariate ordinal data generation given marginal distributions and correlations. Journal of Statistical
 #'     Computation and Simulation, 76(11): 1017-1025. \doi{10.1080/10629360600569246}.
 #'
@@ -123,6 +120,9 @@
 #' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 #'
 #' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
+#'
+#' Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
 #' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
 #'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.

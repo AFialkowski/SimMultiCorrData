@@ -52,7 +52,7 @@ or pdf function fx (with bounds = ylower, yupper)}
 "Gumbel", "Kumaraswamy", "Laplace", "Lindley", "Logistic", "Loggamma", "Lognormal", "Lomax", "Makeham", "Maxwell",
 "Nakagami", "Paralogistic", "Pareto", "Perks", "Rayleigh", "Rice", "Singh-Maddala", "Skewnormal", "t", "Topp-Leone", "Triangular",
 "Uniform", "Weibull".
-Please refer to the documentation for each package (either \code{\link[stats]{stats}}, \code{\link[VGAM]{VGAM}}, or
+Please refer to the documentation for each package (either \code{\link[stats]{stats-package}}, \code{\link[VGAM]{VGAM-package}}, or
 \code{\link[triangle]{triangle}}) for information on appropriate parameter inputs.}
 
 \item{params}{a vector of parameters (up to 4) for the desired distribution (keep NULL if \code{fx} supplied instead)}
@@ -81,7 +81,7 @@ Please refer to the documentation for each package (either \code{\link[stats]{st
 \item{axis.title.size}{the size of the axes titles}
 }
 \value{
-A \code{\link[ggplot2]{ggplot2}} object.
+A \code{\link[ggplot2]{ggplot2-package}} object.
 }
 \description{
 This plots the theoretical power method probability density function: \deqn{f_p(Z)(p(z)) = f_p(Z)(p(z), f_Z(z)/p'(z)),} as given
@@ -93,8 +93,8 @@ This plots the theoretical power method probability density function: \deqn{f_p(
     using \eqn{f_p(Z)(p(z), f_Z(z)/p'(z))}.  If \code{overlay} = TRUE, the target distribution is also plotted given either a
     distribution name (plus up to 4 parameters) or a pdf function \eqn{fx}.  If a target distribution is specified, \eqn{y} is
     scaled and then transformed so that it has the same mean and variance as the target distribution.
-    It returns a \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.  The graph parameters
-    (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2}} parameters.
+    It returns a \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.  The graph parameters
+    (i.e. \code{title}, \code{power_color}, \code{target_color}, \code{target_lty}) are \code{\link[ggplot2]{ggplot2-package}} parameters.
     It works for valid or invalid power method pdfs.
 }
 \examples{
@@ -135,7 +135,7 @@ Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York
 }
 \seealso{
 \code{\link[SimMultiCorrData]{find_constants}}, \code{\link[SimMultiCorrData]{calc_theory}},
-    \code{\link[ggplot2]{ggplot}}, \code{\link[ggplot2]{geom_line}}
+    \code{\link[ggplot2]{ggplot2-package}}, \code{\link[ggplot2]{geom_path}}
 }
 \keyword{Fleishman,}
 \keyword{Headrick}

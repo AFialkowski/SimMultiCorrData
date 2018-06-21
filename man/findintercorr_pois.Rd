@@ -9,7 +9,7 @@ findintercorr_pois(rho_pois, lam, nrand = 1e+05, seed = 1234)
 \arguments{
 \item{rho_pois}{a \code{k_pois x k_pois} matrix of target correlations}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{nrand}{the number of random numbers to generate in calculating the bound (default = 10000)}
 
@@ -26,7 +26,7 @@ This function calculates a \code{k_pois x k_pois} intermediate matrix of correla
     (mincor, maxcor) \eqn{\rho_{y1,y2}} are simulated.  Then the intermediate correlation is found as follows:
     \deqn{\rho_{z1,z2} = (1/b) * log((\rho_{y1,y2} - c)/a)}, where \eqn{a = -(maxcor * mincor)/(maxcor + mincor)},
     \eqn{b = log((maxcor + a)/a)}, and \eqn{c = -a}.  The function adapts code from Amatya & Demirtas' (2016) package
-    \code{\link[PoisNor]{PoisNor}} by:
+    \code{\link[PoisNor]{PoisNor-package}} by:
 
     1) allowing specifications for the number of random variates and the seed for reproducibility
 
@@ -36,8 +36,8 @@ This function calculates a \code{k_pois x k_pois} intermediate matrix of correla
     The function is used in \code{\link[SimMultiCorrData]{findintercorr}} and \code{\link[SimMultiCorrData]{rcorrvar}}.
     This function would not ordinarily be called by the user.
 
-    Note: The method used here is also used in the packages \code{\link[PoisBinOrdNor]{PoisBinOrdNor}} and
-    \code{\link[PoisBinOrdNonNor]{PoisBinOrdNonNor}} by Demirtas et al. (2017), but without my modifications.
+    Note: The method used here is also used in the packages \code{\link[PoisBinOrdNor]{PoisBinOrdNor-package}} and
+    \code{\link[PoisBinOrdNonNor]{PoisBinOrdNonNor-package}} by Demirtas et al. (2017), but without my modifications.
 }
 \references{
 Amatya A & Demirtas H (2015). Simultaneous generation of multivariate mixed data with Poisson and normal marginals.
@@ -64,7 +64,7 @@ Yahav I & Shmueli G (2012). On Generating Multivariate Poisson Data in Managemen
     Models in Business and Industry, 28(1): 91-102. \doi{10.1002/asmb.901}.
 }
 \seealso{
-\code{\link[PoisNor]{PoisNor}}, \code{\link[SimMultiCorrData]{findintercorr_nb}},
+\code{\link[PoisNor]{PoisNor-package}}, \code{\link[SimMultiCorrData]{findintercorr_nb}},
     \code{\link[SimMultiCorrData]{findintercorr_pois_nb}},
     \code{\link[SimMultiCorrData]{findintercorr}}, \code{\link[SimMultiCorrData]{rcorrvar}}
 }

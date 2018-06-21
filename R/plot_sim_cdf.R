@@ -9,8 +9,8 @@
 #'     \eqn{y = delta} is calculated (see \code{\link[SimMultiCorrData]{sim_cdf_prob}}) and the region on the plot is filled with a
 #'     dashed horizontal line drawn at Fn(delta).  The cumulative probability is stated on top of the line.
 #'     This fill option does not work for ordinal or count variables.  The function returns a
-#'     \code{\link[ggplot2]{ggplot2}} object so the user can modify as necessary.
-#'     The graph parameters (i.e. \code{title}, \code{color}, \code{fill}, \code{hline}) are \code{\link[ggplot2]{ggplot2}} parameters.
+#'     \code{\link[ggplot2]{ggplot2-package}} object so the user can modify as necessary.
+#'     The graph parameters (i.e. \code{title}, \code{color}, \code{fill}, \code{hline}) are \code{\link[ggplot2]{ggplot2-package}} parameters.
 #'     It works for valid or invalid power method pdfs.
 #' @param sim_y a vector of simulated data
 #' @param title the title for the graph (default = "Empirical Cumulative Distribution Function")
@@ -30,9 +30,9 @@
 #' @import grid
 #' @export
 #' @keywords plot, simulated, empirical, cdf
-#' @seealso \code{\link[stats]{ecdf}}, \code{\link[SimMultiCorrData]{sim_cdf_prob}}, \code{\link[ggplot2]{ggplot}},
-#'     \code{\link[ggplot2]{stat_ecdf}}, \code{\link[ggplot2]{geom_hline}}, \code{\link[ggplot2]{geom_area}}
-#' @return A \code{\link[ggplot2]{ggplot2}} object.
+#' @seealso \code{\link[stats]{ecdf}}, \code{\link[SimMultiCorrData]{sim_cdf_prob}}, \code{\link[ggplot2]{ggplot2-package}},
+#'     \code{\link[ggplot2]{stat_ecdf}}, \code{\link[ggplot2]{geom_abline}}, \code{\link[ggplot2]{geom_ribbon}}
+#' @return A \code{\link[ggplot2]{ggplot2-package}} object.
 #' @references Please see the references for \code{\link[SimMultiCorrData]{plot_cdf}}.
 #'
 #' Wickham H. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.

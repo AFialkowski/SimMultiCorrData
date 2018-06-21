@@ -66,10 +66,10 @@
 #' @return \code{valid} "TRUE" if the constants produce a valid power method pdf, else "FALSE"
 #' @return \code{SixCorr1} if \code{Six} is specified, the sixth cumulant correction required to achieve a valid pdf
 #' @references
-#' Berend H (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.2.
-#'     \url{https://CRAN.R-project.org/package=nleqslv}
-#'
 #' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
+#'
+#' Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+#'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
 #' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
 #'     Non-normal Distributions. Computational Statistics & Data Analysis, 40(4):685-711. \doi{10.1016/S0167-9473(02)00072-5}.

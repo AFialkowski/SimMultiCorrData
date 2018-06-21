@@ -7,7 +7,7 @@
 chat_pois(lam, n_unif = 10000, seed = 1234)
 }
 \arguments{
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{n_unif}{the number of uniform random numbers to generate in calculating the bound (default = 10000)}
 

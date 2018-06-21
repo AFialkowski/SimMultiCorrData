@@ -17,15 +17,15 @@
 #'     3) Eigenvalue decomposition is done on \code{Sigma} to impose the correct interemdiate correlations on the normal variables.
 #'     If \code{Sigma} is not positive-definite, the negative eigen values are replaced with 0.
 #'
-#'     3) The final positive-definite check has been removed.
+#'     4) The final positive-definite check has been removed.
 #'
-#'     4) The intermediate correlation update function was changed to accomodate more situations.
+#'     5) The intermediate correlation update function was changed to accommodate more situations.
 #'
-#'     5) A final "fail-safe" check was added at the end of the iteration loop where if the absolute
+#'     6) A final "fail-safe" check was added at the end of the iteration loop where if the absolute
 #'     error between the final and target pairwise correlation is still > 0.1, the intermediate correlation is set
 #'     equal to the target correlation (if \code{extra_correct} = "TRUE").
 #'
-#'     6) Allowing specifications for the sample size and the seed for reproducibility.
+#'     7) Allowing specifications for the sample size and the seed for reproducibility.
 #'
 #' @param k_cat the number of ordinal (r >= 2 categories) variables
 #' @param k_cont the number of continuous variables
@@ -48,8 +48,8 @@
 #' @param constants a matrix with \code{k_cont} rows, each a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or
 #'     c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by
 #'     \code{\link[SimMultiCorrData]{find_constants}}
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
-#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
+#' @param size a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})
 #' @param prob a vector of success probability parameters
 #' @param mu a vector of mean parameters (*Note: either \code{prob} or \code{mu} should be supplied for all Negative Binomial variables,
 #'     not a mixture)

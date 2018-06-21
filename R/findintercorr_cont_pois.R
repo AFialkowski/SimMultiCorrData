@@ -16,7 +16,7 @@
 #' @param constants a matrix with \code{k_cont} rows, each a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or
 #'     c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by \code{\link[SimMultiCorrData]{find_constants}}
 #' @param rho_cont_pois a \code{k_cont x k_pois} matrix of target correlations among continuous and Poisson variables
-#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})
+#' @param lam a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})
 #' @param nrand the number of random numbers to generate in calculating the bound (default = 10000)
 #' @param seed the seed used in random number generation (default = 1234)
 #' @export

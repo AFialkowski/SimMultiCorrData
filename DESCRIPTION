@@ -1,7 +1,7 @@
 Package: SimMultiCorrData
 Type: Package
 Title: Simulation of Correlated Data with Multiple Variable Types
-Version: 0.2.1
+Version: 0.2.2
 Author: Allison Cynthia Fialkowski
 Maintainer: Allison Cynthia Fialkowski <allijazz@uab.edu>
 Description: Generate continuous (normal or non-normal), binary, ordinal, and count (Poisson or Negative 

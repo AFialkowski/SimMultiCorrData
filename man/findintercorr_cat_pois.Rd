@@ -14,7 +14,7 @@ findintercorr_cat_pois(rho_cat_pois, marginal, lam, nrand = 1e+05,
 probabilities defining the marginal distribution of the i-th variable;
 if the variable can take r values, the vector will contain r - 1 probabilities (the r-th is assumed to be 1)}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
 \item{nrand}{the number of random numbers to generate in calculating the bound (default = 10000)}
 

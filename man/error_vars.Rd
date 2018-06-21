@@ -27,9 +27,9 @@ and "Polynomial" uses Headrick's fifth-order transformation.}
 c0, c1, c2, c3, c4, c5 (if \code{method} = "Polynomial"), like that returned by
 \code{\link[SimMultiCorrData]{find_constants}}}
 
-\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{dpois}})}
+\item{lam}{a vector of lambda (> 0) constants for the Poisson variables (see \code{\link[stats]{Poisson}})}
 
-\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{dnbinom}})}
+\item{size}{a vector of size parameters for the Negative Binomial variables (see \code{\link[stats]{NegBinomial}})}
 
 \item{prob}{a vector of success probability parameters}
 

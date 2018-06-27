@@ -25,7 +25,7 @@ Description: Generate continuous (normal or non-normal), binary, ordinal, and co
     if a target correlation matrix is within the possible correlation bounds (given the distributions 
     of the simulated variables), summarize results (numerically or graphically), to verify valid power 
     method pdfs, and to calculate lower standardized kurtosis bounds.
-Depends: R (>= 3.3.1)
+Depends: R (>= 3.3.0)
 License: GPL-2
 Imports:
     BB, nleqslv, GenOrd, psych, Matrix, VGAM, triangle, ggplot2, grid, stats, utils

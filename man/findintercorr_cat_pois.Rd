@@ -4,7 +4,7 @@
 \alias{findintercorr_cat_pois}
 \title{Calculate Intermediate MVN Correlation for Ordinal - Poisson Variables: Correlation Method 1}
 \usage{
-findintercorr_cat_pois(rho_cat_pois, marginal, lam, nrand = 1e+05,
+findintercorr_cat_pois(rho_cat_pois, marginal, lam, nrand = 100000,
   seed = 1234)
 }
 \arguments{

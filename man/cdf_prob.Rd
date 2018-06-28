@@ -5,7 +5,7 @@
 \title{Calculate Theoretical Cumulative Probability for Continuous Variables}
 \usage{
 cdf_prob(c, method = c("Fleishman", "Polynomial"), delta = 0.5, mu = 0,
-  sigma = 1, lower = -1e+06, upper = 1e+06)
+  sigma = 1, lower = -1000000, upper = 1000000)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =

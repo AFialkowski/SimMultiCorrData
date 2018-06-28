@@ -9,7 +9,7 @@ plot_cdf(c = NULL, method = c("Fleishman", "Polynomial"), mu = 0,
   yupper = NULL, calc_cprob = FALSE, delta = 5, color = "dark blue",
   fill = "blue", hline = "dark green", n = 10000, seed = 1234,
   text.size = 11, title.text.size = 15, axis.text.size = 10,
-  axis.title.size = 13, lower = -1e+06, upper = 1e+06)
+  axis.title.size = 13, lower = -1000000, upper = 1000000)
 }
 \arguments{
 \item{c}{a vector of constants c0, c1, c2, c3 (if \code{method} = "Fleishman") or c0, c1, c2, c3, c4, c5 (if \code{method} =

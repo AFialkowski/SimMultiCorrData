@@ -140,6 +140,10 @@ This function calculates the lower boundary of standardized kurtosis for Fleishm
 }
 
 \examples{
+
+# Normal distribution with Fleishman transformation
+calc_lower_skurt("Fleishman", 0, 0, 0)
+
 \dontrun{
 
 # This example takes considerable computation time.
@@ -265,7 +269,7 @@ Lower[, 9:12]
 \references{
 Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 
-Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+Hasselman B (2018). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.2.
     \url{https://CRAN.R-project.org/package=nleqslv}
 
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate

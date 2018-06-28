@@ -275,6 +275,11 @@ More details regarding the variable types can be found in the \bold{Variable Typ
 }
 
 \examples{
+Sim1 <- rcorrvar2(n = 1000, k_cat = 1, k_cont = 1, method = "Polynomial",
+  means = 0, vars = 1, skews = 0, skurts = 0, fifths = 0, sixths = 0,
+  marginal = list(c(1/3, 2/3)), support = list(0:2),
+  rho = matrix(c(1, 0.4, 0.4, 1), 2, 2))
+
 \dontrun{
 
 # Binary, Ordinal, Continuous, Poisson, and Negative Binomial Variables
@@ -401,7 +406,7 @@ Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychomet
 
 Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
 
-Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+Hasselman B (2018). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.2.
     \url{https://CRAN.R-project.org/package=nleqslv}
 
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
@@ -430,7 +435,7 @@ Olsson U, Drasgow F, & Dorans NJ (1982). The Polyserial Correlation Coefficient.
 
 Vale CD & Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471. \doi{10.1007/BF02293687}.
 
-Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
+Varadhan R, Gilbert P (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32(4). \doi{10.18637/jss.v032.i04}.
     \url{http://www.jstatsoft.org/v32/i04/}
 }

@@ -44,6 +44,8 @@ This function calculates the 100*\code{alpha} percent symmetric trimmed mean (0 
     an error if the pdf is invalid.  The equations are those from Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}).
 }
 \examples{
+stats_pdf(c = c(0, 1, 0, 0, 0, 0), method = "Polynomial", alpha = 0.025)
+
 \dontrun{
 # Beta(a = 4, b = 2) Distribution:
 con <- find_constants(method = "Polynomial", skews = -0.467707,

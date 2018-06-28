@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2018-06-21" />
+<meta name="date" content="2018-06-28" />
 
 <title>Overall Workflow for Data Simulation</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Overall Workflow for Data Simulation</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2018-06-21</em></h4>
+<h4 class="date"><em>2018-06-28</em></h4>
 
 
 
@@ -191,7 +191,7 @@ start.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 Time &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">difftime</span>(stop.time, start.time, <span class="dt">units =</span> <span class="st">&quot;min&quot;</span>), <span class="dv">3</span>)
 <span class="kw">cat</span>(<span class="st">&quot;Total computation time:&quot;</span>, Time, <span class="st">&quot;minutes </span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
-<pre><code>## Total computation time: 0.755 minutes</code></pre>
+<pre><code>## Total computation time: 0.747 minutes</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Note the message given for Distribution 1 (Normal).</span></code></pre></div>
 <p>In each case, the lower kurtosis boundary calculated from the original Lagrangean constraint equations (see <code>poly_skurt_check</code>) generates constants that yield an invalid power method pdf. This is indicated by the fact that each <code>Invalid.C</code> data.frame contains solutions (i.e. see <code>Lower[[2]]$Invalid.C</code>).</p>
 <p>For Distributions 2 and 3, lower kurtosis values that generate constants that yield valid power method pdfs could be found by adding the values displayed in <code>SkurtCorr1</code> to the original lower kurtosis boundary. For Distribution 1 (Normal), no kurtosis addition (of those specified in <code>Skurt</code>) generated constants that yield a valid pdf. This does not cause a problem since the simulated variable has a valid power method pdf.</p>
@@ -320,9 +320,9 @@ valid &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cla
 ##  Constants: Distribution  3  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.104 minutes 
+## Intercorrelation calculation time: 0.122 minutes 
 ## Error loop calculation time: 0 minutes 
-## Total Simulation time: 0.106 minutes</code></pre>
+## Total Simulation time: 0.124 minutes</code></pre>
 <p>Summarize the correlation errors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Acorr_error =<span class="st"> </span><span class="kw">round</span>(A<span class="op">$</span>correlations <span class="op">-</span><span class="st"> </span>Rey, <span class="dv">6</span>)
 <span class="kw">summary</span>(<span class="kw">as.numeric</span>(Acorr_error))</code></pre></div>
@@ -363,9 +363,9 @@ valid &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cla
 ##  Constants: Distribution  3  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.106 minutes 
-## Error loop calculation time: 0.26 minutes 
-## Total Simulation time: 0.368 minutes</code></pre>
+## Intercorrelation calculation time: 0.115 minutes 
+## Error loop calculation time: 0.258 minutes 
+## Total Simulation time: 0.375 minutes</code></pre>
 <p>Summarize the correlation errors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Bcorr_error =<span class="st"> </span><span class="kw">round</span>(B<span class="op">$</span>correlations <span class="op">-</span><span class="st"> </span>Rey, <span class="dv">6</span>)
 <span class="kw">summary</span>(<span class="kw">as.numeric</span>(Bcorr_error))</code></pre></div>
@@ -829,9 +829,9 @@ valid2 &lt;-<span class="st"> </span><span class="kw">valid_corr2</span>(<span c
 ##  Constants: Distribution  3  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.046 minutes 
+## Intercorrelation calculation time: 0.042 minutes 
 ## Error loop calculation time: 0 minutes 
-## Total Simulation time: 0.048 minutes</code></pre>
+## Total Simulation time: 0.044 minutes</code></pre>
 <p>Summarize the correlation errors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ccorr_error =<span class="st"> </span><span class="kw">round</span>(C<span class="op">$</span>correlations <span class="op">-</span><span class="st"> </span>Rey, <span class="dv">6</span>)
 <span class="kw">summary</span>(<span class="kw">as.numeric</span>(Ccorr_error))</code></pre></div>
@@ -873,9 +873,9 @@ valid2 &lt;-<span class="st"> </span><span class="kw">valid_corr2</span>(<span c
 ##  Constants: Distribution  3  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.053 minutes 
-## Error loop calculation time: 0.154 minutes 
-## Total Simulation time: 0.209 minutes</code></pre>
+## Intercorrelation calculation time: 0.049 minutes 
+## Error loop calculation time: 0.157 minutes 
+## Total Simulation time: 0.208 minutes</code></pre>
 <p>Summarize the correlation errors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Dcorr_error =<span class="st"> </span><span class="kw">round</span>(D<span class="op">$</span>correlations <span class="op">-</span><span class="st"> </span>Rey, <span class="dv">6</span>)
 <span class="kw">summary</span>(<span class="kw">as.numeric</span>(Dcorr_error))</code></pre></div>

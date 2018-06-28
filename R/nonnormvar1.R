@@ -119,7 +119,11 @@
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 #'
-#' @examples \dontrun{
+#' @examples
+#' # Normal distribution with Headrick's fifth-order PMT:
+#' N <- nonnormvar1("Polynomial", 0, 1, 0, 0, 0, 0)
+#'
+#' \dontrun{
 #' # Use Headrick & Kowalchuk's (2007) steps to compare a simulated exponential
 #' # (mean = 2) variable to the theoretical exponential(mean = 2) density:
 #'

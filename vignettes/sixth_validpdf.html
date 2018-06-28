@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2018-06-21" />
+<meta name="date" content="2018-06-28" />
 
 <title>Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the Sixth Cumulant Correction to Find Valid Power Method Pdfs</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2018-06-21</em></h4>
+<h4 class="date"><em>2018-06-28</em></h4>
 
 
 
@@ -316,7 +316,7 @@ start.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 stop.time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
 Time &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">difftime</span>(stop.time, start.time, <span class="dt">units =</span> <span class="st">&quot;min&quot;</span>), <span class="dv">3</span>)
 <span class="kw">cat</span>(<span class="st">&quot;Total computation time:&quot;</span>, Time, <span class="st">&quot;minutes </span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
-<pre><code>## Total computation time: 0.025 minutes</code></pre>
+<pre><code>## Total computation time: 0.023 minutes</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H_cons &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">nrow =</span> <span class="dv">7</span>, <span class="dt">ncol =</span> <span class="kw">ncol</span>(Headrick.dist))
 valid &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">ncol</span>(Headrick.dist))
 <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(H_stcum)) {
@@ -677,9 +677,9 @@ valid &lt;-<span class="st"> </span><span class="kw">valid_corr</span>(<span cla
 ##  Constants: Distribution  2  
 ## 
 ## Constants calculation time: 0 minutes 
-## Intercorrelation calculation time: 0.016 minutes 
+## Intercorrelation calculation time: 0.018 minutes 
 ## Error loop calculation time: 0 minutes 
-## Total Simulation time: 0.017 minutes</code></pre>
+## Total Simulation time: 0.018 minutes</code></pre>
 <p>Look at the maximum correlation error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">paste</span>(<span class="st">&quot;The maximum correlation error is &quot;</span>, <span class="kw">round</span>(A<span class="op">$</span>maxerr, <span class="dv">5</span>), <span class="st">&quot;.&quot;</span>, 
           <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</code></pre></div>

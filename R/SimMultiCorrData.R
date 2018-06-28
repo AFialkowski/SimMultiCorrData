@@ -121,7 +121,7 @@
 #'
 #' Frechet M.  Sur les tableaux de correlation dont les marges sont donnees.  Ann. l'Univ. Lyon SectA.  1951;14:53-77.
 #'
-#' Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+#' Hasselman B (2018). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.2.
 #'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
 #' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
@@ -158,7 +158,7 @@
 #'
 #' Vale CD & Maurelli VA (1983). Simulating Multivariate Nonnormal Distributions. Psychometrika, 48, 465-471. \doi{10.1007/BF02293687}.
 #'
-#' Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
+#' Varadhan R, Gilbert P (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
 #'     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32(4). \doi{10.18637/jss.v032.i04}.
 #'     \url{http://www.jstatsoft.org/v32/i04/}
 #'

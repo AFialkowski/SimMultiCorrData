@@ -29,6 +29,9 @@ This function determines if a given set of constants, calculated using Fleishman
     \doi{10.1080/10629360600605065}).
 }
 \examples{
+# Normal distribution
+pdf_check(c(0, 1, 0, 0, 0, 0), "Polynomial")
+
 \dontrun{
 # Chi-squared (df = 1) Distribution (invalid power method pdf)
 con <- find_constants(method = "Polynomial", skews = sqrt(8), skurts = 12,

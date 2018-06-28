@@ -48,11 +48,11 @@
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}
 #'
-#' Thomas W. Yee (2017). VGAM: Vector Generalized Linear and Additive Models. R package version 1.0-3.
+#' Thomas W. Yee (2018). VGAM: Vector Generalized Linear and Additive Models. R package version 1.0-5.
 #'     \url{https://CRAN.R-project.org/package=VGAM}
 #'
-#' Rob Carnell (2016). triangle: Provides the Standard Distribution Functions for the Triangle Distribution. R package
-#'     version 0.10. \url{https://CRAN.R-project.org/package=triangle}
+#' Rob Carnell (2017). triangle: Provides the Standard Distribution Functions for the Triangle Distribution. R package
+#'     version 0.11. \url{https://CRAN.R-project.org/package=triangle}
 #'
 #' @examples
 #' options(scipen = 999)

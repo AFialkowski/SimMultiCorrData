@@ -12,7 +12,7 @@
 
 <meta name="author" content="Allison C Fialkowski" />
 
-<meta name="date" content="2018-06-21" />
+<meta name="date" content="2018-06-28" />
 
 <title>Functions by Topic</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Functions by Topic</h1>
 <h4 class="author"><em>Allison C Fialkowski</em></h4>
-<h4 class="date"><em>2018-06-21</em></h4>
+<h4 class="date"><em>2018-06-28</em></h4>
 
 
 
@@ -59,7 +59,7 @@
 <ol style="list-style-type: decimal">
 <li><p><code>calc_fisherk</code> uses Fisher’s k-statistics to calculate the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given a vector of data.</p></li>
 <li><p><code>calc_moments</code> uses the method of moments to calculate the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given a vector of data.</p></li>
-<li><p><code>calc_theory</code> calculates the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given either a distribution name with up to 4 associated parameters or pdf function fx with lower and upper support bounds. There are 39 available distributions by name. Please see the appropriate help pages for information regarding parameter inputs (in the <code>VGAM</code> <span class="citation">Yee (2017)</span>, <code>triangle</code> <span class="citation">Carnell (2016)</span>, or <code>stats</code> <span class="citation">R Core Team (2016)</span> packages).</p></li>
+<li><p><code>calc_theory</code> calculates the mean, standard deviation, skewness, standardized kurtosis, and standardized fifth and sixth cumulants given either a distribution name with up to 4 associated parameters or pdf function fx with lower and upper support bounds. There are 39 available distributions by name. Please see the appropriate help pages for information regarding parameter inputs (in the <code>VGAM</code> <span class="citation">Yee (2018)</span>, <code>triangle</code> <span class="citation">Carnell (2016)</span>, or <code>stats</code> <span class="citation">R Core Team (2018)</span> packages).</p></li>
 <li><p><code>cdf_prob</code> calculates a cumulative probability using the theoretical power method cdf <span class="math inline">\(\Large F_p(Z)(p(z)) = F_p(Z)(p(z), F_Z(z))\)</span> up to <span class="math inline">\(\Large sigma * y + mu = delta\)</span>, where <span class="math inline">\(\Large y = p(z)\)</span>, after using <code>pdf_check</code> to verify that the given constants produce a valid pdf. If the given constants do not produce a valid power method pdf, a warning is given.</p></li>
 <li><p><code>power_norm_corr</code> calculates the correlation between a continuous variable produced using a polynomial transformation and the generating standard normal variable. If the correlation is &lt;= 0, the signs of c1 and c3 should be reversed (for <code>method</code> = “Fleishman”), or c1, c3, and c5 (for <code>method</code> = “Polynomial”). These sign changes have no effect on the cumulants of the resulting distribution.</p></li>
 <li><p><code>pdf_check</code> determines if a given set of constants generates a valid power method pdf. This requires yielding a continuous variable with a positive correlation with the generating standard normal variable and satisfying certain contraints that vary by approximation method (see <span class="citation">Headrick and Kowalchuk (2007)</span>).</p></li>
@@ -154,10 +154,10 @@
 <p>Headrick, T C, and S S Sawilowsky. 2002. “Weighted Simplex Procedures for Determining Boundary Points and Constants for the Univariate and Multivariate Power Methods.” <em>Journal of Educational and Behavioral Statistics</em> 25: 417–36. doi:<a href="https://doi.org/10.3102/10769986025004417">10.3102/10769986025004417</a>.</p>
 </div>
 <div id="ref-Stats">
-<p>R Core Team. 2016. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</p>
+<p>R Core Team. 2018. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</p>
 </div>
 <div id="ref-VGAM">
-<p>Yee, T W. 2017. <em>VGAM: Vector Generalized Linear and Additive Models</em>. <a href="https://CRAN.R-project.org/package=VGAM" class="uri">https://CRAN.R-project.org/package=VGAM</a>.</p>
+<p>Yee, T W. 2018. <em>VGAM: Vector Generalized Linear and Additive Models</em>. <a href="https://CRAN.R-project.org/package=VGAM" class="uri">https://CRAN.R-project.org/package=VGAM</a>.</p>
 </div>
 </div>
 </div>

@@ -118,7 +118,7 @@
 #' @references
 #' Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 #'
-#' Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+#' Hasselman B (2018). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.2.
 #'     \url{https://CRAN.R-project.org/package=nleqslv}
 #'
 #' Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
@@ -140,7 +140,12 @@
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 #'
-#' @examples \dontrun{
+#' @examples
+#'
+#' # Normal distribution with Fleishman transformation
+#' calc_lower_skurt("Fleishman", 0, 0, 0)
+#'
+#' \dontrun{
 #'
 #' # This example takes considerable computation time.
 #'

@@ -160,7 +160,12 @@
 #' Hakan Demirtas, Yiran Hu and Rawan Allozi (2017). PoisBinOrdNor: Data Generation with Poisson, Binary, Ordinal and Normal Components.
 #'     R package version 1.4. \url{https://CRAN.R-project.org/package=PoisBinOrdNor}
 #'
-#' @examples \dontrun{
+#' @examples
+#' valid_corr2(n = 1000, k_cat = 1, k_cont = 1, method = "Polynomial",
+#'   means = 0, vars = 1, skews = 0, skurts = 0, fifths = 0, sixths = 0,
+#'   marginal = list(c(1/3, 2/3)), rho = matrix(c(1, 0.4, 0.4, 1), 2, 2))
+#'
+#' \dontrun{
 #'
 #' # Binary, Ordinal, Continuous, Poisson, and Negative Binomial Variables
 #'

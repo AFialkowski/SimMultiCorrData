@@ -38,6 +38,9 @@ This function calculates a cumulative probability using the theoretical power me
     The formulas were obtained from Headrick & Kowalchuk (2007, \doi{10.1080/10629360600605065}).
 }
 \examples{
+# Normal distribution with Headrick's fifth-order PMT:
+cdf_prob(c = c(0, 1, 0, 0, 0, 0), "Polynomial", delta = qnorm(0.05))
+
 \dontrun{
 # Beta(a = 4, b = 2) Distribution:
 con <- find_constants(method = "Polynomial", skews = -0.467707, skurts = -0.375,

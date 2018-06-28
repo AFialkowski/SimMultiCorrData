@@ -83,13 +83,14 @@ This function calculates Fleishman's third or Headrick's fifth-order constants n
 }
 
 \examples{
+
+# Exponential Distribution
+find_constants("Fleishman", 2, 6)
+
 \dontrun{
 # Compute third-order power method constants.
 
 options(scipen = 999) # turn off scientific notation
-
-# Exponential Distribution
-find_constants("Fleishman", 2, 6)
 
 # Laplace Distribution
 find_constants("Fleishman", 0, 3)
@@ -109,7 +110,7 @@ find_constants(method = "Polynomial", skews = 0, skurts = 6/5, fifths = 0,
 \references{
 Fleishman AI (1978). A Method for Simulating Non-normal Distributions. Psychometrika, 43, 521-532. \doi{10.1007/BF02293811}.
 
-Hasselman B (2017). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.1.
+Hasselman B (2018). nleqslv: Solve Systems of Nonlinear Equations. R package version 3.3.2.
     \url{https://CRAN.R-project.org/package=nleqslv}
 
 Headrick TC (2002). Fast Fifth-order Polynomial Transforms for Generating Univariate and Multivariate
@@ -128,7 +129,7 @@ Headrick TC, Sawilowsky SS (1999). Simulating Correlated Non-normal Distribution
 Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 
-Varadhan R, Gilbert PD (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
+Varadhan R, Gilbert P (2009). BB: An R Package for Solving a Large System of Nonlinear Equations and for
     Optimizing a High-Dimensional Nonlinear Objective Function, J. Statistical Software, 32:4,
     \url{http://www.jstatsoft.org/v32/i04/}
 }

@@ -203,6 +203,10 @@ Randomly generated variables with the given marginal distributions are used in t
 }
 
 \examples{
+valid_corr2(n = 1000, k_cat = 1, k_cont = 1, method = "Polynomial",
+  means = 0, vars = 1, skews = 0, skurts = 0, fifths = 0, sixths = 0,
+  marginal = list(c(1/3, 2/3)), rho = matrix(c(1, 0.4, 0.4, 1), 2, 2))
+
 \dontrun{
 
 # Binary, Ordinal, Continuous, Poisson, and Negative Binomial Variables

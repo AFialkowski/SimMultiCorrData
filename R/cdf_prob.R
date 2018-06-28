@@ -40,7 +40,11 @@
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 #'
-#' @examples \dontrun{
+#' @examples
+#' # Normal distribution with Headrick's fifth-order PMT:
+#' cdf_prob(c = c(0, 1, 0, 0, 0, 0), "Polynomial", delta = qnorm(0.05))
+#'
+#' \dontrun{
 #' # Beta(a = 4, b = 2) Distribution:
 #' con <- find_constants(method = "Polynomial", skews = -0.467707, skurts = -0.375,
 #'                       fifths = 1.403122, sixths = -0.426136)$constants

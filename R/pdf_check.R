@@ -36,7 +36,11 @@
 #' Headrick TC, Sheng Y, & Hodis FA (2007). Numerical Computing and Graphics for the Power Method Transformation Using
 #'     Mathematica. Journal of Statistical Software, 19(3), 1 - 17. \doi{10.18637/jss.v019.i03}.
 #'
-#' @examples \dontrun{
+#' @examples
+#' # Normal distribution
+#' pdf_check(c(0, 1, 0, 0, 0, 0), "Polynomial")
+#'
+#' \dontrun{
 #' # Chi-squared (df = 1) Distribution (invalid power method pdf)
 #' con <- find_constants(method = "Polynomial", skews = sqrt(8), skurts = 12,
 #'                       fifths = 48*sqrt(2), sixths = 480)$constants

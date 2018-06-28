@@ -12,8 +12,8 @@ Description: Generate continuous (normal or non-normal), binary, ordinal, and co
     by specifying mean, variance, skewness, standardized kurtosis, and fifth and sixth standardized 
     cumulants using either Fleishman's third-order (<DOI:10.1007/BF02293811>) or Headrick's 
     fifth-order (<DOI:10.1016/S0167-9473(02)00072-5>) polynomial transformation.  Binary and 
-    ordinal variables are simulated using a modification of GenOrd's ordsample function.  Count 
-    variables are simulated using the inverse cdf method.  There are two simulation pathways 
+    ordinal variables are simulated using a modification of the ordsample() function from 'GenOrd'.  
+    Count variables are simulated using the inverse cdf method.  There are two simulation pathways 
     which differ primarily according to the calculation of the intermediate correlation matrix.  In 
     Correlation Method 1, the intercorrelations involving count variables are determined using a 
     simulation based, logarithmic correlation correction (adapting Yahav and Shmueli's 2012 method, 

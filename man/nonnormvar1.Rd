@@ -130,6 +130,9 @@ This function simulates one non-normal continuous variable using either Fleishma
 }
 
 \examples{
+# Normal distribution with Headrick's fifth-order PMT:
+N <- nonnormvar1("Polynomial", 0, 1, 0, 0, 0, 0)
+
 \dontrun{
 # Use Headrick & Kowalchuk's (2007) steps to compare a simulated exponential
 # (mean = 2) variable to the theoretical exponential(mean = 2) density:

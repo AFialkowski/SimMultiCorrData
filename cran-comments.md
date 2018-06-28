@@ -2,7 +2,7 @@
 This is a patch update of the package (from 0.2.1 to 0.2.2) to fix some errors.
 
 ## Test environments
-* local OS 'Windows 10' install, 'R 3.4.4'
+* local OS 'Windows 10' install, 'R 3.5.0'
 * 'win-builder' (devel and release)
 * 'CentOS', 'R 3.4.4'
 
@@ -10,12 +10,6 @@ This is a patch update of the package (from 0.2.1 to 0.2.2) to fix some errors.
 
 0 errors | 0 warnings | 0 notes
 
-Check with 'win-builder' (release) did produce 1 note:
-
-"Possibly mis-spelled words in DESCRIPTION"
-
-These were double checked and are spelled correctly.
-
 ## Downstream dependencies
 
-There are currently no downstream dependencies for this package.
+Reverse dependencies were checked and did not produce any errors.
